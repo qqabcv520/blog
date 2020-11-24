@@ -51,191 +51,27 @@
       </tags>
   </entry>
   <entry>
-    <title>如何写出更高质量的代码</title>
-    <url>/2018/12/08/design-patterns/</url>
-    <content><![CDATA[<p>为什么项目维护困难、BUG 反复？实际上很多时候就是代码质量的问题。编写高质量代码的思路在任何技术栈都是基本相通的，代码架构就像是建筑的钢筋结构，代码细节就像是建筑的内部装修，建筑的抗震等级、简装或豪装完全取决于团队开发人员的水平。</p>
-<a id="more"></a>
+    <title>git filter-branch指令</title>
+    <url>/2019/06/16/git-filter-branch/</url>
+    <content><![CDATA[<p>git filter-branch 这个指令，是一个非常强悍的指令，《Pro Git》的作者说这是一个核弹级指令。除非特别清楚你准备干什么。否则不要抱着尝试的想法来试试，除非你想尝试下核弹的威力。</p>
+<a id="more"></a>     
 
-
-<img src="/2018/12/08/design-patterns/code(1).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(2).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(3).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(4).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(5).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(6).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(7).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(8).png" class="" title="xmind">
-
-<img src="/2018/12/08/design-patterns/code(10).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(11).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(12).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(13).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(14).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(15).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(16).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(17).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(18).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(19).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(20).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(21).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(22).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(23).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(24).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(25).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(26).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(27).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(28).png" class="" title="xmind">
-
-<img src="/2018/12/08/design-patterns/code.jpg" class="" title="xmind">
+<p>// TODO</p>
 ]]></content>
       <tags>
-        <tag>设计模式</tag>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/1970/01/01/hello-world/</url>
-    <content><![CDATA[<p>Mifan blog, Hello World</p>
-<a id="more"></a>
+    <title>git rebase指令</title>
+    <url>/2018/06/16/git-rebase/</url>
+    <content><![CDATA[<p>什么是git rebase? git rebase 你其实可以把它理解成是“重新设置基线”，它会将你的当前分支重新设置开始点，并把当前分支或其他分支的提交重新追加到后面，如果有修改提交内容或者解决冲突，会形成新的提交替换原本的，但是并不会产生比原本更多的提交。所以git rebase除了能用于合并分支以外，还能用于修改提交信息，修改提交文件等操作。</p>
+<a id="more"></a>              
 
-<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>数据结构与算法基础知识点</title>
-    <url>/2019/12/08/data-structure/</url>
-    <content><![CDATA[<p>数据结构是在计算机中组织和存储数据的一种特殊方式，使得数据可以高效地被访问和修改。更确切地说，数据结构是数据值的集合，表示数据之间的关系，也包括了作用在数据上的函数或操作。</p>
-<a id="more"></a>
-
-<img src="/2019/12/08/data-structure/xmind.png" class="" title="xmind">
+<p>// TODO</p>
 ]]></content>
       <tags>
-        <tag>数据结构</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>100行代码实现Virtual DOM和render</title>
-    <url>/2019/08/06/mvvm/</url>
-    <content><![CDATA[<p>在编写代码之前，我们需要先了解需要先来了解一下Virtual DOM是怎么样构建并渲染到浏览器的，常见的构建Virtual DOM的方法有两种，一种是jsx(react)，另一种是template(vue)。</p>
-<a id="more"></a>
-
-<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><ul>
-<li><p>React的jsx一般是通过babel的jsx插件编译成<code>createElement</code><a href="https://github.com/facebook/react/blob/v16.13.1/packages/react/src/ReactElement.js#L348" target="_blank" rel="noopener">[源码]</a>，Vue的template也可以通过vue-loader编译成对应的<code>createElement</code><a href="https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/create-element.js#L28" target="_blank" rel="noopener">[源码]</a>，</p>
-</li>
-<li><p>然后，在组件被创建并初始化state之后，执行render，将组件的props和state根据jsx(react)或template(vue)，生成一个虚拟DOM树</p>
-</li>
-<li><p>最后所有的VDOM生成完毕之后，将所有VDOM都mount上真实HTML DOM。</p>
-</li>
-</ul>
-<p>Component -&gt; render -&gt; VDOM -&gt; mount -&gt; HTML</p>
-<h2 id="VDOM"><a href="#VDOM" class="headerlink" title="VDOM"></a>VDOM</h2><p>VDOM的节点是一个简化版的DOM对象，只存储了我们关心的属性，大大提高了DOM操作时的性能。通常一个虚拟节点(VNode)包含：标签名、子节点数组、属性、事件、key和对应的真实DOM。</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> VNode &#123;</span><br><span class="line">  <span class="keyword">type</span>: <span class="built_in">string</span>;</span><br><span class="line">  children: VNode[] = [];</span><br><span class="line">  props: &#123; propName: <span class="built_in">string</span>; propValue: <span class="built_in">any</span> &#125;[] = [];</span><br><span class="line">  events: &#123; propName: <span class="built_in">string</span>; propValue: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">void</span> &#125;[] = [];</span><br><span class="line">  key: <span class="built_in">any</span>;</span><br><span class="line">  el: Node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这时候再定义一个创建虚拟DOM对象的方法，用于jsx调用，该方法接收三个参数：标签名，标签属性，子标签。返回一个虚拟DOM对象</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createElement</span>(<span class="params"><span class="keyword">type</span>: <span class="built_in">string</span>, props, ...children</span>) </span>&#123;</span><br><span class="line">  props = props || &#123;&#125;;</span><br><span class="line">  <span class="keyword">const</span> vNode = <span class="keyword">new</span> VNode();</span><br><span class="line">  vNode.type = <span class="keyword">type</span>;</span><br><span class="line">  vNode.events = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> value.startsWith(<span class="string">'on'</span>))</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  vNode.props = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> !value.startsWith(<span class="string">'on'</span>) &amp;&amp; value !== <span class="string">'key'</span>)</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  vNode.key = props[<span class="string">'key'</span>];</span><br><span class="line">  vNode.children = children;</span><br><span class="line">  <span class="keyword">return</span> vNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>虚拟DOM挂载到HTML DOM，根据根节点的ID，使用<code>document.createElement</code>将虚拟DOM转成HTML DOM，并挂载到真实节点mountEl下</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mount</span>(<span class="params">el, vNode: VNode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> node = mountVNode(vNode);</span><br><span class="line">  <span class="keyword">if</span> (el != <span class="literal">null</span>) &#123;</span><br><span class="line">    el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>根据VNode树生成真实HTML DOM</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mountVNode</span>(<span class="params">vNode: VNode</span>): <span class="title">HTMLElement</span> | <span class="title">Text</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (vNode == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (vNode <span class="keyword">instanceof</span> VNode) &#123;</span><br><span class="line">    <span class="keyword">let</span> el: HTMLElement;</span><br><span class="line">    el = <span class="built_in">document</span>.createElement(vNode.type);</span><br><span class="line">    vNode.props.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.setAttribute(value.propName, value.propValue)</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.events.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.addEventListener(value.propName.replace(<span class="regexp">/^on/</span>, <span class="string">''</span>), value.propValue);</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.children.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> subEl = mountVNode(value);</span><br><span class="line">      <span class="keyword">if</span> (subEl != <span class="literal">null</span>) &#123;</span><br><span class="line">        el.appendChild(subEl);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.el = el;</span><br><span class="line">    <span class="keyword">return</span> el;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createTextNode(<span class="built_in">String</span>(vNode));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>定义一个所有组件的抽象父组件，实现组件共有的基础功能</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> ComponentProps &#123;</span><br><span class="line">  el: HTMLElement;</span><br><span class="line">  [key: <span class="built_in">string</span>]: <span class="built_in">any</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">abstract</span> <span class="keyword">class</span> Component &#123;</span><br><span class="line"></span><br><span class="line">  readonly el: HTMLElement;</span><br><span class="line">  vNode: VNode;</span><br><span class="line">  <span class="keyword">abstract</span> render(): VNode;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params">props: ComponentProps</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (props) &#123;</span><br><span class="line">      <span class="built_in">Object</span>.assign(<span class="keyword">this</span>, props);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> mount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.vNode = <span class="keyword">this</span>.render();</span><br><span class="line">    <span class="keyword">const</span> node = mountVNode(<span class="keyword">this</span>.vNode);</span><br><span class="line">    <span class="keyword">this</span>.el &amp;&amp; node &amp;&amp; <span class="keyword">this</span>.el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最后再用定义一个挂载方法，创建组件并挂载到真实DOM，并且按顺序执行生命周期即可</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">renderDOM</span>(<span class="params">componentType: &#123; <span class="keyword">new</span> (props: ComponentProps) &#125;, props, selector?: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> component = <span class="keyword">new</span> componentType(&#123;...props, el: <span class="built_in">document</span>.querySelector(selector)&#125;);</span><br><span class="line">  component.beforeMount &amp;&amp; component.beforeMount();</span><br><span class="line">  component.mount();</span><br><span class="line">  component.mounted &amp;&amp; component.mounted();</span><br><span class="line">  <span class="keyword">return</span> component;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="测试运行"><a href="#测试运行" class="headerlink" title="测试运行"></a>测试运行</h2><p>Virtual DOM到render的过程基本就完成了，接下来我们定义一个组件，测试调用一下，看看结果</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"el"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> &gt;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// 定义组件</span></span></span><br><span class="line"><span class="actionscript">  <span class="class"><span class="keyword">class</span> <span class="title">TestComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">    buttonText = <span class="string">'buttonText'</span>;</span></span><br><span class="line">    clickCount = 1;</span><br><span class="line">    </span><br><span class="line"><span class="javascript">    <span class="keyword">constructor</span>(props: ComponentProps) &#123;</span></span><br><span class="line"><span class="actionscript">      <span class="keyword">super</span>(props);</span></span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> (<span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">        <span class="tag">&lt;<span class="name">span</span> &gt;</span>hello world<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">        &lt;button onclick=&#123;() =&gt; &#123;<span class="built_in">console</span>.log(<span class="string">'Hello World!'</span>, ++<span class="keyword">this</span>.clickCount)&#125;&#125;&gt;&#123;<span class="keyword">this</span>.buttonText&#125;&lt;<span class="regexp">/button&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span>);</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="actionscript">  <span class="comment">// 渲染到DOM</span></span></span><br><span class="line"><span class="actionscript">  renderDOM(TestComponent, <span class="string">'#el'</span>)</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<img src="/2019/08/06/mvvm/mvvm.png" class="" title="运行结果">
-
-
-<p>这仅仅是实现了从Virtual DOM渲染到真实DOM，并没有包含diff算法部分，所以当数据变化之后，并不会重新刷新真实DOM。想要刷新真实DOM，就需要在数据发生变化的时候，根据数据重新render一份vnode树，然后和之前生成的vnode树进行diff并更新真实DOM，具体如何实现diff，后续文章会进行具体讲解。</p>
-]]></content>
-      <tags>
-        <tag>Virtual DOM</tag>
-        <tag>React</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用node.js开发命令行工具（一）创建与发布</title>
-    <url>/2019/03/31/npm-publish-1/</url>
-    <content><![CDATA[<p>在前端工程化的大环境下，合理运用node和npm script，可以大大提高我们的开发效率，那么怎么才能使自己开发的nodejs代码通过npm安装，就可以直接使用命令行进行调用呢？</p>
-<a id="more"></a>
-
-<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>确保自己有node环境，并且node已经配置到环境变量。没安装的可以到<a href="https://nodejs.org" target="_blank" rel="noopener">官网下载</a>或者<a href="http://nodejs.cn/" target="_blank" rel="noopener">国内镜像下载</a>。</p>
-<h2 id="第一行node代码"><a href="#第一行node代码" class="headerlink" title="第一行node代码"></a>第一行node代码</h2><ul>
-<li>新建一个js文件，比如: <code>hello.js</code>。</li>
-<li>在js文件中键入<code>console.log(&#39;hello world!&#39;)</code>，保存。</li>
-<li>在打开控制台，切换到<code>hello.js</code>所在的目录，执行<code>node ./hello.js</code>命令中。</li>
-</ul>
-<p>执行完上面的最后一步命令后，就可以看到控制台执行了我们的js文件，输出<code>hello world</code>了。</p>
-<h2 id="强大的nodejs"><a href="#强大的nodejs" class="headerlink" title="强大的nodejs"></a>强大的nodejs</h2><p>我们已经写出了我们的第一个node应用，想要做出更复杂更强大的应用，也只是时间问题了。不过，nodejs除了语法和浏览器端的一样，api和浏览器端是完全不一样的，nodejs没有浏览器端的bom和dom对象，取而代之的是操作系统api和一些工具包，详细的api文档可以查看<a href="https://nodejs.org/en/docs/" target="_blank" rel="noopener">英文文档</a>或者<a href="http://nodejs.cn/api/" target="_blank" rel="noopener">中文文档</a>。</p>
-<h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><p>当我们开发好node程序之后，能不能不经过node，直接像vue/cli这种cli工具那样，输入<code>hello</code>执行我们刚刚的程序呢呢？当然可以。</p>
-<ul>
-<li>创建一个新文件夹作为项目目录。</li>
-<li>使用控制台进入项目目录，执行<code>npm init</code>初始化一个npm项目。</li>
-<li>将之前的hello.js放入项目目录。</li>
-<li>打开<code>package.json</code>文件，在底部添加一项配置<code>&quot;bin&quot;</code>，<code>bin</code>对象里的key就是命令名称，value就是要执行的js文件。  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"MIT"</span>,</span><br><span class="line">  <span class="attr">"bin"</span>: &#123;</span><br><span class="line">    <span class="attr">"hello"</span>: <span class="string">"hello.js"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>打开<code>hello.js</code>文件，在文件顶部添加一句<code>#!/usr/bin/env node</code>并保存，用以指定使用node.js运行当前js文件。</li>
-</ul>
-<p>这个时候，我们的程序已经完成了，只需要发布，使用的时候安装就可以了。那么怎么发布呢，有两种方式，一种方式是本地发布<code>npm link</code>，这种方式只有本地能进行安装，另一种方式是<code>npm publish</code>发布到npm中央仓库，任何人都能够使用npm安装你的应用。</p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>当我们怎么样进行本地测试运行呢？我们可以使用<code>npm link</code>命令，这时候我们的当前项目就会被发布到本地并全局安装了，我们可以直接使用<code>hello</code>命令运行刚刚的js文件了。</p>
-<p>除此之外，如果我们想局部安装，我们可以切刀需要局部安装的项目中，使用<code>npm link &lt;packageNmae&gt;</code>替代<code>npm install &lt;packageNmae&gt;</code>命令，进行局部安装。被局部安装的包，不会添加到全局变量，但是可以使用npm script进行调用。</p>
-<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><ul>
-<li>在<a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm官网</a>注册一个自己的账号，用于发布和管理自己的npm包。</li>
-<li>给你的npm包起个名字，<code>package.json</code>中的<code>name</code>字段就是你的npm包的名字，<code>name</code>在官网查询下是不是重复，重复的包名不能提交。</li>
-<li>给你的npm包定义版本号，<code>package.json</code>中的<code>version</code>字段就是你的npm包的版本号，<code>version</code>应该比之前的版本递增，推荐使用<a href="https://semver.org/lang/zh-CN/" target="_blank" rel="noopener">语义化版本</a>规范。</li>
-<li>使用<code>npm publish</code>命令，根据提示先登录npm账号，然后发布npm包。</li>
-</ul>
-<p>按步骤执行到这里，整个npm包就发布完成了，我们可以在其他的npm项目下面用<code>npm install</code>命令安装我们发布的包了。</p>
-]]></content>
-      <tags>
-        <tag>Node.js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用node.js开发命令行工具（二）命令行输入输出UI库</title>
-    <url>/2019/04/08/npm-publish-2/</url>
-    <content><![CDATA[<p>相信很多前端都听说过或者使用过@angular/cli, vue-cli, create-react-app或其他类似的命令行工具。他们能够在命令行后面跟各种复杂的参数已经交互性的命令行选项，那你知道这些功能是怎么实现的吗？</p>
-<a id="more"></a>
-<h2 id="commander-js"><a href="#commander-js" class="headerlink" title="commander.js"></a>commander.js</h2><p>node.js命令行开发工具开发库，使node.js开发CLI工具变得简单，允许快捷的定义形如<code>&lt;command&gt; [options]</code>的命令。</p>
-<p>基础用法：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> program = <span class="built_in">require</span>(<span class="string">'commander'</span>);</span><br><span class="line"></span><br><span class="line"> program</span><br><span class="line">  .version(<span class="built_in">require</span>(<span class="string">'../package.json'</span>).version, <span class="string">'-v, --version'</span>) <span class="comment">// 定义版本信息</span></span><br><span class="line">  .usage(<span class="string">'&lt;command&gt; [options]'</span>); <span class="comment">// 定义命令用法</span></span><br><span class="line"> </span><br><span class="line">program</span><br><span class="line">  .command(<span class="string">'rm &lt;dir&gt;'</span>) <span class="comment">// 定义一个rm命令</span></span><br><span class="line">  .description(<span class="string">'删除文件或文件夹'</span>) <span class="comment">// 给rm命令添加描述信息，获取命令帮助信息的时候会显示</span></span><br><span class="line">  .option(<span class="string">'-r, --recursive'</span>, <span class="string">'Remove recursively'</span>) <span class="comment">// rm允许添加-r或者--recursive命令进行递归</span></span><br><span class="line">  .action(<span class="function"><span class="keyword">function</span> (<span class="params">dir, cmd</span>) </span>&#123; <span class="comment">// 对应命令的处理函数</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'remove '</span> + dir + (cmd.recursive ? <span class="string">' recursively'</span> : <span class="string">''</span>))</span><br><span class="line">  &#125;);</span><br><span class="line"> </span><br><span class="line"> program.parse(process.argv); <span class="comment">// commander的入口欧，传入命令行参数执行解析</span></span><br></pre></td></tr></table></figure>
-<p>github仓库：<a href="https://github.com/tj/commander.js" target="_blank" rel="noopener">https://github.com/tj/commander.js</a></p>
-<h2 id="inquirer-js"><a href="#inquirer-js" class="headerlink" title="inquirer.js"></a>inquirer.js</h2><p>node.js 交互式命令行界面开发库，允许方便的定义使用上下左右进行列表选择等交互式命令。</p>
-<p>基础用法：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">'inquirer'</span>);</span><br><span class="line"></span><br><span class="line">inquirer.prompt(</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'input'</span>, <span class="comment">// 问题类型，包括input，number，confirm，list，rawlist，password</span></span><br><span class="line">    name: <span class="string">'name'</span>, </span><br><span class="line">    message: <span class="string">'请输入项目名称'</span>, <span class="comment">// 问题</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'unnamed'</span> <span class="comment">// 默认值</span></span><br><span class="line">    validate: <span class="function">(<span class="params">input: string</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (input.length &gt; <span class="number">255</span>) &#123; <span class="comment">// 输入验证：name长度不允许超过255</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'项目名称超过限制'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;        </span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'list'</span>,</span><br><span class="line">    name: <span class="string">'type'</span>,</span><br><span class="line">    message: <span class="string">'请选择'</span>,</span><br><span class="line">    choices: [<span class="string">'item1'</span>, <span class="string">'item2'</span>, <span class="string">'item3'</span>, <span class="string">'item4'</span>], <span class="comment">// 可选选项</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'project'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(answers.name);</span><br><span class="line">    <span class="built_in">console</span>.log(answers.type);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<img src="/2019/04/08/npm-publish-2/inquirer.js.jpg" class="" title="inquirer.js示例">
-
-<p>github仓库：<a href="https://github.com/SBoudrias/Inquirer.js" target="_blank" rel="noopener">https://github.com/SBoudrias/Inquirer.js</a></p>
-<h2 id="ora"><a href="#ora" class="headerlink" title="ora"></a>ora</h2><p>优雅的命令行Loading动画。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> ora = <span class="built_in">require</span>(<span class="string">'ora'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> spinner = ora(<span class="string">'Loading unicorns'</span>).start();</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.color = <span class="string">'yellow'</span>;</span><br><span class="line">	spinner.text = <span class="string">'Loading rainbows'</span>;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.stop();</span><br><span class="line">&#125;, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
-<p align="center">
-    <br>
-    <img src="/2019/04/08/npm-publish-2/ora.svg" class="" title="ora.js示例">
-    <br>
-</p>
-
-<p>github仓库：<a href="https://github.com/sindresorhus/ora" target="_blank" rel="noopener">https://github.com/sindresorhus/ora</a></p>
-]]></content>
-      <tags>
-        <tag>Node.js</tag>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -304,7 +140,7 @@
   </entry>
   <entry>
     <title>深入Vue源码理解diff算法</title>
-    <url>/2020/06/15/diff/</url>
+    <url>/2020/08/15/diff/</url>
     <content><![CDATA[<p>计算两颗树的结构差异并进行转化，传统的diff算法是通过循环递归对每个节点进行依次对比，算法复杂度达到 O(n^3) ，n是树的节点数，这个有多可怕呢？——如果要展示1000个节点，得执行上亿次比较。。即便是CPU快能执行30亿条命令，也很难在一秒内计算出差异。</p>
 <a id="more"></a>
 
@@ -349,16 +185,16 @@
 <li>oldCh和newCh的尾和头进行比较</li>
 </ul>
 <p><code>oldStartIdx</code>、<code>oldEndIdx</code>、<code>newStartIdx</code>、<code>newEndIdx</code>保存着当前比较的vnode的下标，头部比较成功后，idx就往尾部移动，尾部比较成功后，idx头部移动。</p>
-<img src="/2020/06/15/diff/vue-diff.png" class="" title="diff流程图">
+<img src="/2020/08/15/diff/vue-diff.png" class="" title="diff流程图">
 
 <p>当<code>oldCh</code>头部和<code>newCh</code>尾部比较成功后，则将<code>oldCh</code>尾部的节点移动插入到<code>newCh</code>的头部，<code>oldCh</code>尾部和<code>newCh</code>头部比较成功后，也是一样将<code>oldCh</code>头部的节点移动插入到<code>newCh</code>的尾部。</p>
-<img src="/2020/06/15/diff/vue-diff2.png" class="" title="diff流程图">
+<img src="/2020/08/15/diff/vue-diff2.png" class="" title="diff流程图">
 
 <p>当循环结束的时候，则可能是<code>oldStartIdx &gt; oldEndIdx</code>（oldCh已经被遍历完了）或者<code>newStartIdx &lt;= newEndIdx</code>（newCh已经被遍历完了），如果是<code>oldCh</code>被遍历完，而<code>newCh</code>没有被遍历完，则说明<code>newCh</code>中剩下的是新插入的节点，如果是<code>newCh</code>被遍历完，而<code>oldCh</code>没有被遍历完，则说明<code>oldCh</code>中剩下的是被移除的节点。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/patch.js#L404</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateChildren</span> (<span class="params">parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> oldStartIdx = <span class="number">0</span></span><br><span class="line">  <span class="keyword">let</span> newStartIdx = <span class="number">0</span></span><br><span class="line">  <span class="keyword">let</span> oldEndIdx = oldCh.length - <span class="number">1</span></span><br><span class="line">  <span class="keyword">let</span> oldStartVnode = oldCh[<span class="number">0</span>]</span><br><span class="line">  <span class="keyword">let</span> oldEndVnode = oldCh[oldEndIdx]</span><br><span class="line">  <span class="keyword">let</span> newEndIdx = newCh.length - <span class="number">1</span></span><br><span class="line">  <span class="keyword">let</span> newStartVnode = newCh[<span class="number">0</span>]</span><br><span class="line">  <span class="keyword">let</span> newEndVnode = newCh[newEndIdx]</span><br><span class="line">  <span class="keyword">let</span> oldKeyToIdx, idxInOld, vnodeToMove, refElm</span><br><span class="line"></span><br><span class="line">  <span class="comment">// removeOnly is a special flag used only by &lt;transition-group&gt;</span></span><br><span class="line">  <span class="comment">// to ensure removed elements stay in correct relative positions</span></span><br><span class="line">  <span class="comment">// during leaving transitions</span></span><br><span class="line">  <span class="keyword">const</span> canMove = !removeOnly</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">while</span> (oldStartIdx &lt;= oldEndIdx &amp;&amp; newStartIdx &lt;= newEndIdx) &#123;</span><br><span class="line">    <span class="keyword">if</span> (isUndef(oldStartVnode)) &#123;</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx] <span class="comment">// Vnode has been moved left</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isUndef(oldEndVnode)) &#123;</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldStartVnode, newStartVnode)) &#123;</span><br><span class="line">       <span class="comment">// oldCh头newCh头比较成功，递归patchVnode，idx往后移</span></span><br><span class="line">      patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue, newCh, newStartIdx)</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx]</span><br><span class="line">      newStartVnode = newCh[++newStartIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldEndVnode, newEndVnode)) &#123; </span><br><span class="line">      <span class="comment">// oldCh尾newCh尾比较成功，递归patchVnode，idx往前移</span></span><br><span class="line">      patchVnode(oldEndVnode, newEndVnode, insertedVnodeQueue, newCh, newEndIdx)</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx]</span><br><span class="line">      newEndVnode = newCh[--newEndIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldStartVnode, newEndVnode)) &#123; <span class="comment">// Vnode moved right</span></span><br><span class="line">      <span class="comment">// oldCh头和newCh尾比较成功，递归patchVnode，然后将oldCh尾部的vnode插入到newCh的头部，oldStartIdx往后移，newEndIdx往前移</span></span><br><span class="line">      patchVnode(oldStartVnode, newEndVnode, insertedVnodeQueue, newCh, newEndIdx)</span><br><span class="line">      canMove &amp;&amp; nodeOps.insertBefore(parentElm, oldStartVnode.elm, nodeOps.nextSibling(oldEndVnode.elm))</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx]</span><br><span class="line">      newEndVnode = newCh[--newEndIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldEndVnode, newStartVnode)) &#123; <span class="comment">// Vnode moved left</span></span><br><span class="line">      <span class="comment">// oldCh尾newCh头比较成功，递归patchVnode，然后将oldCh尾部的vnode插入到newCh的头部，oldEndIdx往前移，newStartIdx往后移</span></span><br><span class="line">      patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue, newCh, newStartIdx)</span><br><span class="line">      canMove &amp;&amp; nodeOps.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm)</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx]</span><br><span class="line">      newStartVnode = newCh[++newStartIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 用oldCl的key创建一个存有vnode的Map</span></span><br><span class="line">      <span class="keyword">if</span> (isUndef(oldKeyToIdx)) oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx)</span><br><span class="line">      <span class="comment">// 用新vnode的key从Map取数据</span></span><br><span class="line">      idxInOld = isDef(newStartVnode.key)</span><br><span class="line">        ? oldKeyToIdx[newStartVnode.key]</span><br><span class="line">        : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx)</span><br><span class="line">      <span class="comment">// 如果没取到，oldCh中没有能够复用的vnode，新创建一个</span></span><br><span class="line">      <span class="keyword">if</span> (isUndef(idxInOld)) &#123; <span class="comment">// New element</span></span><br><span class="line">        createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm, <span class="literal">false</span>, newCh, newStartIdx)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果取到了，说明key相同，他们是相同的vnode，递归patchVnode，将oldCh的vnode插入到新的位置</span></span><br><span class="line">        vnodeToMove = oldCh[idxInOld]</span><br><span class="line">        <span class="keyword">if</span> (sameVnode(vnodeToMove, newStartVnode)) &#123;</span><br><span class="line">          patchVnode(vnodeToMove, newStartVnode, insertedVnodeQueue, newCh, newStartIdx)</span><br><span class="line">          oldCh[idxInOld] = <span class="literal">undefined</span></span><br><span class="line">          canMove &amp;&amp; nodeOps.insertBefore(parentElm, vnodeToMove.elm, oldStartVnode.elm)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// same key but different element. treat as new element</span></span><br><span class="line">          createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm, <span class="literal">false</span>, newCh, newStartIdx)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      newStartVnode = newCh[++newStartIdx]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 当`oldCh`被遍历完，而`newCh`没有被遍历完，则说明`newCh`中剩下的是新插入的节点</span></span><br><span class="line">  <span class="keyword">if</span> (oldStartIdx &gt; oldEndIdx) &#123;</span><br><span class="line">    refElm = isUndef(newCh[newEndIdx + <span class="number">1</span>]) ? <span class="literal">null</span> : newCh[newEndIdx + <span class="number">1</span>].elm</span><br><span class="line">    addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue)</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (newStartIdx &gt; newEndIdx) &#123;</span><br><span class="line">    <span class="comment">// 当`newCh`被遍历完，而`oldCh`没有被遍历完，则说明`oldCh`中剩下的是被移除的节点</span></span><br><span class="line">    removeVnodes(oldCh, oldStartIdx, oldEndIdx)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>递归执行完<code>patchVnode</code>和<code>updateChildren</code>之后，整棵vnode树就被完全更新了，diff结束。</p>
-<h2 id="完整流程图"><a href="#完整流程图" class="headerlink" title="完整流程图"></a>完整流程图</h2><img src="/2020/06/15/diff/diff.jpg" class="" title="diff流程图">
+<h2 id="完整流程图"><a href="#完整流程图" class="headerlink" title="完整流程图"></a>完整流程图</h2><img src="/2020/08/15/diff/diff.jpg" class="" title="diff流程图">
 
 ]]></content>
       <tags>
@@ -367,27 +203,107 @@
       </tags>
   </entry>
   <entry>
-    <title>git filter-branch指令</title>
-    <url>/2019/06/16/git-filter-branch/</url>
-    <content><![CDATA[<p>git filter-branch 这个指令，是一个非常强悍的指令，《Pro Git》的作者说这是一个核弹级指令。除非特别清楚你准备干什么。否则不要抱着尝试的想法来试试，除非你想尝试下核弹的威力。</p>
-<a id="more"></a>     
+    <title>Hello World</title>
+    <url>/1970/01/01/hello-world/</url>
+    <content><![CDATA[<p>Mifan blog, Hello World</p>
+<a id="more"></a>
 
-<p>// TODO</p>
+<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>100行代码实现Virtual DOM和render</title>
+    <url>/2019/08/06/mvvm/</url>
+    <content><![CDATA[<p>在编写代码之前，我们需要先了解需要先来了解一下Virtual DOM是怎么样构建并渲染到浏览器的，常见的构建Virtual DOM的方法有两种，一种是jsx(react)，另一种是template(vue)。</p>
+<a id="more"></a>
+
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><ul>
+<li><p>React的jsx一般是通过babel的jsx插件编译成<code>createElement</code><a href="https://github.com/facebook/react/blob/v16.13.1/packages/react/src/ReactElement.js#L348" target="_blank" rel="noopener">[源码]</a>，Vue的template也可以通过vue-loader编译成对应的<code>createElement</code><a href="https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/create-element.js#L28" target="_blank" rel="noopener">[源码]</a>，</p>
+</li>
+<li><p>然后，在组件被创建并初始化state之后，执行render，将组件的props和state根据jsx(react)或template(vue)，生成一个虚拟DOM树</p>
+</li>
+<li><p>最后所有的VDOM生成完毕之后，将所有VDOM都mount上真实HTML DOM。</p>
+</li>
+</ul>
+<p>Component -&gt; render -&gt; VDOM -&gt; mount -&gt; HTML</p>
+<h2 id="VDOM"><a href="#VDOM" class="headerlink" title="VDOM"></a>VDOM</h2><p>VDOM的节点是一个简化版的DOM对象，只存储了我们关心的属性，大大提高了DOM操作时的性能。通常一个虚拟节点(VNode)包含：标签名、子节点数组、属性、事件、key和对应的真实DOM。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> VNode &#123;</span><br><span class="line">  <span class="keyword">type</span>: <span class="built_in">string</span>;</span><br><span class="line">  children: VNode[] = [];</span><br><span class="line">  props: &#123; propName: <span class="built_in">string</span>; propValue: <span class="built_in">any</span> &#125;[] = [];</span><br><span class="line">  events: &#123; propName: <span class="built_in">string</span>; propValue: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">void</span> &#125;[] = [];</span><br><span class="line">  key: <span class="built_in">any</span>;</span><br><span class="line">  el: Node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这时候再定义一个创建虚拟DOM对象的方法，用于jsx调用，该方法接收三个参数：标签名，标签属性，子标签。返回一个虚拟DOM对象</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createElement</span>(<span class="params"><span class="keyword">type</span>: <span class="built_in">string</span>, props, ...children</span>) </span>&#123;</span><br><span class="line">  props = props || &#123;&#125;;</span><br><span class="line">  <span class="keyword">const</span> vNode = <span class="keyword">new</span> VNode();</span><br><span class="line">  vNode.type = <span class="keyword">type</span>;</span><br><span class="line">  vNode.events = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> value.startsWith(<span class="string">'on'</span>))</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  vNode.props = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> !value.startsWith(<span class="string">'on'</span>) &amp;&amp; value !== <span class="string">'key'</span>)</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  vNode.key = props[<span class="string">'key'</span>];</span><br><span class="line">  vNode.children = children;</span><br><span class="line">  <span class="keyword">return</span> vNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>虚拟DOM挂载到HTML DOM，根据根节点的ID，使用<code>document.createElement</code>将虚拟DOM转成HTML DOM，并挂载到真实节点mountEl下</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mount</span>(<span class="params">el, vNode: VNode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> node = mountVNode(vNode);</span><br><span class="line">  <span class="keyword">if</span> (el != <span class="literal">null</span>) &#123;</span><br><span class="line">    el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据VNode树生成真实HTML DOM</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mountVNode</span>(<span class="params">vNode: VNode</span>): <span class="title">HTMLElement</span> | <span class="title">Text</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (vNode == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (vNode <span class="keyword">instanceof</span> VNode) &#123;</span><br><span class="line">    <span class="keyword">let</span> el: HTMLElement;</span><br><span class="line">    el = <span class="built_in">document</span>.createElement(vNode.type);</span><br><span class="line">    vNode.props.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.setAttribute(value.propName, value.propValue)</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.events.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.addEventListener(value.propName.replace(<span class="regexp">/^on/</span>, <span class="string">''</span>), value.propValue);</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.children.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> subEl = mountVNode(value);</span><br><span class="line">      <span class="keyword">if</span> (subEl != <span class="literal">null</span>) &#123;</span><br><span class="line">        el.appendChild(subEl);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.el = el;</span><br><span class="line">    <span class="keyword">return</span> el;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createTextNode(<span class="built_in">String</span>(vNode));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义一个所有组件的抽象父组件，实现组件共有的基础功能</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> ComponentProps &#123;</span><br><span class="line">  el: HTMLElement;</span><br><span class="line">  [key: <span class="built_in">string</span>]: <span class="built_in">any</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">abstract</span> <span class="keyword">class</span> Component &#123;</span><br><span class="line"></span><br><span class="line">  readonly el: HTMLElement;</span><br><span class="line">  vNode: VNode;</span><br><span class="line">  <span class="keyword">abstract</span> render(): VNode;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params">props: ComponentProps</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (props) &#123;</span><br><span class="line">      <span class="built_in">Object</span>.assign(<span class="keyword">this</span>, props);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> mount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.vNode = <span class="keyword">this</span>.render();</span><br><span class="line">    <span class="keyword">const</span> node = mountVNode(<span class="keyword">this</span>.vNode);</span><br><span class="line">    <span class="keyword">this</span>.el &amp;&amp; node &amp;&amp; <span class="keyword">this</span>.el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后再用定义一个挂载方法，创建组件并挂载到真实DOM，并且按顺序执行生命周期即可</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">renderDOM</span>(<span class="params">componentType: &#123; <span class="keyword">new</span> (props: ComponentProps) &#125;, props, selector?: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> component = <span class="keyword">new</span> componentType(&#123;...props, el: <span class="built_in">document</span>.querySelector(selector)&#125;);</span><br><span class="line">  component.beforeMount &amp;&amp; component.beforeMount();</span><br><span class="line">  component.mount();</span><br><span class="line">  component.mounted &amp;&amp; component.mounted();</span><br><span class="line">  <span class="keyword">return</span> component;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试运行"><a href="#测试运行" class="headerlink" title="测试运行"></a>测试运行</h2><p>Virtual DOM到render的过程基本就完成了，接下来我们定义一个组件，测试调用一下，看看结果</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"el"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> &gt;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// 定义组件</span></span></span><br><span class="line"><span class="actionscript">  <span class="class"><span class="keyword">class</span> <span class="title">TestComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">    buttonText = <span class="string">'buttonText'</span>;</span></span><br><span class="line">    clickCount = 1;</span><br><span class="line">    </span><br><span class="line"><span class="javascript">    <span class="keyword">constructor</span>(props: ComponentProps) &#123;</span></span><br><span class="line"><span class="actionscript">      <span class="keyword">super</span>(props);</span></span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> (<span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">        <span class="tag">&lt;<span class="name">span</span> &gt;</span>hello world<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">        &lt;button onclick=&#123;() =&gt; &#123;<span class="built_in">console</span>.log(<span class="string">'Hello World!'</span>, ++<span class="keyword">this</span>.clickCount)&#125;&#125;&gt;&#123;<span class="keyword">this</span>.buttonText&#125;&lt;<span class="regexp">/button&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span>);</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="actionscript">  <span class="comment">// 渲染到DOM</span></span></span><br><span class="line"><span class="actionscript">  renderDOM(TestComponent, <span class="string">'#el'</span>)</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<img src="/2019/08/06/mvvm/mvvm.png" class="" title="运行结果">
+
+
+<p>这仅仅是实现了从Virtual DOM渲染到真实DOM，并没有包含diff算法部分，所以当数据变化之后，并不会重新刷新真实DOM。想要刷新真实DOM，就需要在数据发生变化的时候，根据数据重新render一份vnode树，然后和之前生成的vnode树进行diff并更新真实DOM，具体如何实现diff，后续文章会进行具体讲解。</p>
 ]]></content>
       <tags>
-        <tag>Git</tag>
+        <tag>React</tag>
+        <tag>Virtual DOM</tag>
       </tags>
   </entry>
   <entry>
-    <title>git rebase指令</title>
-    <url>/2018/06/16/git-rebase/</url>
-    <content><![CDATA[<p>什么是git rebase? git rebase 你其实可以把它理解成是“重新设置基线”，它会将你的当前分支重新设置开始点，并把当前分支或其他分支的提交重新追加到后面，如果有修改提交内容或者解决冲突，会形成新的提交替换原本的，但是并不会产生比原本更多的提交。所以git rebase除了能用于合并分支以外，还能用于修改提交信息，修改提交文件等操作。</p>
-<a id="more"></a>              
+    <title>使用node.js开发命令行工具（一）创建与发布</title>
+    <url>/2019/03/31/npm-publish-1/</url>
+    <content><![CDATA[<p>在前端工程化的大环境下，合理运用node和npm script，可以大大提高我们的开发效率，那么怎么才能使自己开发的nodejs代码通过npm安装，就可以直接使用命令行进行调用呢？</p>
+<a id="more"></a>
 
-<p>// TODO</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>确保自己有node环境，并且node已经配置到环境变量。没安装的可以到<a href="https://nodejs.org" target="_blank" rel="noopener">官网下载</a>或者<a href="http://nodejs.cn/" target="_blank" rel="noopener">国内镜像下载</a>。</p>
+<h2 id="第一行node代码"><a href="#第一行node代码" class="headerlink" title="第一行node代码"></a>第一行node代码</h2><ul>
+<li>新建一个js文件，比如: <code>hello.js</code>。</li>
+<li>在js文件中键入<code>console.log(&#39;hello world!&#39;)</code>，保存。</li>
+<li>在打开控制台，切换到<code>hello.js</code>所在的目录，执行<code>node ./hello.js</code>命令中。</li>
+</ul>
+<p>执行完上面的最后一步命令后，就可以看到控制台执行了我们的js文件，输出<code>hello world</code>了。</p>
+<h2 id="强大的nodejs"><a href="#强大的nodejs" class="headerlink" title="强大的nodejs"></a>强大的nodejs</h2><p>我们已经写出了我们的第一个node应用，想要做出更复杂更强大的应用，也只是时间问题了。不过，nodejs除了语法和浏览器端的一样，api和浏览器端是完全不一样的，nodejs没有浏览器端的bom和dom对象，取而代之的是操作系统api和一些工具包，详细的api文档可以查看<a href="https://nodejs.org/en/docs/" target="_blank" rel="noopener">英文文档</a>或者<a href="http://nodejs.cn/api/" target="_blank" rel="noopener">中文文档</a>。</p>
+<h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><p>当我们开发好node程序之后，能不能不经过node，直接像vue/cli这种cli工具那样，输入<code>hello</code>执行我们刚刚的程序呢呢？当然可以。</p>
+<ul>
+<li>创建一个新文件夹作为项目目录。</li>
+<li>使用控制台进入项目目录，执行<code>npm init</code>初始化一个npm项目。</li>
+<li>将之前的hello.js放入项目目录。</li>
+<li>打开<code>package.json</code>文件，在底部添加一项配置<code>&quot;bin&quot;</code>，<code>bin</code>对象里的key就是命令名称，value就是要执行的js文件。  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"MIT"</span>,</span><br><span class="line">  <span class="attr">"bin"</span>: &#123;</span><br><span class="line">    <span class="attr">"hello"</span>: <span class="string">"hello.js"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>打开<code>hello.js</code>文件，在文件顶部添加一句<code>#!/usr/bin/env node</code>并保存，用以指定使用node.js运行当前js文件。</li>
+</ul>
+<p>这个时候，我们的程序已经完成了，只需要发布，使用的时候安装就可以了。那么怎么发布呢，有两种方式，一种方式是本地发布<code>npm link</code>，这种方式只有本地能进行安装，另一种方式是<code>npm publish</code>发布到npm中央仓库，任何人都能够使用npm安装你的应用。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>当我们怎么样进行本地测试运行呢？我们可以使用<code>npm link</code>命令，这时候我们的当前项目就会被发布到本地并全局安装了，我们可以直接使用<code>hello</code>命令运行刚刚的js文件了。</p>
+<p>除此之外，如果我们想局部安装，我们可以切刀需要局部安装的项目中，使用<code>npm link &lt;packageNmae&gt;</code>替代<code>npm install &lt;packageNmae&gt;</code>命令，进行局部安装。被局部安装的包，不会添加到全局变量，但是可以使用npm script进行调用。</p>
+<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><ul>
+<li>在<a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm官网</a>注册一个自己的账号，用于发布和管理自己的npm包。</li>
+<li>给你的npm包起个名字，<code>package.json</code>中的<code>name</code>字段就是你的npm包的名字，<code>name</code>在官网查询下是不是重复，重复的包名不能提交。</li>
+<li>给你的npm包定义版本号，<code>package.json</code>中的<code>version</code>字段就是你的npm包的版本号，<code>version</code>应该比之前的版本递增，推荐使用<a href="https://semver.org/lang/zh-CN/" target="_blank" rel="noopener">语义化版本</a>规范。</li>
+<li>使用<code>npm publish</code>命令，根据提示先登录npm账号，然后发布npm包。</li>
+</ul>
+<p>按步骤执行到这里，整个npm包就发布完成了，我们可以在其他的npm项目下面用<code>npm install</code>命令安装我们发布的包了。</p>
 ]]></content>
       <tags>
-        <tag>Git</tag>
+        <tag>Node.js</tag>
       </tags>
   </entry>
   <entry>
@@ -407,72 +323,6 @@
 ]]></content>
       <tags>
         <tag>面试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RxJS和响应式编程</title>
-    <url>/2019/04/26/rxjs/</url>
-    <content><![CDATA[<p>RxJS 是一个库，它通过使用 observable 序列来编写异步和基于事件的程序。它提供了一个核心类型 Observable，附属类型 (Observer、 Schedulers、 Subjects) 和受 [Array#extras] 启发的操作符 (map、filter、reduce、every, 等等)，这些数组操作符可以把异步事件作为集合来处理。可以把 RxJS 当做是用来处理异步事件的 Lodash 。</p>
-<a id="more"></a>
-
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>ReactiveX 结合了 <strong>观察者模式</strong>、<strong>迭代器模式</strong> 和 <strong>使用集合的函数式编程</strong>，以满足以一种理想方式来管理事件序列所需要的一切。</p>
-<p>注册事件监听器的常规写法。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
-<p>使用 RxJS 的话，创建一个 observable 来代替。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).subscribe(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
-<p>这里涉及到了几个基础概念，</p>
-<p><strong>Observable</strong> (可观察对象)：<code>fromEvent</code>方法返回就是一个<code>Observable</code>对象，表示一个事件或值的发生方，可以调用<code>subscribe</code>方法，对这个事件进行监听。</p>
-<p><strong>Observer</strong> (观察者)：对<code>Observable</code>进行监听调用的<code>subscribe</code>方法接收的参数就是<code>Observer</code>，就需要<code>Observer</code>对象，通常包含了成功、失败、结束三种回调。</p>
-<p><strong>Subscription</strong> (订阅): <code>subscribe</code>的返回值就是<code>Subscription</code>，主要用于取消<code>Observable</code>的执行。</p>
-<p><strong>Operators</strong> (操作符)：采用函数式编程风格的纯函数，使用像<code>map</code>、<code>filter</code>、<code>concat</code>、<code>flatMap</code>这样的操作符来处理事件集合。</p>
-<p><strong>Schedulers</strong> (调度器): 用来控制并发并且是中央集权的调度员，允许我们在发生计算时进行协调，例如<code>setTimeout</code>或微任务或其他。</p>
-<h3 id="纯净性-Purity"><a href="#纯净性-Purity" class="headerlink" title="纯净性 (Purity)"></a>纯净性 (Purity)</h3><p>RxJS之所以如此强大，正是因为它使用纯函数来产生值的能力，这意味着你的代码更不容易出错。</p>
-<p>在很多情况下，一些事件的处理，需要额外的状态，通常你会创建一个非纯函数，在这个函数之外也可能修改共享变量，这将使得你的应用更难维护。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
-
-<p>使用 RxJS 的话，你会将应用状态隔离出来。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>)</span><br><span class="line">  .scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">  .subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
-
-<p>scan 操作符的工作原理与数组的 reduce 类似。它接收一个回调函数和初始值。每次回调函数运行后的返回值会作为下次回调函数运行时的参数。</p>
-<h3 id="流动性-Flow"><a href="#流动性-Flow" class="headerlink" title="流动性 (Flow)"></a>流动性 (Flow)</h3><p><code>Observable</code>对象提供了pipe方法，可以使用RxJS提供的操作符来帮助你控制事件如何流经管道。</p>
-<p>下面的代码展示的是如何控制一秒钟内最多点击一次，先来看使用普通的 JavaScript：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> rate = <span class="number">1000</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> lastClick = <span class="built_in">Date</span>.now() - rate;</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - lastClick &gt;= rate) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>);</span><br><span class="line">    lastClick = <span class="built_in">Date</span>.now();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>使用 RxJS：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; scan, throttleTime &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).pipe(</span><br><span class="line">  throttleTime(<span class="number">1000</span>),</span><br><span class="line">  scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">).subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>Observable 是多个值的惰性推送集合。它填补了下面表格中的空白：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>单个值</th>
-<th>多个值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>拉取</td>
-<td>Function</td>
-<td>Generator</td>
-</tr>
-<tr>
-<td>推送</td>
-<td>Promise</td>
-<td>Observable</td>
-</tr>
-</tbody></table>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> Observable(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  subscriber.next(<span class="number">1</span>);</span><br><span class="line">  subscriber.next(<span class="number">2</span>);</span><br><span class="line">  subscriber.next(<span class="number">3</span>);</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    subscriber.next(<span class="number">4</span>);</span><br><span class="line">    subscriber.complete();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>要调用 Observable 并看到这些值，我们需要订阅 Observable：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">observable.subscribe(&#123;</span><br><span class="line">  next: <span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'获取值：'</span> + x),</span><br><span class="line">  error: <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(<span class="string">'错误：'</span> + err),</span><br><span class="line">  complete: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'结束'</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="TODO"><a href="#TODO" class="headerlink" title="// TODO"></a>// TODO</h2>]]></content>
-      <tags>
-        <tag>RxJS</tag>
       </tags>
   </entry>
   <entry>
@@ -599,6 +449,114 @@
       </tags>
   </entry>
   <entry>
+    <title>数据结构与算法基础知识点</title>
+    <url>/2019/12/08/data-structure/</url>
+    <content><![CDATA[<p>数据结构是在计算机中组织和存储数据的一种特殊方式，使得数据可以高效地被访问和修改。更确切地说，数据结构是数据值的集合，表示数据之间的关系，也包括了作用在数据上的函数或操作。</p>
+<a id="more"></a>
+
+<img src="/2019/12/08/data-structure/xmind.png" class="" title="xmind">
+]]></content>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用node.js开发命令行工具（二）命令行输入输出UI库</title>
+    <url>/2019/04/08/npm-publish-2/</url>
+    <content><![CDATA[<p>相信很多前端都听说过或者使用过@angular/cli, vue-cli, create-react-app或其他类似的命令行工具。他们能够在命令行后面跟各种复杂的参数已经交互性的命令行选项，那你知道这些功能是怎么实现的吗？</p>
+<a id="more"></a>
+<h2 id="commander-js"><a href="#commander-js" class="headerlink" title="commander.js"></a>commander.js</h2><p>node.js命令行开发工具开发库，使node.js开发CLI工具变得简单，允许快捷的定义形如<code>&lt;command&gt; [options]</code>的命令。</p>
+<p>基础用法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> program = <span class="built_in">require</span>(<span class="string">'commander'</span>);</span><br><span class="line"></span><br><span class="line"> program</span><br><span class="line">  .version(<span class="built_in">require</span>(<span class="string">'../package.json'</span>).version, <span class="string">'-v, --version'</span>) <span class="comment">// 定义版本信息</span></span><br><span class="line">  .usage(<span class="string">'&lt;command&gt; [options]'</span>); <span class="comment">// 定义命令用法</span></span><br><span class="line"> </span><br><span class="line">program</span><br><span class="line">  .command(<span class="string">'rm &lt;dir&gt;'</span>) <span class="comment">// 定义一个rm命令</span></span><br><span class="line">  .description(<span class="string">'删除文件或文件夹'</span>) <span class="comment">// 给rm命令添加描述信息，获取命令帮助信息的时候会显示</span></span><br><span class="line">  .option(<span class="string">'-r, --recursive'</span>, <span class="string">'Remove recursively'</span>) <span class="comment">// rm允许添加-r或者--recursive命令进行递归</span></span><br><span class="line">  .action(<span class="function"><span class="keyword">function</span> (<span class="params">dir, cmd</span>) </span>&#123; <span class="comment">// 对应命令的处理函数</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'remove '</span> + dir + (cmd.recursive ? <span class="string">' recursively'</span> : <span class="string">''</span>))</span><br><span class="line">  &#125;);</span><br><span class="line"> </span><br><span class="line"> program.parse(process.argv); <span class="comment">// commander的入口欧，传入命令行参数执行解析</span></span><br></pre></td></tr></table></figure>
+<p>github仓库：<a href="https://github.com/tj/commander.js" target="_blank" rel="noopener">https://github.com/tj/commander.js</a></p>
+<h2 id="inquirer-js"><a href="#inquirer-js" class="headerlink" title="inquirer.js"></a>inquirer.js</h2><p>node.js 交互式命令行界面开发库，允许方便的定义使用上下左右进行列表选择等交互式命令。</p>
+<p>基础用法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">'inquirer'</span>);</span><br><span class="line"></span><br><span class="line">inquirer.prompt(</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'input'</span>, <span class="comment">// 问题类型，包括input，number，confirm，list，rawlist，password</span></span><br><span class="line">    name: <span class="string">'name'</span>, </span><br><span class="line">    message: <span class="string">'请输入项目名称'</span>, <span class="comment">// 问题</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'unnamed'</span> <span class="comment">// 默认值</span></span><br><span class="line">    validate: <span class="function">(<span class="params">input: string</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (input.length &gt; <span class="number">255</span>) &#123; <span class="comment">// 输入验证：name长度不允许超过255</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'项目名称超过限制'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;        </span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'list'</span>,</span><br><span class="line">    name: <span class="string">'type'</span>,</span><br><span class="line">    message: <span class="string">'请选择'</span>,</span><br><span class="line">    choices: [<span class="string">'item1'</span>, <span class="string">'item2'</span>, <span class="string">'item3'</span>, <span class="string">'item4'</span>], <span class="comment">// 可选选项</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'project'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(answers.name);</span><br><span class="line">    <span class="built_in">console</span>.log(answers.type);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<img src="/2019/04/08/npm-publish-2/inquirer.js.jpg" class="" title="inquirer.js示例">
+
+<p>github仓库：<a href="https://github.com/SBoudrias/Inquirer.js" target="_blank" rel="noopener">https://github.com/SBoudrias/Inquirer.js</a></p>
+<h2 id="ora"><a href="#ora" class="headerlink" title="ora"></a>ora</h2><p>优雅的命令行Loading动画。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> ora = <span class="built_in">require</span>(<span class="string">'ora'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> spinner = ora(<span class="string">'Loading unicorns'</span>).start();</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.color = <span class="string">'yellow'</span>;</span><br><span class="line">	spinner.text = <span class="string">'Loading rainbows'</span>;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.stop();</span><br><span class="line">&#125;, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
+<p align="center">
+    <br>
+    <img src="/2019/04/08/npm-publish-2/ora.svg" class="" title="ora.js示例">
+    <br>
+</p>
+
+<p>github仓库：<a href="https://github.com/sindresorhus/ora" target="_blank" rel="noopener">https://github.com/sindresorhus/ora</a></p>
+]]></content>
+      <tags>
+        <tag>Node.js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RxJS和响应式编程</title>
+    <url>/2019/04/26/rxjs/</url>
+    <content><![CDATA[<p>RxJS 是一个库，它通过使用 observable 序列来编写异步和基于事件的程序。它提供了一个核心类型 Observable，附属类型 (Observer、 Schedulers、 Subjects) 和受 [Array#extras] 启发的操作符 (map、filter、reduce、every, 等等)，这些数组操作符可以把异步事件作为集合来处理。可以把 RxJS 当做是用来处理异步事件的 Lodash 。</p>
+<a id="more"></a>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>ReactiveX 结合了 <strong>观察者模式</strong>、<strong>迭代器模式</strong> 和 <strong>使用集合的函数式编程</strong>，以满足以一种理想方式来管理事件序列所需要的一切。</p>
+<p>注册事件监听器的常规写法。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
+<p>使用 RxJS 的话，创建一个 observable 来代替。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).subscribe(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
+<p>这里涉及到了几个基础概念，</p>
+<p><strong>Observable</strong> (可观察对象)：<code>fromEvent</code>方法返回就是一个<code>Observable</code>对象，表示一个事件或值的发生方，可以调用<code>subscribe</code>方法，对这个事件进行监听。</p>
+<p><strong>Observer</strong> (观察者)：对<code>Observable</code>进行监听调用的<code>subscribe</code>方法接收的参数就是<code>Observer</code>，就需要<code>Observer</code>对象，通常包含了成功、失败、结束三种回调。</p>
+<p><strong>Subscription</strong> (订阅): <code>subscribe</code>的返回值就是<code>Subscription</code>，主要用于取消<code>Observable</code>的执行。</p>
+<p><strong>Operators</strong> (操作符)：采用函数式编程风格的纯函数，使用像<code>map</code>、<code>filter</code>、<code>concat</code>、<code>flatMap</code>这样的操作符来处理事件集合。</p>
+<p><strong>Schedulers</strong> (调度器): 用来控制并发并且是中央集权的调度员，允许我们在发生计算时进行协调，例如<code>setTimeout</code>或微任务或其他。</p>
+<h3 id="纯净性-Purity"><a href="#纯净性-Purity" class="headerlink" title="纯净性 (Purity)"></a>纯净性 (Purity)</h3><p>RxJS之所以如此强大，正是因为它使用纯函数来产生值的能力，这意味着你的代码更不容易出错。</p>
+<p>在很多情况下，一些事件的处理，需要额外的状态，通常你会创建一个非纯函数，在这个函数之外也可能修改共享变量，这将使得你的应用更难维护。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+<p>使用 RxJS 的话，你会将应用状态隔离出来。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>)</span><br><span class="line">  .scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">  .subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+<p>scan 操作符的工作原理与数组的 reduce 类似。它接收一个回调函数和初始值。每次回调函数运行后的返回值会作为下次回调函数运行时的参数。</p>
+<h3 id="流动性-Flow"><a href="#流动性-Flow" class="headerlink" title="流动性 (Flow)"></a>流动性 (Flow)</h3><p><code>Observable</code>对象提供了pipe方法，可以使用RxJS提供的操作符来帮助你控制事件如何流经管道。</p>
+<p>下面的代码展示的是如何控制一秒钟内最多点击一次，先来看使用普通的 JavaScript：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> rate = <span class="number">1000</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> lastClick = <span class="built_in">Date</span>.now() - rate;</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - lastClick &gt;= rate) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>);</span><br><span class="line">    lastClick = <span class="built_in">Date</span>.now();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>使用 RxJS：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; scan, throttleTime &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).pipe(</span><br><span class="line">  throttleTime(<span class="number">1000</span>),</span><br><span class="line">  scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">).subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>Observable 是多个值的惰性推送集合。它填补了下面表格中的空白：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>单个值</th>
+<th>多个值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拉取</td>
+<td>Function</td>
+<td>Generator</td>
+</tr>
+<tr>
+<td>推送</td>
+<td>Promise</td>
+<td>Observable</td>
+</tr>
+</tbody></table>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> Observable(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  subscriber.next(<span class="number">1</span>);</span><br><span class="line">  subscriber.next(<span class="number">2</span>);</span><br><span class="line">  subscriber.next(<span class="number">3</span>);</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    subscriber.next(<span class="number">4</span>);</span><br><span class="line">    subscriber.complete();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>要调用 Observable 并看到这些值，我们需要订阅 Observable：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">observable.subscribe(&#123;</span><br><span class="line">  next: <span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'获取值：'</span> + x),</span><br><span class="line">  error: <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(<span class="string">'错误：'</span> + err),</span><br><span class="line">  complete: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'结束'</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="// TODO"></a>// TODO</h2>]]></content>
+      <tags>
+        <tag>RxJS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>浅谈Typescript</title>
     <url>/2020/03/05/typescript/</url>
     <content><![CDATA[<p>TypeScript是一种由微软开发的开源、跨平台的编程语言。它扩展了JavaScript的语法，添加了可选的静态类型系统和很多尚未正式发布的ECMAScript新特性。TypeScript是JavaScript的超集，现有的JavaScript程序可以直接运行在在TypeScript环境中，TypeScript最终会被编译为JavaScript代码。</p>
@@ -651,5 +609,88 @@
       <tags>
         <tag>Typescript</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>如何写出更高质量的代码</title>
+    <url>/2018/12/08/design-patterns/</url>
+    <content><![CDATA[<p>为什么项目维护困难、BUG 反复？实际上很多时候就是代码质量的问题。编写高质量代码的思路在任何技术栈都是基本相通的，代码架构就像是建筑的钢筋结构，代码细节就像是建筑的内部装修，建筑的抗震等级、简装或豪装完全取决于团队开发人员的水平。</p>
+<a id="more"></a>
+
+
+<img src="/2018/12/08/design-patterns/code(1).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(2).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(3).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(4).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(5).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(6).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(7).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(8).png" class="" title="xmind">
+
+<img src="/2018/12/08/design-patterns/code(10).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(11).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(12).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(13).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(14).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(15).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(16).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(17).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(18).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(19).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(20).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(21).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(22).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(23).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(24).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(25).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(26).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(27).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(28).png" class="" title="xmind">
+
+<img src="/2018/12/08/design-patterns/code.jpg" class="" title="xmind">
+]]></content>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>结构化思维</title>
+    <url>/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/</url>
+    <content><![CDATA[<p>在日常工作中，我们时常会碰到这样的情况，有的人讲事情逻辑非常混乱，罗列了很多事项，却把握不到重点，无法把一件事情说清楚。他说的每个字你都听得懂，然而组合在一起，你并不知道他想说什么，内容没有逻辑，语句没有重点。</p>
+<p>这种思维混乱是典型的缺少结构化思维的表现。结构化思维非常重要，不仅仅体现在表达上，也体现在在我们分析问题的过程中。具备结构化思维，才能将问题分析地更全面、更深刻。</p>
+<a id="more"></a>
+
+<h2 id="什么是结构化思维？"><a href="#什么是结构化思维？" class="headerlink" title="什么是结构化思维？"></a>什么是结构化思维？</h2><p>在理解概念之前，咱们来看一个例子：</p>
+<p><strong>花5秒钟的时间，记住下图的数字</strong></p>
+<img src="/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/number.png" class="" title="无序数字">
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<p><strong>好，我们再来试一组数字，还是花5秒钟来记住它</strong></p>
+<img src="/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/number2.png" class="" title="有序数字">
+
+
+<p>其实这2组的20个数字是一样的，但是不是觉得第二组一下子就记住了？</p>
+<p>为什么会这样？因为第二组数据更符合我们大脑的使用习惯，数字与数字之间有清晰的逻辑和结构。</p>
+<p>我们大脑处理信息有2个规律：</p>
+<ul>
+<li><p>人处理信息的能力有限，太多的信息记不住</p>
+</li>
+<li><p>人更偏爱有规律的信息</p>
+</li>
+</ul>
+<p>假如我们在解决问题、与人沟通、输出文章的过程中找到一个框架，可以将零散信息放进去加以整合，就能得出方法和结论。这个框架就是<strong>结构化思维</strong>。</p>
+<p>乍看还挺容易的，具体是怎么运用呢？</p>
+<p>首先，需要了解结构化思维的首选工具——金字塔模型</p>
+<h2 id="利用结构化思维思考问题"><a href="#利用结构化思维思考问题" class="headerlink" title="利用结构化思维思考问题"></a>利用结构化思维思考问题</h2><p><strong>自上而下发散</strong>：适用于思考问题、输出文章/演讲稿、与人沟通等这种问题比较明确的情况，我们只需要找到问题的核心要素即可，然后进行展开即可。</p>
+<p><strong>从下往上总结</strong>：适合判断他人逻辑、归纳信息等这种问题不够明确的情况，我们需要对多种杂乱的内容，进行分类、剪枝、归纳汇总成一个中心。</p>
+<p>建立中心通常不会是一次成型的，随着对问题理解的变化，对中心的抽象也会进行相应的调整。不同的抽象层次其面对的问题宽度是不一样的。具体要用哪个层次的抽象作为“中心”，要视具体情况而定。</p>
+<p>比如面对“系统 bug 多”的问题，向上抽象是“提升代码质量”，向下抽象是“加强测试”，都可以作为中心，选择哪个为中心取决于你当前要解决的问题是什么。</p>
+]]></content>
   </entry>
 </search>
