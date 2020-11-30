@@ -605,6 +605,16 @@
 </p>
 
 <p>github仓库：<a href="https://github.com/sindresorhus/ora" target="_blank" rel="noopener">https://github.com/sindresorhus/ora</a></p>
+<h2 id="Chalk"><a href="#Chalk" class="headerlink" title="Chalk"></a>Chalk</h2><p>给命令行输出的文本添加样式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 基本示例</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello world!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一行文本多种样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello'</span>) + <span class="string">' World'</span> + chalk.red(<span class="string">'!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复合样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue.bgRed.bold(<span class="string">'Hello world!'</span>));</span><br></pre></td></tr></table></figure>
+
+<p align="center">
+    <br>
+    <img src="/2019/04/08/npm-publish-2/chalk.svg" class="" title="chalk示例">
+    <br>
+</p>
+
+<p>github仓库：<a href="https://github.com/chalk/chalk" target="_blank" rel="noopener">https://github.com/chalk/chalk</a></p>
 ]]></content>
       <tags>
         <tag>Node.js</tag>
