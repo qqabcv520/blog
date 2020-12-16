@@ -881,7 +881,7 @@ body {
   background-color: #fff;
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   font-size: 1.4rem;
-  line-height: 1.7;
+  line-height: 1.8;
   color: #1e3e3f;
   padding: 0;
   margin: 0;
@@ -1331,7 +1331,7 @@ img {
 }
 .article-topping .fe {
   font-size: 2rem;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 .article-meta::before,
 .article-meta::after {
@@ -1977,6 +1977,7 @@ a.toc-link {
   border-radius: 0.4rem;
   overflow: auto;
   color: #444443;
+  line-height: 1.6;
 }
 .article-entry .highlight .gutter pre,
 .article-entry .gist .gist-file .gist-data .line-numbers {
@@ -1984,7 +1985,8 @@ a.toc-link {
 }
 .article-entry pre,
 .article-entry code {
-  font-family: inherit;
+  font-family: Consolas;
+  font-size: 12px;
   text-shadow: none;
 }
 .article-entry code {
@@ -2335,6 +2337,7 @@ pre .javascript .function {
 .navbar .nav.nav-main .nav-item-link i.fe {
   display: block;
   line-height: 1;
+  font-size: 20px;
 }
 .navbar .nav.nav-main .nav-item-link::before {
   font-family: 'feathericon';
@@ -2343,13 +2346,13 @@ pre .javascript .function {
   content: '\f12f';
 }
 .navbar .nav.nav-main .nav-item:nth-child(2) .nav-item-link::before {
-  content: '\f12a';
+  content: '\f153';
 }
 .navbar .nav.nav-main .nav-item:nth-child(3) .nav-item-link::before {
   content: '\f1a9';
 }
 .navbar .nav.nav-main .nav-item:nth-child(4) .nav-item-link::before {
-  content: '\f174';
+  content: '\f1d6';
 }
 .navbar-bottom {
   position: absolute;

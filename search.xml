@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>当async/await遇到map和reduce</title>
+    <url>/2019/03/30/async-await/</url>
+    <content><![CDATA[<p>数组的map、reduce和filter这些方法，使用应该很常见了，但是async function在直接使用map和reduce的时候，就会出现与期望的结果不符的结果了。</p>
+<a id="more"></a>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>首先我们来看看同步的map怎么写。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 对数组所有元素乘2</span></span><br><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].map(<span class="function"><span class="params">value</span> =&gt;</span> value * <span class="number">2</span>); <span class="comment">// [2,4,6]</span></span><br></pre></td></tr></table></figure>
+<p>那如果map函数需要进行异步操作才能返回结果应该怎么写呢？</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].map(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>); <span class="comment">// [Promise, Promise, Promise]</span></span><br></pre></td></tr></table></figure>
+<p>async函数执行完会返回Promise对象，map就直接接收后装进新数组了，数组内容直接变成了三个Promise，这显然不是我们想要的结果，所以我们要对Promise数组再进一步操作取出其中的值。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].map(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>)) <span class="comment">// [2,4,6]</span></span><br></pre></td></tr></table></figure>
+<p>这里的Promise.all会将一个由Promise组成的数组依次执行，并返回一个Promise对象，该对象的结果为数组产生的结果集。</p>
+<h2 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h2><p>对于reduce来说，也是基本和map差不多的思路，只是需要提前将前一次的结果用await取出Prmose的值，再进行运算。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].reduce(<span class="keyword">async</span>(previousValue, currentValue) =&gt; <span class="keyword">await</span> previousValue + currentValue, <span class="number">0</span>) <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p>感觉好简单啊，那数组的异步filter能不能也像map这么写呢？</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].filter(<span class="keyword">async</span> value =&gt; value % <span class="number">2</span> === <span class="number">1</span>)) <span class="comment">// [1,2,3]</span></span><br></pre></td></tr></table></figure>
+<p>结果没对啊，async返回的Promise被直接判断成true，导致一个元素也没被过滤掉。<br>这里我们要使用一个临时数组配合前面map先获取异步filter对应每个元素的结果，然后再使用filter过滤数组，搞定~</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> filterResults = <span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">                            .map(<span class="keyword">async</span> value =&gt; (value % <span class="number">2</span> === <span class="number">1</span>))); <span class="comment">// [true,false,true]</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].filter(<span class="function">(<span class="params">value, index</span>) =&gt;</span> filterResults[index]); <span class="comment">// [1,3]</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Promise库"><a href="#Promise库" class="headerlink" title="Promise库"></a>Promise库</h2><p>刚开写asyncMap的时候，以为其他的方法也会这么简单，后来发现事情并没简单，只好找了个Promise库 <strong>bluebird</strong>，专门处理这些异步操作<del>~</del></p>
+<p>Promise.map</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.map([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span> value =&gt; value * <span class="number">2</span>) <span class="comment">// [2, 4, 6]</span></span><br></pre></td></tr></table></figure>
+<p>Promise.reduce</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.reduce([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span>(previousValue, currentValue) =&gt; <span class="keyword">await</span> previousValue + currentValue, <span class="number">0</span>) <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+
+<p>Promise.filter</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.filter([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span> value =&gt; value % <span class="number">2</span> === <span class="number">1</span>) <span class="comment">// [1, 3]</span></span><br></pre></td></tr></table></figure>
+
+<p>除了提供有常见的map、filter、reduce、some之外，还提供了PromisifyAll，直接把需要传递回调函数的库Promise化。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="built_in">Promise</span>.promisifyAll(fs);</span><br><span class="line">fs.readFileAsync(<span class="string">"file.js"</span>, <span class="string">"utf8"</span>).then(...)</span><br></pre></td></tr></table></figure>
+<p>也支持第三方库</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="built_in">Promise</span>.promisifyAll(<span class="built_in">require</span>(<span class="string">"redis"</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="Rxjs"><a href="#Rxjs" class="headerlink" title="Rxjs"></a>Rxjs</h2><p>除了使用上面提到的Promise库 <strong>bluebird</strong>之外，还可以使用<strong>Rxjs</strong>，<strong>Rxjs</strong>是专门为处理异步而生，并且提供了比数组更丰富的管道操作符</p>
+<p>Rxjs对异步操作进行reduce：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    flatMap(fromPromise(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>)),</span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 2, 4, 6</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Rxjs对异步操作进行reduce：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    reduce(<span class="keyword">async</span>(previousValue, currentValue) =&gt; (<span class="keyword">await</span> previousValue) + currentValue, <span class="number">0</span>),</span><br><span class="line">    flatMap(fromPromise) <span class="comment">//把异步操作返回的Promise转换成Observable</span></span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 6</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Rxjs对异步操作进行filter：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    map(<span class="keyword">async</span> value =&gt; value), <span class="comment">// 先执行异步操作</span></span><br><span class="line">    flatMap(fromPromise),  <span class="comment">//把异步操作返回的Promise转换成Observable</span></span><br><span class="line">    fllter(<span class="function"><span class="params">value</span> =&gt;</span> value % <span class="number">2</span> === <span class="number">1</span>) <span class="comment">// 再对Observable中的数据进行过滤</span></span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 1, 3</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Promise</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法基础知识点</title>
+    <url>/2019/12/08/data-structure/</url>
+    <content><![CDATA[<p>数据结构是在计算机中组织和存储数据的一种特殊方式，使得数据可以高效地被访问和修改。更确切地说，数据结构是数据值的集合，表示数据之间的关系，也包括了作用在数据上的函数或操作。</p>
+<a id="more"></a>
+
+<img src="/2019/12/08/data-structure/xmind.png" class="" title="xmind">
+]]></content>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深入Vue源码理解响应式原理和依赖收集</title>
     <url>/2020/06/10/dep-collection/</url>
     <content><![CDATA[<p>每当问到Vue响应式原理，大家可能都会脱口而出“Vue通过<code>Object.defineProperty</code>方法把data对象的全部属性转化成getter/setter，当属性被访问或修改时通知变化”。然而，其内部深层的响应式原理可能很多人都没有完全理解，网络上关于其响应式原理的文章质量也是参差不齐。</p>
@@ -150,19 +213,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>数据结构与算法基础知识点</title>
-    <url>/2019/12/08/data-structure/</url>
-    <content><![CDATA[<p>数据结构是在计算机中组织和存储数据的一种特殊方式，使得数据可以高效地被访问和修改。更确切地说，数据结构是数据值的集合，表示数据之间的关系，也包括了作用在数据上的函数或操作。</p>
-<a id="more"></a>
-
-<img src="/2019/12/08/data-structure/xmind.png" class="" title="xmind">
-]]></content>
-      <tags>
-        <tag>数据结构</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>100行代码实现Virtual DOM和render</title>
     <url>/2019/08/06/mvvm/</url>
     <content><![CDATA[<p>在编写代码之前，我们需要先了解需要先来了解一下Virtual DOM是怎么样构建并渲染到浏览器的，常见的构建Virtual DOM的方法有两种，一种是jsx(react)，另一种是template(vue)。</p>
@@ -262,6 +312,99 @@
 ]]></content>
       <tags>
         <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用node.js开发命令行工具（二）命令行输入输出UI库</title>
+    <url>/2019/04/08/npm-publish-2/</url>
+    <content><![CDATA[<p>相信很多前端都听说过或者使用过@angular/cli, vue-cli, create-react-app或其他类似的命令行工具。他们能够在命令行后面跟各种复杂的参数已经交互性的命令行选项，那你知道这些功能是怎么实现的吗？</p>
+<a id="more"></a>
+<h2 id="Commander-js"><a href="#Commander-js" class="headerlink" title="Commander.js"></a>Commander.js</h2><p>node.js命令行开发工具开发库，使node.js开发CLI工具变得简单，允许快捷的定义形如<code>&lt;command&gt; [options]</code>的命令。</p>
+<p>基础用法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> program = <span class="built_in">require</span>(<span class="string">'commander'</span>);</span><br><span class="line"></span><br><span class="line"> program</span><br><span class="line">  .version(<span class="built_in">require</span>(<span class="string">'../package.json'</span>).version, <span class="string">'-v, --version'</span>) <span class="comment">// 定义版本信息</span></span><br><span class="line">  .usage(<span class="string">'&lt;command&gt; [options]'</span>); <span class="comment">// 定义命令用法</span></span><br><span class="line"> </span><br><span class="line">program</span><br><span class="line">  .command(<span class="string">'rm &lt;dir&gt;'</span>) <span class="comment">// 定义一个rm命令</span></span><br><span class="line">  .description(<span class="string">'删除文件或文件夹'</span>) <span class="comment">// 给rm命令添加描述信息，获取命令帮助信息的时候会显示</span></span><br><span class="line">  .option(<span class="string">'-r, --recursive'</span>, <span class="string">'Remove recursively'</span>) <span class="comment">// rm允许添加-r或者--recursive命令进行递归</span></span><br><span class="line">  .action(<span class="function"><span class="keyword">function</span> (<span class="params">dir, cmd</span>) </span>&#123; <span class="comment">// 对应命令的处理函数</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'remove '</span> + dir + (cmd.recursive ? <span class="string">' recursively'</span> : <span class="string">''</span>))</span><br><span class="line">  &#125;);</span><br><span class="line"> </span><br><span class="line"> program.parse(process.argv); <span class="comment">// commander的入口欧，传入命令行参数执行解析</span></span><br></pre></td></tr></table></figure>
+<p>github仓库：<a href="https://github.com/tj/commander.js" target="_blank" rel="noopener">https://github.com/tj/commander.js</a></p>
+<h2 id="Inquirer-js"><a href="#Inquirer-js" class="headerlink" title="Inquirer.js"></a>Inquirer.js</h2><p>node.js 交互式命令行界面开发库，允许方便的定义使用上下左右进行列表选择等交互式命令。</p>
+<p>基础用法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">'inquirer'</span>);</span><br><span class="line"></span><br><span class="line">inquirer.prompt(</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'input'</span>, <span class="comment">// 问题类型，包括input，number，confirm，list，rawlist，password</span></span><br><span class="line">    name: <span class="string">'name'</span>, </span><br><span class="line">    message: <span class="string">'请输入项目名称'</span>, <span class="comment">// 问题</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'unnamed'</span> <span class="comment">// 默认值</span></span><br><span class="line">    validate: <span class="function">(<span class="params">input: string</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (input.length &gt; <span class="number">255</span>) &#123; <span class="comment">// 输入验证：name长度不允许超过255</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'项目名称超过限制'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;        </span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'list'</span>,</span><br><span class="line">    name: <span class="string">'type'</span>,</span><br><span class="line">    message: <span class="string">'请选择'</span>,</span><br><span class="line">    choices: [<span class="string">'item1'</span>, <span class="string">'item2'</span>, <span class="string">'item3'</span>, <span class="string">'item4'</span>], <span class="comment">// 可选选项</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'project'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(answers.name);</span><br><span class="line">    <span class="built_in">console</span>.log(answers.type);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<img src="/2019/04/08/npm-publish-2/inquirer.js.jpg" class="" title="inquirer.js示例">
+
+<p>github仓库：<a href="https://github.com/SBoudrias/Inquirer.js" target="_blank" rel="noopener">https://github.com/SBoudrias/Inquirer.js</a></p>
+<h2 id="Ora"><a href="#Ora" class="headerlink" title="Ora"></a>Ora</h2><p>优雅的命令行Loading动画。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> ora = <span class="built_in">require</span>(<span class="string">'ora'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> spinner = ora(<span class="string">'Loading unicorns'</span>).start();</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.color = <span class="string">'yellow'</span>;</span><br><span class="line">	spinner.text = <span class="string">'Loading rainbows'</span>;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.stop();</span><br><span class="line">&#125;, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
+<p align="center">
+    <br>
+    <img src="/2019/04/08/npm-publish-2/ora.svg" class="" title="ora.js示例">
+    <br>
+</p>
+
+<p>github仓库：<a href="https://github.com/sindresorhus/ora" target="_blank" rel="noopener">https://github.com/sindresorhus/ora</a></p>
+<h2 id="Chalk"><a href="#Chalk" class="headerlink" title="Chalk"></a>Chalk</h2><p>给命令行输出的文本添加样式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 基本示例</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello world!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一行文本多种样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello'</span>) + <span class="string">' World'</span> + chalk.red(<span class="string">'!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复合样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue.bgRed.bold(<span class="string">'Hello world!'</span>));</span><br></pre></td></tr></table></figure>
+
+<p align="center">
+    <br>
+    <img src="/2019/04/08/npm-publish-2/chalk.svg" class="" title="chalk示例">
+    <br>
+</p>
+
+<p>github仓库：<a href="https://github.com/chalk/chalk" target="_blank" rel="noopener">https://github.com/chalk/chalk</a></p>
+]]></content>
+      <tags>
+        <tag>Node.js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浅谈Typescript</title>
+    <url>/2020/03/05/typescript/</url>
+    <content><![CDATA[<p>TypeScript是一种由微软开发的开源、跨平台的编程语言。它扩展了JavaScript的语法，添加了可选的静态类型系统和很多尚未正式发布的ECMAScript新特性。TypeScript是JavaScript的超集，现有的JavaScript程序可以直接运行在在TypeScript环境中，TypeScript最终会被编译为JavaScript代码。</p>
+<a id="more"></a>
+
+<!--是什么？-->
+
+<!--有什么用？-->
+
+<!--什么时候用？-->
+
+
+<h2 id="TS比JS多了什么？"><a href="#TS比JS多了什么？" class="headerlink" title="TS比JS多了什么？"></a>TS比JS多了什么？</h2><h3 id="类型注解"><a href="#类型注解" class="headerlink" title="类型注解"></a>类型注解</h3><p>TS定义变量的时候可以给变量声明类型，ts会在变量使用的时候，检测是否正确的使用了该变量。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a: <span class="built_in">number</span>;</span><br><span class="line">a = <span class="number">1</span>; <span class="comment">// 正确</span></span><br><span class="line">a = <span class="literal">true</span>; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p>TS的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。 在TS里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。</p>
+<p>这里我们使用接口来描述一个拥有firstName和lastName字段的对象。 在TS里，只在两个类型内部的结构兼容那么这两个类型就是兼容的。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    firstName: <span class="built_in">string</span>;</span><br><span class="line">    lastName: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user: Person;</span><br><span class="line">user = &#123; firstName: <span class="string">"Jane"</span>, lastName: <span class="string">"User"</span> &#125;; <span class="comment">// 正确 </span></span><br><span class="line">user = &#123; firstName: <span class="number">2</span>, lastName: <span class="number">1</span> &#125;; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="类"><a href="#类" class="headerlink" title="类"></a>类</h3><p>TS的类可以带有一个构造函数和一些公共字段， 注意类可以实现接口，开发人员可以自行决定抽象的级别。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    firstName: <span class="built_in">string</span>;</span><br><span class="line">    lastName: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> Student <span class="keyword">implements</span> Person &#123;</span><br><span class="line">    fullName: <span class="built_in">string</span>;</span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params"><span class="keyword">public</span> firstName, <span class="keyword">public</span> lastName</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.fullName = firstName + <span class="string">" "</span> + lastName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user: Person = <span class="keyword">new</span> Student(<span class="string">"Jane"</span>, <span class="string">"User"</span>); <span class="comment">// 正确</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Result&lt;T&gt; &#123;</span><br><span class="line">    data: T;</span><br><span class="line">    status: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> a: Result&lt;<span class="built_in">string</span>&gt;;</span><br><span class="line">a.data = <span class="string">"abc"</span>; <span class="comment">// 正确</span></span><br><span class="line">a.data = <span class="number">123</span>; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><p>使用枚举我们可以定义一些带名字的常量。 使用枚举可以清晰地表达意图或创建一组有区别的用例。 TS支持数字的和基于字符串的枚举。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> Direction &#123;</span><br><span class="line">    Up = <span class="number">1</span>,</span><br><span class="line">    Down = <span class="number">2</span>,</span><br><span class="line">    Left = <span class="number">3</span>,</span><br><span class="line">    Right = <span class="number">4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="更多特性"><a href="#更多特性" class="headerlink" title="更多特性"></a>更多特性</h3><ul>
+<li>类型推论</li>
+<li>类型兼容性</li>
+<li>高级类型</li>
+<li>更多…</li>
+</ul>
+<h2 id="TS开发上的变化？"><a href="#TS开发上的变化？" class="headerlink" title="TS开发上的变化？"></a>TS开发上的变化？</h2><p>TS为我们扩展的这些语法，能提高我们的开发效率吗？ 事实上，在TS的严格模式下，我们需要为我们所有的变量提供类型声明，这对于原生的Javascript来说，会提升我们不小的工作量，开发效率也相应降低。这也是不少前端开发者刚开始使用TS的第一感觉。</p>
+<p>对前端开发者来说，TS 能强化了「面向接口编程」这一理念。我们知道稍微复杂一点的程序都离不开不同模块间的配合，不同模块的功能理应是更为清晰的，TS 能帮我们梳理清不同的接口。</p>
+<h3 id="明确的模块抽象过程"><a href="#明确的模块抽象过程" class="headerlink" title="明确的模块抽象过程"></a>明确的模块抽象过程</h3><p>TS 对我的思考方式的影响之一在于，我现在会把考虑抽象和拓展看作写一个模块前的必备环节了。当然一个好的开发者用任何语言写程序，考虑抽象和拓展都会是一个必备环节，不过如果你在日常生活中使用过清单，你就会明白 TS 通过接口将这种抽象明确为具体的内容的意义所在了，任何没有被明确的内容，其实都有点像是可选的内容，往往就容易被忽略。</p>
+<p>举例来说，比如说我们用 TS 定义一个函数，TS 会要求我们对函数的参数及返回值有一个明确的定义，简单的定义一些类型，却能帮助我们定位函数的作用，比如说我们设置其返回值类型为 void ，就明确的表明了我们想利用这个函数的副作用；</p>
+<p>把抽象明确下来，对后续代码的修改也非常有意义，我们不用再担心忘记了之前是怎么构想的呢，对多人协作的团队来说，这一点也许更为重要。</p>
+<p>当然使用 jsdoc 等工具也能把对函数的抽象明确下来，不过并没有那么强制，所以效果不一定会很好，不过 jsdoc 反而可以做为 TS 的一种补充。</p>
+<h3 id="更自信的写代码"><a href="#更自信的写代码" class="headerlink" title="更自信的写代码"></a>更自信的写代码</h3><p>TS 还能让我更自信的写前端代码，这种自信来自 TS 可以帮我们避免很多可能由于自己的忽略造成的 bug。实际上，关于 TS 辅助避免 bug 方面存在专门的研究，一篇名为 To Type or Not to Type: Quantifying Detectable Bugs in JavaScript 的论文，表明使用 TS 进行静态类型检查能帮我们至少减少 15% 以上的 bug （这篇论文的研究过程也很有意思，感兴趣可以点击链接阅读）。</p>
+<p>可以举一个例子来说明，TS 是怎么给我带来这种自信的。</p>
+<p>下面这条语句，大家都很熟悉，是 DOM 提供依据 id 获取元素的方法。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="built_in">document</span>.getElementById(<span class="string">"a"</span>)</span><br></pre></td></tr></table></figure>
+<p>对我自己来说，使用 TS 之前，我忽略了document.getElementById的返回值还可能是 null，这种不经意的忽略也许在未来就会造成一个意想不到的 bug。</p>
+<p>使用 TS，在编辑器中就会明确的提醒我们 a 的值可能为 null。我们并不一定要处理值 null 的情况，使用 <code>const a = document.getElementById(&#39;id&#39;)!</code> 可以明确告诉 TS ，它不会是 null，不过至少，这时候我们清楚的知道自己想做什么。</p>
+<h3 id="代码就是最好的注释"><a href="#代码就是最好的注释" class="headerlink" title="代码就是最好的注释"></a>代码就是最好的注释</h3><p>习惯使用 TS 后，可以明显的感觉到查文档的时间大大减少了。无论是库还是原生的 js 或者 nodejs，甚至是自己团队其它成员定义的类型。结合IED ，会有非常智能的提醒，也可以很方便看到相应的接口的确切定义。使用的过程就是在加深理解的过程，确实「面向接口编程」天然和静态类型更为亲密。</p>
+<p><strong>总的来说，TS带来的并不是开发效率的提升，而是能通过语法的限制，避免开发者犯错。这在大规模、长周期的项目中，显得尤为明显，因此，在选择是否要使用TS之前，需要清楚目标项目是否足够复杂，不然不但感觉不到TS的任何好处，反而提高了开发成本。</strong> </p>
+]]></content>
+      <tags>
+        <tag>Typescript</tag>
       </tags>
   </entry>
   <entry>
@@ -388,56 +531,6 @@
       </tags>
   </entry>
   <entry>
-    <title>当async/await遇到map和reduce</title>
-    <url>/2019/03/30/async-await/</url>
-    <content><![CDATA[<p>数组的map、reduce和filter这些方法，使用应该很常见了，但是async function在直接使用map和reduce的时候，就会出现与期望的结果不符的结果了。</p>
-<a id="more"></a>
-<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>首先我们来看看同步的map怎么写。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 对数组所有元素乘2</span></span><br><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].map(<span class="function"><span class="params">value</span> =&gt;</span> value * <span class="number">2</span>); <span class="comment">// [2,4,6]</span></span><br></pre></td></tr></table></figure>
-<p>那如果map函数需要进行异步操作才能返回结果应该怎么写呢？</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].map(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>); <span class="comment">// [Promise, Promise, Promise]</span></span><br></pre></td></tr></table></figure>
-<p>async函数执行完会返回Promise对象，map就直接接收后装进新数组了，数组内容直接变成了三个Promise，这显然不是我们想要的结果，所以我们要对Promise数组再进一步操作取出其中的值。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].map(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>)) <span class="comment">// [2,4,6]</span></span><br></pre></td></tr></table></figure>
-<p>这里的Promise.all会将一个由Promise组成的数组依次执行，并返回一个Promise对象，该对象的结果为数组产生的结果集。</p>
-<h2 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h2><p>对于reduce来说，也是基本和map差不多的思路，只是需要提前将前一次的结果用await取出Prmose的值，再进行运算。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].reduce(<span class="keyword">async</span>(previousValue, currentValue) =&gt; <span class="keyword">await</span> previousValue + currentValue, <span class="number">0</span>) <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p>感觉好简单啊，那数组的异步filter能不能也像map这么写呢？</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].filter(<span class="keyword">async</span> value =&gt; value % <span class="number">2</span> === <span class="number">1</span>)) <span class="comment">// [1,2,3]</span></span><br></pre></td></tr></table></figure>
-<p>结果没对啊，async返回的Promise被直接判断成true，导致一个元素也没被过滤掉。<br>这里我们要使用一个临时数组配合前面map先获取异步filter对应每个元素的结果，然后再使用filter过滤数组，搞定~</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> filterResults = <span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">                            .map(<span class="keyword">async</span> value =&gt; (value % <span class="number">2</span> === <span class="number">1</span>))); <span class="comment">// [true,false,true]</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].filter(<span class="function">(<span class="params">value, index</span>) =&gt;</span> filterResults[index]); <span class="comment">// [1,3]</span></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="Promise库"><a href="#Promise库" class="headerlink" title="Promise库"></a>Promise库</h2><p>刚开写asyncMap的时候，以为其他的方法也会这么简单，后来发现事情并没简单，只好找了个Promise库 <strong>bluebird</strong>，专门处理这些异步操作<del>~</del></p>
-<p>Promise.map</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.map([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span> value =&gt; value * <span class="number">2</span>) <span class="comment">// [2, 4, 6]</span></span><br></pre></td></tr></table></figure>
-<p>Promise.reduce</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.reduce([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span>(previousValue, currentValue) =&gt; <span class="keyword">await</span> previousValue + currentValue, <span class="number">0</span>) <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
-
-<p>Promise.filter</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.filter([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span> value =&gt; value % <span class="number">2</span> === <span class="number">1</span>) <span class="comment">// [1, 3]</span></span><br></pre></td></tr></table></figure>
-
-<p>除了提供有常见的map、filter、reduce、some之外，还提供了PromisifyAll，直接把需要传递回调函数的库Promise化。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="built_in">Promise</span>.promisifyAll(fs);</span><br><span class="line">fs.readFileAsync(<span class="string">"file.js"</span>, <span class="string">"utf8"</span>).then(...)</span><br></pre></td></tr></table></figure>
-<p>也支持第三方库</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="built_in">Promise</span>.promisifyAll(<span class="built_in">require</span>(<span class="string">"redis"</span>));</span><br></pre></td></tr></table></figure>
-
-<h2 id="Rxjs"><a href="#Rxjs" class="headerlink" title="Rxjs"></a>Rxjs</h2><p>除了使用上面提到的Promise库 <strong>bluebird</strong>之外，还可以使用<strong>Rxjs</strong>，<strong>Rxjs</strong>是专门为处理异步而生，并且提供了比数组更丰富的管道操作符</p>
-<p>Rxjs对异步操作进行reduce：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    flatMap(fromPromise(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>)),</span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 2, 4, 6</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>Rxjs对异步操作进行reduce：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    reduce(<span class="keyword">async</span>(previousValue, currentValue) =&gt; (<span class="keyword">await</span> previousValue) + currentValue, <span class="number">0</span>),</span><br><span class="line">    flatMap(fromPromise) <span class="comment">//把异步操作返回的Promise转换成Observable</span></span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 6</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>Rxjs对异步操作进行filter：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    map(<span class="keyword">async</span> value =&gt; value), <span class="comment">// 先执行异步操作</span></span><br><span class="line">    flatMap(fromPromise),  <span class="comment">//把异步操作返回的Promise转换成Observable</span></span><br><span class="line">    fllter(<span class="function"><span class="params">value</span> =&gt;</span> value % <span class="number">2</span> === <span class="number">1</span>) <span class="comment">// 再对Observable中的数据进行过滤</span></span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 1, 3</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Promise</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>git filter-branch指令</title>
     <url>/2019/06/16/git-filter-branch/</url>
     <content><![CDATA[<p>git filter-branch 这个指令，是一个非常强悍的指令，《Pro Git》的作者说这是一个核弹级指令。除非特别清楚你准备干什么。否则不要抱着尝试的想法来试试，除非你想尝试下核弹的威力。</p>
@@ -528,96 +621,45 @@
       </tags>
   </entry>
   <entry>
-    <title>浅谈Typescript</title>
-    <url>/2020/03/05/typescript/</url>
-    <content><![CDATA[<p>TypeScript是一种由微软开发的开源、跨平台的编程语言。它扩展了JavaScript的语法，添加了可选的静态类型系统和很多尚未正式发布的ECMAScript新特性。TypeScript是JavaScript的超集，现有的JavaScript程序可以直接运行在在TypeScript环境中，TypeScript最终会被编译为JavaScript代码。</p>
+    <title>如何写出更高质量的代码</title>
+    <url>/2018/12/08/design-patterns/</url>
+    <content><![CDATA[<p>为什么项目维护困难、BUG 反复？实际上很多时候就是代码质量的问题。编写高质量代码的思路在任何技术栈都是基本相通的，代码架构就像是建筑的钢筋结构，代码细节就像是建筑的内部装修，建筑的抗震等级、简装或豪装完全取决于团队开发人员的水平。</p>
 <a id="more"></a>
 
-<!--是什么？-->
 
-<!--有什么用？-->
+<img src="/2018/12/08/design-patterns/code(1).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(2).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(3).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(4).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(5).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(6).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(7).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(8).png" class="" title="xmind">
 
-<!--什么时候用？-->
+<img src="/2018/12/08/design-patterns/code(10).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(11).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(12).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(13).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(14).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(15).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(16).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(17).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(18).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(19).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(20).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(21).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(22).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(23).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(24).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(25).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(26).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(27).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(28).png" class="" title="xmind">
 
-
-<h2 id="TS比JS多了什么？"><a href="#TS比JS多了什么？" class="headerlink" title="TS比JS多了什么？"></a>TS比JS多了什么？</h2><h3 id="类型注解"><a href="#类型注解" class="headerlink" title="类型注解"></a>类型注解</h3><p>TS定义变量的时候可以给变量声明类型，ts会在变量使用的时候，检测是否正确的使用了该变量。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a: <span class="built_in">number</span>;</span><br><span class="line">a = <span class="number">1</span>; <span class="comment">// 正确</span></span><br><span class="line">a = <span class="literal">true</span>; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p>TS的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。 在TS里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。</p>
-<p>这里我们使用接口来描述一个拥有firstName和lastName字段的对象。 在TS里，只在两个类型内部的结构兼容那么这两个类型就是兼容的。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    firstName: <span class="built_in">string</span>;</span><br><span class="line">    lastName: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user: Person;</span><br><span class="line">user = &#123; firstName: <span class="string">"Jane"</span>, lastName: <span class="string">"User"</span> &#125;; <span class="comment">// 正确 </span></span><br><span class="line">user = &#123; firstName: <span class="number">2</span>, lastName: <span class="number">1</span> &#125;; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="类"><a href="#类" class="headerlink" title="类"></a>类</h3><p>TS的类可以带有一个构造函数和一些公共字段， 注意类可以实现接口，开发人员可以自行决定抽象的级别。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    firstName: <span class="built_in">string</span>;</span><br><span class="line">    lastName: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> Student <span class="keyword">implements</span> Person &#123;</span><br><span class="line">    fullName: <span class="built_in">string</span>;</span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params"><span class="keyword">public</span> firstName, <span class="keyword">public</span> lastName</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.fullName = firstName + <span class="string">" "</span> + lastName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user: Person = <span class="keyword">new</span> Student(<span class="string">"Jane"</span>, <span class="string">"User"</span>); <span class="comment">// 正确</span></span><br></pre></td></tr></table></figure>
-
-
-<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Result&lt;T&gt; &#123;</span><br><span class="line">    data: T;</span><br><span class="line">    status: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> a: Result&lt;<span class="built_in">string</span>&gt;;</span><br><span class="line">a.data = <span class="string">"abc"</span>; <span class="comment">// 正确</span></span><br><span class="line">a.data = <span class="number">123</span>; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><p>使用枚举我们可以定义一些带名字的常量。 使用枚举可以清晰地表达意图或创建一组有区别的用例。 TS支持数字的和基于字符串的枚举。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> Direction &#123;</span><br><span class="line">    Up = <span class="number">1</span>,</span><br><span class="line">    Down = <span class="number">2</span>,</span><br><span class="line">    Left = <span class="number">3</span>,</span><br><span class="line">    Right = <span class="number">4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="更多特性"><a href="#更多特性" class="headerlink" title="更多特性"></a>更多特性</h3><ul>
-<li>类型推论</li>
-<li>类型兼容性</li>
-<li>高级类型</li>
-<li>更多…</li>
-</ul>
-<h2 id="TS开发上的变化？"><a href="#TS开发上的变化？" class="headerlink" title="TS开发上的变化？"></a>TS开发上的变化？</h2><p>TS为我们扩展的这些语法，能提高我们的开发效率吗？ 事实上，在TS的严格模式下，我们需要为我们所有的变量提供类型声明，这对于原生的Javascript来说，会提升我们不小的工作量，开发效率也相应降低。这也是不少前端开发者刚开始使用TS的第一感觉。</p>
-<p>对前端开发者来说，TS 能强化了「面向接口编程」这一理念。我们知道稍微复杂一点的程序都离不开不同模块间的配合，不同模块的功能理应是更为清晰的，TS 能帮我们梳理清不同的接口。</p>
-<h3 id="明确的模块抽象过程"><a href="#明确的模块抽象过程" class="headerlink" title="明确的模块抽象过程"></a>明确的模块抽象过程</h3><p>TS 对我的思考方式的影响之一在于，我现在会把考虑抽象和拓展看作写一个模块前的必备环节了。当然一个好的开发者用任何语言写程序，考虑抽象和拓展都会是一个必备环节，不过如果你在日常生活中使用过清单，你就会明白 TS 通过接口将这种抽象明确为具体的内容的意义所在了，任何没有被明确的内容，其实都有点像是可选的内容，往往就容易被忽略。</p>
-<p>举例来说，比如说我们用 TS 定义一个函数，TS 会要求我们对函数的参数及返回值有一个明确的定义，简单的定义一些类型，却能帮助我们定位函数的作用，比如说我们设置其返回值类型为 void ，就明确的表明了我们想利用这个函数的副作用；</p>
-<p>把抽象明确下来，对后续代码的修改也非常有意义，我们不用再担心忘记了之前是怎么构想的呢，对多人协作的团队来说，这一点也许更为重要。</p>
-<p>当然使用 jsdoc 等工具也能把对函数的抽象明确下来，不过并没有那么强制，所以效果不一定会很好，不过 jsdoc 反而可以做为 TS 的一种补充。</p>
-<h3 id="更自信的写代码"><a href="#更自信的写代码" class="headerlink" title="更自信的写代码"></a>更自信的写代码</h3><p>TS 还能让我更自信的写前端代码，这种自信来自 TS 可以帮我们避免很多可能由于自己的忽略造成的 bug。实际上，关于 TS 辅助避免 bug 方面存在专门的研究，一篇名为 To Type or Not to Type: Quantifying Detectable Bugs in JavaScript 的论文，表明使用 TS 进行静态类型检查能帮我们至少减少 15% 以上的 bug （这篇论文的研究过程也很有意思，感兴趣可以点击链接阅读）。</p>
-<p>可以举一个例子来说明，TS 是怎么给我带来这种自信的。</p>
-<p>下面这条语句，大家都很熟悉，是 DOM 提供依据 id 获取元素的方法。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="built_in">document</span>.getElementById(<span class="string">"a"</span>)</span><br></pre></td></tr></table></figure>
-<p>对我自己来说，使用 TS 之前，我忽略了document.getElementById的返回值还可能是 null，这种不经意的忽略也许在未来就会造成一个意想不到的 bug。</p>
-<p>使用 TS，在编辑器中就会明确的提醒我们 a 的值可能为 null。我们并不一定要处理值 null 的情况，使用 <code>const a = document.getElementById(&#39;id&#39;)!</code> 可以明确告诉 TS ，它不会是 null，不过至少，这时候我们清楚的知道自己想做什么。</p>
-<h3 id="代码就是最好的注释"><a href="#代码就是最好的注释" class="headerlink" title="代码就是最好的注释"></a>代码就是最好的注释</h3><p>习惯使用 TS 后，可以明显的感觉到查文档的时间大大减少了。无论是库还是原生的 js 或者 nodejs，甚至是自己团队其它成员定义的类型。结合IED ，会有非常智能的提醒，也可以很方便看到相应的接口的确切定义。使用的过程就是在加深理解的过程，确实「面向接口编程」天然和静态类型更为亲密。</p>
-<p><strong>总的来说，TS带来的并不是开发效率的提升，而是能通过语法的限制，避免开发者犯错。这在大规模、长周期的项目中，显得尤为明显，因此，在选择是否要使用TS之前，需要清楚目标项目是否足够复杂，不然不但感觉不到TS的任何好处，反而提高了开发成本。</strong> </p>
+<img src="/2018/12/08/design-patterns/code.jpg" class="" title="xmind">
 ]]></content>
       <tags>
-        <tag>Typescript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用node.js开发命令行工具（二）命令行输入输出UI库</title>
-    <url>/2019/04/08/npm-publish-2/</url>
-    <content><![CDATA[<p>相信很多前端都听说过或者使用过@angular/cli, vue-cli, create-react-app或其他类似的命令行工具。他们能够在命令行后面跟各种复杂的参数已经交互性的命令行选项，那你知道这些功能是怎么实现的吗？</p>
-<a id="more"></a>
-<h2 id="commander-js"><a href="#commander-js" class="headerlink" title="commander.js"></a>commander.js</h2><p>node.js命令行开发工具开发库，使node.js开发CLI工具变得简单，允许快捷的定义形如<code>&lt;command&gt; [options]</code>的命令。</p>
-<p>基础用法：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> program = <span class="built_in">require</span>(<span class="string">'commander'</span>);</span><br><span class="line"></span><br><span class="line"> program</span><br><span class="line">  .version(<span class="built_in">require</span>(<span class="string">'../package.json'</span>).version, <span class="string">'-v, --version'</span>) <span class="comment">// 定义版本信息</span></span><br><span class="line">  .usage(<span class="string">'&lt;command&gt; [options]'</span>); <span class="comment">// 定义命令用法</span></span><br><span class="line"> </span><br><span class="line">program</span><br><span class="line">  .command(<span class="string">'rm &lt;dir&gt;'</span>) <span class="comment">// 定义一个rm命令</span></span><br><span class="line">  .description(<span class="string">'删除文件或文件夹'</span>) <span class="comment">// 给rm命令添加描述信息，获取命令帮助信息的时候会显示</span></span><br><span class="line">  .option(<span class="string">'-r, --recursive'</span>, <span class="string">'Remove recursively'</span>) <span class="comment">// rm允许添加-r或者--recursive命令进行递归</span></span><br><span class="line">  .action(<span class="function"><span class="keyword">function</span> (<span class="params">dir, cmd</span>) </span>&#123; <span class="comment">// 对应命令的处理函数</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'remove '</span> + dir + (cmd.recursive ? <span class="string">' recursively'</span> : <span class="string">''</span>))</span><br><span class="line">  &#125;);</span><br><span class="line"> </span><br><span class="line"> program.parse(process.argv); <span class="comment">// commander的入口欧，传入命令行参数执行解析</span></span><br></pre></td></tr></table></figure>
-<p>github仓库：<a href="https://github.com/tj/commander.js" target="_blank" rel="noopener">https://github.com/tj/commander.js</a></p>
-<h2 id="inquirer-js"><a href="#inquirer-js" class="headerlink" title="inquirer.js"></a>inquirer.js</h2><p>node.js 交互式命令行界面开发库，允许方便的定义使用上下左右进行列表选择等交互式命令。</p>
-<p>基础用法：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">'inquirer'</span>);</span><br><span class="line"></span><br><span class="line">inquirer.prompt(</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'input'</span>, <span class="comment">// 问题类型，包括input，number，confirm，list，rawlist，password</span></span><br><span class="line">    name: <span class="string">'name'</span>, </span><br><span class="line">    message: <span class="string">'请输入项目名称'</span>, <span class="comment">// 问题</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'unnamed'</span> <span class="comment">// 默认值</span></span><br><span class="line">    validate: <span class="function">(<span class="params">input: string</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (input.length &gt; <span class="number">255</span>) &#123; <span class="comment">// 输入验证：name长度不允许超过255</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'项目名称超过限制'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;        </span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'list'</span>,</span><br><span class="line">    name: <span class="string">'type'</span>,</span><br><span class="line">    message: <span class="string">'请选择'</span>,</span><br><span class="line">    choices: [<span class="string">'item1'</span>, <span class="string">'item2'</span>, <span class="string">'item3'</span>, <span class="string">'item4'</span>], <span class="comment">// 可选选项</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'project'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(answers.name);</span><br><span class="line">    <span class="built_in">console</span>.log(answers.type);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<img src="/2019/04/08/npm-publish-2/inquirer.js.jpg" class="" title="inquirer.js示例">
-
-<p>github仓库：<a href="https://github.com/SBoudrias/Inquirer.js" target="_blank" rel="noopener">https://github.com/SBoudrias/Inquirer.js</a></p>
-<h2 id="ora"><a href="#ora" class="headerlink" title="ora"></a>ora</h2><p>优雅的命令行Loading动画。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> ora = <span class="built_in">require</span>(<span class="string">'ora'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> spinner = ora(<span class="string">'Loading unicorns'</span>).start();</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.color = <span class="string">'yellow'</span>;</span><br><span class="line">	spinner.text = <span class="string">'Loading rainbows'</span>;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.stop();</span><br><span class="line">&#125;, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
-<p align="center">
-    <br>
-    <img src="/2019/04/08/npm-publish-2/ora.svg" class="" title="ora.js示例">
-    <br>
-</p>
-
-<p>github仓库：<a href="https://github.com/sindresorhus/ora" target="_blank" rel="noopener">https://github.com/sindresorhus/ora</a></p>
-<h2 id="Chalk"><a href="#Chalk" class="headerlink" title="Chalk"></a>Chalk</h2><p>给命令行输出的文本添加样式</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 基本示例</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello world!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一行文本多种样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello'</span>) + <span class="string">' World'</span> + chalk.red(<span class="string">'!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复合样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue.bgRed.bold(<span class="string">'Hello world!'</span>));</span><br></pre></td></tr></table></figure>
-
-<p align="center">
-    <br>
-    <img src="/2019/04/08/npm-publish-2/chalk.svg" class="" title="chalk示例">
-    <br>
-</p>
-
-<p>github仓库：<a href="https://github.com/chalk/chalk" target="_blank" rel="noopener">https://github.com/chalk/chalk</a></p>
-]]></content>
-      <tags>
-        <tag>Node.js</tag>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -719,47 +761,5 @@
 <p>你看，这样一步步梳理，我们就从一堆凌乱、没有规则的想法中，提炼出了一套有结构，有逻辑，可执行的行动方案。</p>
 <p>这，就是结构化思维的力量！</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>如何写出更高质量的代码</title>
-    <url>/2018/12/08/design-patterns/</url>
-    <content><![CDATA[<p>为什么项目维护困难、BUG 反复？实际上很多时候就是代码质量的问题。编写高质量代码的思路在任何技术栈都是基本相通的，代码架构就像是建筑的钢筋结构，代码细节就像是建筑的内部装修，建筑的抗震等级、简装或豪装完全取决于团队开发人员的水平。</p>
-<a id="more"></a>
-
-
-<img src="/2018/12/08/design-patterns/code(1).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(2).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(3).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(4).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(5).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(6).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(7).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(8).png" class="" title="xmind">
-
-<img src="/2018/12/08/design-patterns/code(10).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(11).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(12).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(13).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(14).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(15).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(16).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(17).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(18).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(19).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(20).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(21).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(22).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(23).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(24).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(25).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(26).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(27).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(28).png" class="" title="xmind">
-
-<img src="/2018/12/08/design-patterns/code.jpg" class="" title="xmind">
-]]></content>
-      <tags>
-        <tag>设计模式</tag>
-      </tags>
   </entry>
 </search>
