@@ -51,16 +51,27 @@
       </tags>
   </entry>
   <entry>
-    <title>数据结构与算法基础知识点</title>
-    <url>/2019/12/08/data-structure/</url>
-    <content><![CDATA[<p>数据结构是在计算机中组织和存储数据的一种特殊方式，使得数据可以高效地被访问和修改。更确切地说，数据结构是数据值的集合，表示数据之间的关系，也包括了作用在数据上的函数或操作。</p>
-<a id="more"></a>
+    <title>git filter-branch指令</title>
+    <url>/2019/06/16/git-filter-branch/</url>
+    <content><![CDATA[<p>git filter-branch 这个指令，是一个非常强悍的指令，《Pro Git》的作者说这是一个核弹级指令。除非特别清楚你准备干什么。否则不要抱着尝试的想法来试试，除非你想尝试下核弹的威力。</p>
+<a id="more"></a>     
 
-<img src="/2019/12/08/data-structure/xmind.png" class="" title="xmind">
+<p>// TODO</p>
 ]]></content>
       <tags>
-        <tag>数据结构</tag>
-        <tag>算法</tag>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git rebase指令</title>
+    <url>/2018/06/16/git-rebase/</url>
+    <content><![CDATA[<p>什么是git rebase? git rebase 你其实可以把它理解成是“重新设置基线”，它会将你的当前分支重新设置开始点，并把当前分支或其他分支的提交重新追加到后面，如果有修改提交内容或者解决冲突，会形成新的提交替换原本的，但是并不会产生比原本更多的提交。所以git rebase除了能用于合并分支以外，还能用于修改提交信息，修改提交文件等操作。</p>
+<a id="more"></a>              
+
+<p>// TODO</p>
+]]></content>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -213,52 +224,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>100行代码实现Virtual DOM和render</title>
-    <url>/2019/08/06/mvvm/</url>
-    <content><![CDATA[<p>在编写代码之前，我们需要先了解需要先来了解一下Virtual DOM是怎么样构建并渲染到浏览器的，常见的构建Virtual DOM的方法有两种，一种是jsx(react)，另一种是template(vue)。</p>
-<a id="more"></a>
-
-<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><ul>
-<li><p>React的jsx一般是通过babel的jsx插件编译成<code>createElement</code><a href="https://github.com/facebook/react/blob/v16.13.1/packages/react/src/ReactElement.js#L348" target="_blank" rel="noopener">[源码]</a>，Vue的template也可以通过vue-loader编译成对应的<code>createElement</code><a href="https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/create-element.js#L28" target="_blank" rel="noopener">[源码]</a>，</p>
-</li>
-<li><p>然后，在组件被创建并初始化state之后，执行render，将组件的props和state根据jsx(react)或template(vue)，生成一个虚拟DOM树</p>
-</li>
-<li><p>最后所有的VDOM生成完毕之后，将所有VDOM都mount上真实HTML DOM。</p>
-</li>
-</ul>
-<p>Component -&gt; render -&gt; VDOM -&gt; mount -&gt; HTML</p>
-<h2 id="VDOM"><a href="#VDOM" class="headerlink" title="VDOM"></a>VDOM</h2><p>VDOM的节点是一个简化版的DOM对象，只存储了我们关心的属性，大大提高了DOM操作时的性能。通常一个虚拟节点(VNode)包含：标签名、子节点数组、属性、事件、key和对应的真实DOM。</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> VNode &#123;</span><br><span class="line">  <span class="keyword">type</span>: <span class="built_in">string</span>;</span><br><span class="line">  children: VNode[] = [];</span><br><span class="line">  props: &#123; propName: <span class="built_in">string</span>; propValue: <span class="built_in">any</span> &#125;[] = [];</span><br><span class="line">  events: &#123; propName: <span class="built_in">string</span>; propValue: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">void</span> &#125;[] = [];</span><br><span class="line">  key: <span class="built_in">any</span>;</span><br><span class="line">  el: Node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这时候再定义一个创建虚拟DOM对象的方法，用于jsx调用，该方法接收三个参数：标签名，标签属性，子标签。返回一个虚拟DOM对象</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createElement</span>(<span class="params"><span class="keyword">type</span>: <span class="built_in">string</span>, props, ...children</span>) </span>&#123;</span><br><span class="line">  props = props || &#123;&#125;;</span><br><span class="line">  <span class="keyword">const</span> vNode = <span class="keyword">new</span> VNode();</span><br><span class="line">  vNode.type = <span class="keyword">type</span>;</span><br><span class="line">  vNode.events = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> value.startsWith(<span class="string">'on'</span>))</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  vNode.props = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> !value.startsWith(<span class="string">'on'</span>) &amp;&amp; value !== <span class="string">'key'</span>)</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  vNode.key = props[<span class="string">'key'</span>];</span><br><span class="line">  vNode.children = children;</span><br><span class="line">  <span class="keyword">return</span> vNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>虚拟DOM挂载到HTML DOM，根据根节点的ID，使用<code>document.createElement</code>将虚拟DOM转成HTML DOM，并挂载到真实节点mountEl下</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mount</span>(<span class="params">el, vNode: VNode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> node = mountVNode(vNode);</span><br><span class="line">  <span class="keyword">if</span> (el != <span class="literal">null</span>) &#123;</span><br><span class="line">    el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>根据VNode树生成真实HTML DOM</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mountVNode</span>(<span class="params">vNode: VNode</span>): <span class="title">HTMLElement</span> | <span class="title">Text</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (vNode == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (vNode <span class="keyword">instanceof</span> VNode) &#123;</span><br><span class="line">    <span class="keyword">let</span> el: HTMLElement;</span><br><span class="line">    el = <span class="built_in">document</span>.createElement(vNode.type);</span><br><span class="line">    vNode.props.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.setAttribute(value.propName, value.propValue)</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.events.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.addEventListener(value.propName.replace(<span class="regexp">/^on/</span>, <span class="string">''</span>), value.propValue);</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.children.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> subEl = mountVNode(value);</span><br><span class="line">      <span class="keyword">if</span> (subEl != <span class="literal">null</span>) &#123;</span><br><span class="line">        el.appendChild(subEl);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.el = el;</span><br><span class="line">    <span class="keyword">return</span> el;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createTextNode(<span class="built_in">String</span>(vNode));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>定义一个所有组件的抽象父组件，实现组件共有的基础功能</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> ComponentProps &#123;</span><br><span class="line">  el: HTMLElement;</span><br><span class="line">  [key: <span class="built_in">string</span>]: <span class="built_in">any</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">abstract</span> <span class="keyword">class</span> Component &#123;</span><br><span class="line"></span><br><span class="line">  readonly el: HTMLElement;</span><br><span class="line">  vNode: VNode;</span><br><span class="line">  <span class="keyword">abstract</span> render(): VNode;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params">props: ComponentProps</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (props) &#123;</span><br><span class="line">      <span class="built_in">Object</span>.assign(<span class="keyword">this</span>, props);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> mount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.vNode = <span class="keyword">this</span>.render();</span><br><span class="line">    <span class="keyword">const</span> node = mountVNode(<span class="keyword">this</span>.vNode);</span><br><span class="line">    <span class="keyword">this</span>.el &amp;&amp; node &amp;&amp; <span class="keyword">this</span>.el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最后再用定义一个挂载方法，创建组件并挂载到真实DOM，并且按顺序执行生命周期即可</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">renderDOM</span>(<span class="params">componentType: &#123; <span class="keyword">new</span> (props: ComponentProps) &#125;, props, selector?: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> component = <span class="keyword">new</span> componentType(&#123;...props, el: <span class="built_in">document</span>.querySelector(selector)&#125;);</span><br><span class="line">  component.beforeMount &amp;&amp; component.beforeMount();</span><br><span class="line">  component.mount();</span><br><span class="line">  component.mounted &amp;&amp; component.mounted();</span><br><span class="line">  <span class="keyword">return</span> component;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="测试运行"><a href="#测试运行" class="headerlink" title="测试运行"></a>测试运行</h2><p>Virtual DOM到render的过程基本就完成了，接下来我们定义一个组件，测试调用一下，看看结果</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"el"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> &gt;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// 定义组件</span></span></span><br><span class="line"><span class="actionscript">  <span class="class"><span class="keyword">class</span> <span class="title">TestComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">    buttonText = <span class="string">'buttonText'</span>;</span></span><br><span class="line">    clickCount = 1;</span><br><span class="line">    </span><br><span class="line"><span class="javascript">    <span class="keyword">constructor</span>(props: ComponentProps) &#123;</span></span><br><span class="line"><span class="actionscript">      <span class="keyword">super</span>(props);</span></span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> (<span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">        <span class="tag">&lt;<span class="name">span</span> &gt;</span>hello world<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">        &lt;button onclick=&#123;() =&gt; &#123;<span class="built_in">console</span>.log(<span class="string">'Hello World!'</span>, ++<span class="keyword">this</span>.clickCount)&#125;&#125;&gt;&#123;<span class="keyword">this</span>.buttonText&#125;&lt;<span class="regexp">/button&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span>);</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="actionscript">  <span class="comment">// 渲染到DOM</span></span></span><br><span class="line"><span class="actionscript">  renderDOM(TestComponent, <span class="string">'#el'</span>)</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<img src="/2019/08/06/mvvm/mvvm.png" class="" title="运行结果">
-
-
-<p>这仅仅是实现了从Virtual DOM渲染到真实DOM，并没有包含diff算法部分，所以当数据变化之后，并不会重新刷新真实DOM。想要刷新真实DOM，就需要在数据发生变化的时候，根据数据重新render一份vnode树，然后和之前生成的vnode树进行diff并更新真实DOM，具体如何实现diff，后续文章会进行具体讲解。</p>
-]]></content>
-      <tags>
-        <tag>Virtual DOM</tag>
-        <tag>React</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用node.js开发命令行工具（一）创建与发布</title>
     <url>/2019/03/31/npm-publish-1/</url>
     <content><![CDATA[<p>在前端工程化的大环境下，合理运用node和npm script，可以大大提高我们的开发效率，那么怎么才能使自己开发的nodejs代码通过npm安装，就可以直接使用命令行进行调用呢？</p>
@@ -312,6 +277,52 @@
 ]]></content>
       <tags>
         <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>100行代码实现Virtual DOM和render</title>
+    <url>/2019/08/06/mvvm/</url>
+    <content><![CDATA[<p>在编写代码之前，我们需要先了解需要先来了解一下Virtual DOM是怎么样构建并渲染到浏览器的，常见的构建Virtual DOM的方法有两种，一种是jsx(react)，另一种是template(vue)。</p>
+<a id="more"></a>
+
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><ul>
+<li><p>React的jsx一般是通过babel的jsx插件编译成<code>createElement</code><a href="https://github.com/facebook/react/blob/v16.13.1/packages/react/src/ReactElement.js#L348" target="_blank" rel="noopener">[源码]</a>，Vue的template也可以通过vue-loader编译成对应的<code>createElement</code><a href="https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/create-element.js#L28" target="_blank" rel="noopener">[源码]</a>，</p>
+</li>
+<li><p>然后，在组件被创建并初始化state之后，执行render，将组件的props和state根据jsx(react)或template(vue)，生成一个虚拟DOM树</p>
+</li>
+<li><p>最后所有的VDOM生成完毕之后，将所有VDOM都mount上真实HTML DOM。</p>
+</li>
+</ul>
+<p>Component -&gt; render -&gt; VDOM -&gt; mount -&gt; HTML</p>
+<h2 id="VDOM"><a href="#VDOM" class="headerlink" title="VDOM"></a>VDOM</h2><p>VDOM的节点是一个简化版的DOM对象，只存储了我们关心的属性，大大提高了DOM操作时的性能。通常一个虚拟节点(VNode)包含：标签名、子节点数组、属性、事件、key和对应的真实DOM。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> VNode &#123;</span><br><span class="line">  <span class="keyword">type</span>: <span class="built_in">string</span>;</span><br><span class="line">  children: VNode[] = [];</span><br><span class="line">  props: &#123; propName: <span class="built_in">string</span>; propValue: <span class="built_in">any</span> &#125;[] = [];</span><br><span class="line">  events: &#123; propName: <span class="built_in">string</span>; propValue: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">void</span> &#125;[] = [];</span><br><span class="line">  key: <span class="built_in">any</span>;</span><br><span class="line">  el: Node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这时候再定义一个创建虚拟DOM对象的方法，用于jsx调用，该方法接收三个参数：标签名，标签属性，子标签。返回一个虚拟DOM对象</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createElement</span>(<span class="params"><span class="keyword">type</span>: <span class="built_in">string</span>, props, ...children</span>) </span>&#123;</span><br><span class="line">  props = props || &#123;&#125;;</span><br><span class="line">  <span class="keyword">const</span> vNode = <span class="keyword">new</span> VNode();</span><br><span class="line">  vNode.type = <span class="keyword">type</span>;</span><br><span class="line">  vNode.events = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> value.startsWith(<span class="string">'on'</span>))</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  vNode.props = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> !value.startsWith(<span class="string">'on'</span>) &amp;&amp; value !== <span class="string">'key'</span>)</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  vNode.key = props[<span class="string">'key'</span>];</span><br><span class="line">  vNode.children = children;</span><br><span class="line">  <span class="keyword">return</span> vNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>虚拟DOM挂载到HTML DOM，根据根节点的ID，使用<code>document.createElement</code>将虚拟DOM转成HTML DOM，并挂载到真实节点mountEl下</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mount</span>(<span class="params">el, vNode: VNode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> node = mountVNode(vNode);</span><br><span class="line">  <span class="keyword">if</span> (el != <span class="literal">null</span>) &#123;</span><br><span class="line">    el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据VNode树生成真实HTML DOM</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mountVNode</span>(<span class="params">vNode: VNode</span>): <span class="title">HTMLElement</span> | <span class="title">Text</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (vNode == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (vNode <span class="keyword">instanceof</span> VNode) &#123;</span><br><span class="line">    <span class="keyword">let</span> el: HTMLElement;</span><br><span class="line">    el = <span class="built_in">document</span>.createElement(vNode.type);</span><br><span class="line">    vNode.props.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.setAttribute(value.propName, value.propValue)</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.events.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.addEventListener(value.propName.replace(<span class="regexp">/^on/</span>, <span class="string">''</span>), value.propValue);</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.children.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> subEl = mountVNode(value);</span><br><span class="line">      <span class="keyword">if</span> (subEl != <span class="literal">null</span>) &#123;</span><br><span class="line">        el.appendChild(subEl);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.el = el;</span><br><span class="line">    <span class="keyword">return</span> el;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createTextNode(<span class="built_in">String</span>(vNode));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义一个所有组件的抽象父组件，实现组件共有的基础功能</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> ComponentProps &#123;</span><br><span class="line">  el: HTMLElement;</span><br><span class="line">  [key: <span class="built_in">string</span>]: <span class="built_in">any</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">abstract</span> <span class="keyword">class</span> Component &#123;</span><br><span class="line"></span><br><span class="line">  readonly el: HTMLElement;</span><br><span class="line">  vNode: VNode;</span><br><span class="line">  <span class="keyword">abstract</span> render(): VNode;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params">props: ComponentProps</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (props) &#123;</span><br><span class="line">      <span class="built_in">Object</span>.assign(<span class="keyword">this</span>, props);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> mount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.vNode = <span class="keyword">this</span>.render();</span><br><span class="line">    <span class="keyword">const</span> node = mountVNode(<span class="keyword">this</span>.vNode);</span><br><span class="line">    <span class="keyword">this</span>.el &amp;&amp; node &amp;&amp; <span class="keyword">this</span>.el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后再用定义一个挂载方法，创建组件并挂载到真实DOM，并且按顺序执行生命周期即可</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">renderDOM</span>(<span class="params">componentType: &#123; <span class="keyword">new</span> (props: ComponentProps) &#125;, props, selector?: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> component = <span class="keyword">new</span> componentType(&#123;...props, el: <span class="built_in">document</span>.querySelector(selector)&#125;);</span><br><span class="line">  component.beforeMount &amp;&amp; component.beforeMount();</span><br><span class="line">  component.mount();</span><br><span class="line">  component.mounted &amp;&amp; component.mounted();</span><br><span class="line">  <span class="keyword">return</span> component;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试运行"><a href="#测试运行" class="headerlink" title="测试运行"></a>测试运行</h2><p>Virtual DOM到render的过程基本就完成了，接下来我们定义一个组件，测试调用一下，看看结果</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"el"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> &gt;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// 定义组件</span></span></span><br><span class="line"><span class="actionscript">  <span class="class"><span class="keyword">class</span> <span class="title">TestComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">    buttonText = <span class="string">'buttonText'</span>;</span></span><br><span class="line">    clickCount = 1;</span><br><span class="line">    </span><br><span class="line"><span class="javascript">    <span class="keyword">constructor</span>(props: ComponentProps) &#123;</span></span><br><span class="line"><span class="actionscript">      <span class="keyword">super</span>(props);</span></span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> (<span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">        <span class="tag">&lt;<span class="name">span</span> &gt;</span>hello world<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">        &lt;button onclick=&#123;() =&gt; &#123;<span class="built_in">console</span>.log(<span class="string">'Hello World!'</span>, ++<span class="keyword">this</span>.clickCount)&#125;&#125;&gt;&#123;<span class="keyword">this</span>.buttonText&#125;&lt;<span class="regexp">/button&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span>);</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="actionscript">  <span class="comment">// 渲染到DOM</span></span></span><br><span class="line"><span class="actionscript">  renderDOM(TestComponent, <span class="string">'#el'</span>)</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<img src="/2019/08/06/mvvm/mvvm.png" class="" title="运行结果">
+
+
+<p>这仅仅是实现了从Virtual DOM渲染到真实DOM，并没有包含diff算法部分，所以当数据变化之后，并不会重新刷新真实DOM。想要刷新真实DOM，就需要在数据发生变化的时候，根据数据重新render一份vnode树，然后和之前生成的vnode树进行diff并更新真实DOM，具体如何实现diff，后续文章会进行具体讲解。</p>
+]]></content>
+      <tags>
+        <tag>Virtual DOM</tag>
+        <tag>React</tag>
       </tags>
   </entry>
   <entry>
@@ -405,6 +416,61 @@
 ]]></content>
       <tags>
         <tag>Typescript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法基础知识点</title>
+    <url>/2019/12/08/data-structure/</url>
+    <content><![CDATA[<p>数据结构是在计算机中组织和存储数据的一种特殊方式，使得数据可以高效地被访问和修改。更确切地说，数据结构是数据值的集合，表示数据之间的关系，也包括了作用在数据上的函数或操作。</p>
+<a id="more"></a>
+
+<img src="/2019/12/08/data-structure/xmind.png" class="" title="xmind">
+]]></content>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何写出更高质量的代码</title>
+    <url>/2018/12/08/design-patterns/</url>
+    <content><![CDATA[<p>为什么项目维护困难、BUG 反复？实际上很多时候就是代码质量的问题。编写高质量代码的思路在任何技术栈都是基本相通的，代码架构就像是建筑的钢筋结构，代码细节就像是建筑的内部装修，建筑的抗震等级、简装或豪装完全取决于团队开发人员的水平。</p>
+<a id="more"></a>
+
+
+<img src="/2018/12/08/design-patterns/code(1).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(2).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(3).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(4).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(5).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(6).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(7).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(8).png" class="" title="xmind">
+
+<img src="/2018/12/08/design-patterns/code(10).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(11).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(12).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(13).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(14).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(15).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(16).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(17).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(18).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(19).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(20).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(21).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(22).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(23).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(24).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(25).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(26).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(27).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(28).png" class="" title="xmind">
+
+<img src="/2018/12/08/design-patterns/code.jpg" class="" title="xmind">
+]]></content>
+      <tags>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -531,138 +597,6 @@
       </tags>
   </entry>
   <entry>
-    <title>git filter-branch指令</title>
-    <url>/2019/06/16/git-filter-branch/</url>
-    <content><![CDATA[<p>git filter-branch 这个指令，是一个非常强悍的指令，《Pro Git》的作者说这是一个核弹级指令。除非特别清楚你准备干什么。否则不要抱着尝试的想法来试试，除非你想尝试下核弹的威力。</p>
-<a id="more"></a>     
-
-<p>// TODO</p>
-]]></content>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RxJS和响应式编程</title>
-    <url>/2019/04/26/rxjs/</url>
-    <content><![CDATA[<p>RxJS 是一个库，它通过使用 observable 序列来编写异步和基于事件的程序。它提供了一个核心类型 Observable，附属类型 (Observer、 Schedulers、 Subjects) 和受 [Array#extras] 启发的操作符 (map、filter、reduce、every, 等等)，这些数组操作符可以把异步事件作为集合来处理。可以把 RxJS 当做是用来处理异步事件的 Lodash 。</p>
-<a id="more"></a>
-
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>ReactiveX 结合了 <strong>观察者模式</strong>、<strong>迭代器模式</strong> 和 <strong>使用集合的函数式编程</strong>，以满足以一种理想方式来管理事件序列所需要的一切。</p>
-<p>注册事件监听器的常规写法。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
-<p>使用 RxJS 的话，创建一个 observable 来代替。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).subscribe(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
-<p>这里涉及到了几个基础概念，</p>
-<p><strong>Observable</strong> (可观察对象)：<code>fromEvent</code>方法返回就是一个<code>Observable</code>对象，表示一个事件或值的发生方，可以调用<code>subscribe</code>方法，对这个事件进行监听。</p>
-<p><strong>Observer</strong> (观察者)：对<code>Observable</code>进行监听调用的<code>subscribe</code>方法接收的参数就是<code>Observer</code>，就需要<code>Observer</code>对象，通常包含了成功、失败、结束三种回调。</p>
-<p><strong>Subscription</strong> (订阅): <code>subscribe</code>的返回值就是<code>Subscription</code>，主要用于取消<code>Observable</code>的执行。</p>
-<p><strong>Operators</strong> (操作符)：采用函数式编程风格的纯函数，使用像<code>map</code>、<code>filter</code>、<code>concat</code>、<code>flatMap</code>这样的操作符来处理事件集合。</p>
-<p><strong>Schedulers</strong> (调度器): 用来控制并发并且是中央集权的调度员，允许我们在发生计算时进行协调，例如<code>setTimeout</code>或微任务或其他。</p>
-<h3 id="纯净性-Purity"><a href="#纯净性-Purity" class="headerlink" title="纯净性 (Purity)"></a>纯净性 (Purity)</h3><p>RxJS之所以如此强大，正是因为它使用纯函数来产生值的能力，这意味着你的代码更不容易出错。</p>
-<p>在很多情况下，一些事件的处理，需要额外的状态，通常你会创建一个非纯函数，在这个函数之外也可能修改共享变量，这将使得你的应用更难维护。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
-
-<p>使用 RxJS 的话，你会将应用状态隔离出来。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>)</span><br><span class="line">  .scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">  .subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
-
-<p>scan 操作符的工作原理与数组的 reduce 类似。它接收一个回调函数和初始值。每次回调函数运行后的返回值会作为下次回调函数运行时的参数。</p>
-<h3 id="流动性-Flow"><a href="#流动性-Flow" class="headerlink" title="流动性 (Flow)"></a>流动性 (Flow)</h3><p><code>Observable</code>对象提供了pipe方法，可以使用RxJS提供的操作符来帮助你控制事件如何流经管道。</p>
-<p>下面的代码展示的是如何控制一秒钟内最多点击一次，先来看使用普通的 JavaScript：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> rate = <span class="number">1000</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> lastClick = <span class="built_in">Date</span>.now() - rate;</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - lastClick &gt;= rate) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>);</span><br><span class="line">    lastClick = <span class="built_in">Date</span>.now();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>使用 RxJS：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; scan, throttleTime &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).pipe(</span><br><span class="line">  throttleTime(<span class="number">1000</span>),</span><br><span class="line">  scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">).subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>Observable 是多个值的惰性推送集合。它填补了下面表格中的空白：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>单个值</th>
-<th>多个值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>拉取</td>
-<td>Function</td>
-<td>Generator</td>
-</tr>
-<tr>
-<td>推送</td>
-<td>Promise</td>
-<td>Observable</td>
-</tr>
-</tbody></table>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> Observable(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  subscriber.next(<span class="number">1</span>);</span><br><span class="line">  subscriber.next(<span class="number">2</span>);</span><br><span class="line">  subscriber.next(<span class="number">3</span>);</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    subscriber.next(<span class="number">4</span>);</span><br><span class="line">    subscriber.complete();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>要调用 Observable 并看到这些值，我们需要订阅 Observable：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">observable.subscribe(&#123;</span><br><span class="line">  next: <span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'获取值：'</span> + x),</span><br><span class="line">  error: <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(<span class="string">'错误：'</span> + err),</span><br><span class="line">  complete: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'结束'</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="TODO"><a href="#TODO" class="headerlink" title="// TODO"></a>// TODO</h2>]]></content>
-      <tags>
-        <tag>RxJS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git rebase指令</title>
-    <url>/2018/06/16/git-rebase/</url>
-    <content><![CDATA[<p>什么是git rebase? git rebase 你其实可以把它理解成是“重新设置基线”，它会将你的当前分支重新设置开始点，并把当前分支或其他分支的提交重新追加到后面，如果有修改提交内容或者解决冲突，会形成新的提交替换原本的，但是并不会产生比原本更多的提交。所以git rebase除了能用于合并分支以外，还能用于修改提交信息，修改提交文件等操作。</p>
-<a id="more"></a>              
-
-<p>// TODO</p>
-]]></content>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何写出更高质量的代码</title>
-    <url>/2018/12/08/design-patterns/</url>
-    <content><![CDATA[<p>为什么项目维护困难、BUG 反复？实际上很多时候就是代码质量的问题。编写高质量代码的思路在任何技术栈都是基本相通的，代码架构就像是建筑的钢筋结构，代码细节就像是建筑的内部装修，建筑的抗震等级、简装或豪装完全取决于团队开发人员的水平。</p>
-<a id="more"></a>
-
-
-<img src="/2018/12/08/design-patterns/code(1).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(2).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(3).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(4).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(5).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(6).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(7).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(8).png" class="" title="xmind">
-
-<img src="/2018/12/08/design-patterns/code(10).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(11).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(12).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(13).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(14).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(15).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(16).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(17).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(18).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(19).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(20).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(21).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(22).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(23).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(24).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(25).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(26).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(27).png" class="" title="xmind">
-<img src="/2018/12/08/design-patterns/code(28).png" class="" title="xmind">
-
-<img src="/2018/12/08/design-patterns/code.jpg" class="" title="xmind">
-]]></content>
-      <tags>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>结构化思维</title>
     <url>/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/</url>
     <content><![CDATA[<p>在日常工作中，我们时常会碰到这样的情况，有的人讲事情逻辑非常混乱，罗列了很多事项，却把握不到重点，无法把一件事情说清楚。他说的每个字你都听得懂，然而组合在一起，你并不知道他想说什么，内容没有逻辑，语句没有重点。</p>
@@ -761,5 +695,71 @@
 <p>你看，这样一步步梳理，我们就从一堆凌乱、没有规则的想法中，提炼出了一套有结构，有逻辑，可执行的行动方案。</p>
 <p>这，就是结构化思维的力量！</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>RxJS和响应式编程</title>
+    <url>/2019/04/26/rxjs/</url>
+    <content><![CDATA[<p>RxJS 是一个库，它通过使用 observable 序列来编写异步和基于事件的程序。它提供了一个核心类型 Observable，附属类型 (Observer、 Schedulers、 Subjects) 和受 [Array#extras] 启发的操作符 (map、filter、reduce、every, 等等)，这些数组操作符可以把异步事件作为集合来处理。可以把 RxJS 当做是用来处理异步事件的 Lodash 。</p>
+<a id="more"></a>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>ReactiveX 结合了 <strong>观察者模式</strong>、<strong>迭代器模式</strong> 和 <strong>使用集合的函数式编程</strong>，以满足以一种理想方式来管理事件序列所需要的一切。</p>
+<p>注册事件监听器的常规写法。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
+<p>使用 RxJS 的话，创建一个 observable 来代替。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).subscribe(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
+<p>这里涉及到了几个基础概念，</p>
+<p><strong>Observable</strong> (可观察对象)：<code>fromEvent</code>方法返回就是一个<code>Observable</code>对象，表示一个事件或值的发生方，可以调用<code>subscribe</code>方法，对这个事件进行监听。</p>
+<p><strong>Observer</strong> (观察者)：对<code>Observable</code>进行监听调用的<code>subscribe</code>方法接收的参数就是<code>Observer</code>，就需要<code>Observer</code>对象，通常包含了成功、失败、结束三种回调。</p>
+<p><strong>Subscription</strong> (订阅): <code>subscribe</code>的返回值就是<code>Subscription</code>，主要用于取消<code>Observable</code>的执行。</p>
+<p><strong>Operators</strong> (操作符)：采用函数式编程风格的纯函数，使用像<code>map</code>、<code>filter</code>、<code>concat</code>、<code>flatMap</code>这样的操作符来处理事件集合。</p>
+<p><strong>Schedulers</strong> (调度器): 用来控制并发并且是中央集权的调度员，允许我们在发生计算时进行协调，例如<code>setTimeout</code>或微任务或其他。</p>
+<h3 id="纯净性-Purity"><a href="#纯净性-Purity" class="headerlink" title="纯净性 (Purity)"></a>纯净性 (Purity)</h3><p>RxJS之所以如此强大，正是因为它使用纯函数来产生值的能力，这意味着你的代码更不容易出错。</p>
+<p>在很多情况下，一些事件的处理，需要额外的状态，通常你会创建一个非纯函数，在这个函数之外也可能修改共享变量，这将使得你的应用更难维护。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+<p>使用 RxJS 的话，你会将应用状态隔离出来。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>)</span><br><span class="line">  .scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">  .subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+<p>scan 操作符的工作原理与数组的 reduce 类似。它接收一个回调函数和初始值。每次回调函数运行后的返回值会作为下次回调函数运行时的参数。</p>
+<h3 id="流动性-Flow"><a href="#流动性-Flow" class="headerlink" title="流动性 (Flow)"></a>流动性 (Flow)</h3><p><code>Observable</code>对象提供了pipe方法，可以使用RxJS提供的操作符来帮助你控制事件如何流经管道。</p>
+<p>下面的代码展示的是如何控制一秒钟内最多点击一次，先来看使用普通的 JavaScript：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> rate = <span class="number">1000</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> lastClick = <span class="built_in">Date</span>.now() - rate;</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - lastClick &gt;= rate) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>);</span><br><span class="line">    lastClick = <span class="built_in">Date</span>.now();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>使用 RxJS：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; scan, throttleTime &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).pipe(</span><br><span class="line">  throttleTime(<span class="number">1000</span>),</span><br><span class="line">  scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">).subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>Observable 是多个值的惰性推送集合。它填补了下面表格中的空白：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>单个值</th>
+<th>多个值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拉取</td>
+<td>Function</td>
+<td>Generator</td>
+</tr>
+<tr>
+<td>推送</td>
+<td>Promise</td>
+<td>Observable</td>
+</tr>
+</tbody></table>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> Observable(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  subscriber.next(<span class="number">1</span>);</span><br><span class="line">  subscriber.next(<span class="number">2</span>);</span><br><span class="line">  subscriber.next(<span class="number">3</span>);</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    subscriber.next(<span class="number">4</span>);</span><br><span class="line">    subscriber.complete();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>要调用 Observable 并看到这些值，我们需要订阅 Observable：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">observable.subscribe(&#123;</span><br><span class="line">  next: <span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'获取值：'</span> + x),</span><br><span class="line">  error: <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(<span class="string">'错误：'</span> + err),</span><br><span class="line">  complete: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'结束'</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="// TODO"></a>// TODO</h2>]]></content>
+      <tags>
+        <tag>RxJS</tag>
+      </tags>
   </entry>
 </search>
