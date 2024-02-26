@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>数据结构与算法基础知识点</title>
+    <url>/2019/12/08/data-structure/</url>
+    <content><![CDATA[<p>数据结构是在计算机中组织和存储数据的一种特殊方式，使得数据可以高效地被访问和修改。更确切地说，数据结构是数据值的集合，表示数据之间的关系，也包括了作用在数据上的函数或操作。</p>
+<a id="more"></a>
+
+<img src="/2019/12/08/data-structure/xmind.png" class="" title="xmind">
+]]></content>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何写出更高质量的代码</title>
+    <url>/2018/12/08/design-patterns/</url>
+    <content><![CDATA[<p>为什么项目维护困难、BUG 反复？实际上很多时候就是代码质量的问题。编写高质量代码的思路在任何技术栈都是基本相通的，代码架构就像是建筑的钢筋结构，代码细节就像是建筑的内部装修，建筑的抗震等级、简装或豪装完全取决于团队开发人员的水平。</p>
+<a id="more"></a>
+
+
+<img src="/2018/12/08/design-patterns/code(1).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(2).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(3).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(4).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(5).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(6).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(7).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(8).png" class="" title="xmind">
+
+<img src="/2018/12/08/design-patterns/code(10).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(11).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(12).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(13).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(14).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(15).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(16).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(17).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(18).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(19).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(20).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(21).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(22).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(23).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(24).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(25).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(26).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(27).png" class="" title="xmind">
+<img src="/2018/12/08/design-patterns/code(28).png" class="" title="xmind">
+
+<img src="/2018/12/08/design-patterns/code.jpg" class="" title="xmind">
+]]></content>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>当async/await遇到map和reduce</title>
+    <url>/2019/03/30/async-await/</url>
+    <content><![CDATA[<p>数组的map、reduce和filter这些方法，使用应该很常见了，但是async function在直接使用map和reduce的时候，就会出现与期望的结果不符的结果了。</p>
+<a id="more"></a>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>首先我们来看看同步的map怎么写。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 对数组所有元素乘2</span></span><br><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].map(<span class="function"><span class="params">value</span> =&gt;</span> value * <span class="number">2</span>); <span class="comment">// [2,4,6]</span></span><br></pre></td></tr></table></figure>
+<p>那如果map函数需要进行异步操作才能返回结果应该怎么写呢？</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].map(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>); <span class="comment">// [Promise, Promise, Promise]</span></span><br></pre></td></tr></table></figure>
+<p>async函数执行完会返回Promise对象，map就直接接收后装进新数组了，数组内容直接变成了三个Promise，这显然不是我们想要的结果，所以我们要对Promise数组再进一步操作取出其中的值。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].map(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>)) <span class="comment">// [2,4,6]</span></span><br></pre></td></tr></table></figure>
+<p>这里的Promise.all会将一个由Promise组成的数组依次执行，并返回一个Promise对象，该对象的结果为数组产生的结果集。</p>
+<h2 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h2><p>对于reduce来说，也是基本和map差不多的思路，只是需要提前将前一次的结果用await取出Prmose的值，再进行运算。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].reduce(<span class="keyword">async</span>(previousValue, currentValue) =&gt; <span class="keyword">await</span> previousValue + currentValue, <span class="number">0</span>) <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p>感觉好简单啊，那数组的异步filter能不能也像map这么写呢？</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].filter(<span class="keyword">async</span> value =&gt; value % <span class="number">2</span> === <span class="number">1</span>)) <span class="comment">// [1,2,3]</span></span><br></pre></td></tr></table></figure>
+<p>结果没对啊，async返回的Promise被直接判断成true，导致一个元素也没被过滤掉。<br>这里我们要使用一个临时数组配合前面map先获取异步filter对应每个元素的结果，然后再使用filter过滤数组，搞定~</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> filterResults = <span class="keyword">await</span> <span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">                            .map(<span class="keyword">async</span> value =&gt; (value % <span class="number">2</span> === <span class="number">1</span>))); <span class="comment">// [true,false,true]</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].filter(<span class="function">(<span class="params">value, index</span>) =&gt;</span> filterResults[index]); <span class="comment">// [1,3]</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Promise库"><a href="#Promise库" class="headerlink" title="Promise库"></a>Promise库</h2><p>刚开写asyncMap的时候，以为其他的方法也会这么简单，后来发现事情并没简单，只好找了个Promise库 <strong>bluebird</strong>，专门处理这些异步操作<del>~</del></p>
+<p>Promise.map</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.map([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span> value =&gt; value * <span class="number">2</span>) <span class="comment">// [2, 4, 6]</span></span><br></pre></td></tr></table></figure>
+<p>Promise.reduce</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.reduce([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span>(previousValue, currentValue) =&gt; <span class="keyword">await</span> previousValue + currentValue, <span class="number">0</span>) <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+
+<p>Promise.filter</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="keyword">await</span> <span class="built_in">Promise</span>.filter([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="keyword">async</span> value =&gt; value % <span class="number">2</span> === <span class="number">1</span>) <span class="comment">// [1, 3]</span></span><br></pre></td></tr></table></figure>
+
+<p>除了提供有常见的map、filter、reduce、some之外，还提供了PromisifyAll，直接把需要传递回调函数的库Promise化。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="built_in">Promise</span>.promisifyAll(fs);</span><br><span class="line">fs.readFileAsync(<span class="string">"file.js"</span>, <span class="string">"utf8"</span>).then(...)</span><br></pre></td></tr></table></figure>
+<p>也支持第三方库</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>);</span><br><span class="line"><span class="built_in">Promise</span>.promisifyAll(<span class="built_in">require</span>(<span class="string">"redis"</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="Rxjs"><a href="#Rxjs" class="headerlink" title="Rxjs"></a>Rxjs</h2><p>除了使用上面提到的Promise库 <strong>bluebird</strong>之外，还可以使用<strong>Rxjs</strong>，<strong>Rxjs</strong>是专门为处理异步而生，并且提供了比数组更丰富的管道操作符</p>
+<p>Rxjs对异步操作进行reduce：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    flatMap(fromPromise(<span class="keyword">async</span> value =&gt; value * <span class="number">2</span>)),</span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 2, 4, 6</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Rxjs对异步操作进行reduce：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    reduce(<span class="keyword">async</span>(previousValue, currentValue) =&gt; (<span class="keyword">await</span> previousValue) + currentValue, <span class="number">0</span>),</span><br><span class="line">    flatMap(fromPromise) <span class="comment">//把异步操作返回的Promise转换成Observable</span></span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 6</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Rxjs对异步操作进行filter：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).pipe(</span><br><span class="line">    map(<span class="keyword">async</span> value =&gt; value), <span class="comment">// 先执行异步操作</span></span><br><span class="line">    flatMap(fromPromise),  <span class="comment">//把异步操作返回的Promise转换成Observable</span></span><br><span class="line">    fllter(<span class="function"><span class="params">value</span> =&gt;</span> value % <span class="number">2</span> === <span class="number">1</span>) <span class="comment">// 再对Observable中的数据进行过滤</span></span><br><span class="line">).subscript(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value) <span class="comment">// 1, 3</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Promise</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git rebase指令</title>
+    <url>/2018/06/16/git-rebase/</url>
+    <content><![CDATA[<p>什么是git rebase? git rebase 你其实可以把它理解成是“重新设置基线”，它会将你的当前分支重新设置开始点，并把当前分支或其他分支的提交重新追加到后面，如果有修改提交内容或者解决冲突，会形成新的提交替换原本的，但是并不会产生比原本更多的提交。所以git rebase除了能用于合并分支以外，还能用于修改提交信息，修改提交文件等操作。</p>
+<a id="more"></a>              
+
+<p>// TODO</p>
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/1970/01/01/hello-world/</url>
+    <content><![CDATA[<p>Mifan blog, Hello World</p>
+<a id="more"></a>
+
+<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>git filter-branch指令</title>
+    <url>/2019/06/16/git-filter-branch/</url>
+    <content><![CDATA[<p>git filter-branch 这个指令，是一个非常强悍的指令，《Pro Git》的作者说这是一个核弹级指令。除非特别清楚你准备干什么。否则不要抱着尝试的想法来试试，除非你想尝试下核弹的威力。</p>
+<a id="more"></a>     
+
+<p>// TODO</p>
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深入Vue源码理解diff算法</title>
+    <url>/2020/08/15/diff/</url>
+    <content><![CDATA[<p>计算两颗树的结构差异并进行转化，传统的diff算法是通过循环递归对每个节点进行依次对比，算法复杂度达到 O(n^3) ，n是树的节点数，这个有多可怕呢？——如果要展示1000个节点，得执行上亿次比较。。即便是CPU快能执行30亿条命令，也很难在一秒内计算出差异。</p>
+<a id="more"></a>
+
+<p>最开始经典的深度优先遍历算法，其复杂度为O(n^3)，存在高昂的diff成本。然后cito.js的横空出世，提出两项优化方案，使用key实现移动追踪及基于key的编辑长度距离算法应用（算法复杂度 为O(n^2)）。但这样的diff算法太过复杂了，于是后来者snabbdom将kivi.js进行简化，去掉编辑长度距离算法，调整两端比较算法。速度略有损失，但可读性大大提高。再之后，就是著名的Vue2.0 把snabbdom整个库整合掉了。</p>
+<p>所以如果觉得直接看Vue的diff算法太多干扰，可以直接对照着snabbdom，方便梳理Vue diff的核心代码。本文从组件Watcher中触发<code>updateComponent</code>开始讲解，每段代码前都会附带基于<strong>Vue v2.6.11</strong>版本的源码Github地址。</p>
+<h2 id="Watcher触发diff"><a href="#Watcher触发diff" class="headerlink" title="Watcher触发diff"></a>Watcher触发diff</h2><p>当<code>Watcher</code>监听到data发生变化后，触发<code>updateComponent</code>，调用<code>vm._render()</code>生成新的vnode树，传入<code>vm._update</code>中。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/instance/lifecycle.js#L197</span></span><br><span class="line"><span class="keyword">new</span> Watcher(vm, updateComponent, noop, &#123;</span><br><span class="line">  before () &#123;</span><br><span class="line">    <span class="keyword">if</span> (vm._isMounted &amp;&amp; !vm._isDestroyed) &#123;</span><br><span class="line">      callHook(vm, <span class="string">'beforeUpdate'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="literal">true</span> <span class="comment">/* isRenderWatcher */</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/instance/lifecycle.js#L189</span></span><br><span class="line">updateComponent = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  vm._update(vm._render(), hydrating)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Vue原型上的_update方法将当前vm上保存着上一次render的vnode树，将新render的vnode和oldVnode传入patch中，就开始diff了。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/instance/lifecycle.js#L59</span></span><br><span class="line">Vue.prototype._update = <span class="function"><span class="keyword">function</span> (<span class="params">vnode: VNode, hydrating?: boolean</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">if</span> (!prevVnode) &#123;</span><br><span class="line">    <span class="comment">// initial render</span></span><br><span class="line">    vm.$el = vm.__patch__(vm.$el, vnode, hydrating, <span class="literal">false</span> <span class="comment">/* removeOnly */</span>)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// updates</span></span><br><span class="line">    vm.$el = vm.__patch__(prevVnode, vnode)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><code>__patch__</code>方法是由<code>src/core/vdom/patch</code>下的<code>createPatchFunction</code>方法返回的一个闭包函数的，然后赋值到Vue的原型上的，</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/platforms/web/runtime/patch.js#L12</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> patch: <span class="built_in">Function</span> = createPatchFunction(&#123; nodeOps, modules &#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/platforms/web/runtime/index.js#L34</span></span><br><span class="line">Vue.prototype.__patch__ = inBrowser ? patch : noop</span><br></pre></td></tr></table></figure>
+
+<h2 id="执行patch"><a href="#执行patch" class="headerlink" title="执行patch"></a>执行patch</h2><ul>
+<li>如果<code>oldVnode</code>不为空，<code>vnode</code>为空，则直接销毁<code>oldVnode</code>的真实DOM</li>
+<li>如果<code>oldVnode</code>为空，<code>vnode</code>不为空，则为<code>vnode</code>创建一个新的真实DOM</li>
+<li>如果<code>oldVnode</code>和<code>vnode</code>是相同节点，执行<code>patchVnode(oldVnode, vnode)</code></li>
+<li>如果<code>oldVnode</code>和<code>vnode</code>不是相同节点，删除<code>oldVnode</code>，创建新的<code>vnode</code>并插入</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/patch.js#L70</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createPatchFunction</span> (<span class="params">backend</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/patch.js#L700</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">patch</span> (<span class="params">oldVnode, vnode, hydrating, removeOnly</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 如果oldVnode不为空，vnode为空，则直接销毁oldVnode</span></span><br><span class="line">    <span class="keyword">if</span> (isUndef(vnode)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (isDef(oldVnode)) invokeDestroyHook(oldVnode)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> isInitialPatch = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">const</span> insertedVnodeQueue = []</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果oldVnode为空，vnode不为空，则创建一个新vnode</span></span><br><span class="line">    <span class="keyword">if</span> (isUndef(oldVnode)) &#123;</span><br><span class="line">      createElm(vnode, insertedVnodeQueue)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="comment">// 相同的节点，执行patchVnode</span></span><br><span class="line">      <span class="keyword">if</span> (sameVnode(oldVnode, vnode)) &#123;  </span><br><span class="line">        patchVnode(oldVnode, vnode, insertedVnodeQueue, <span class="literal">null</span>, <span class="literal">null</span>, removeOnly)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 不相同的节点，删除oldVnode，创建新的vnode并插入</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;  </span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="comment">// create new node</span></span><br><span class="line">        createElm(</span><br><span class="line">          vnode,</span><br><span class="line">          insertedVnodeQueue,</span><br><span class="line">          <span class="comment">// ...</span></span><br><span class="line">        )</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="comment">// destroy old node</span></span><br><span class="line">        <span class="keyword">if</span> (isDef(parentElm)) &#123;</span><br><span class="line">          removeVnodes(parentElm, [oldVnode], <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDef(oldVnode.tag)) &#123;</span><br><span class="line">          invokeDestroyHook(oldVnode)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 调用Insert回调</span></span><br><span class="line">    invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)</span><br><span class="line">    <span class="keyword">return</span> vnode.elm</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="patchVnode"><a href="#patchVnode" class="headerlink" title="patchVnode"></a>patchVnode</h2><p>到了<code>patchVnode</code>方法这里，就正式开始进行递归diff了，这个方法会根据<code>oldVnode</code>和<code>vnode</code>data的差异，更新对应的真实DOM，并且对真实DOM的children继续执行<code>patchVnode</code>递归更新。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/patch.js#L501</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">patchVnode</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    oldVnode,</span></span></span><br><span class="line"><span class="function"><span class="params">    vnode,</span></span></span><br><span class="line"><span class="function"><span class="params">    insertedVnodeQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">    ownerArray,</span></span></span><br><span class="line"><span class="function"><span class="params">    index,</span></span></span><br><span class="line"><span class="function"><span class="params">    removeOnly</span></span></span><br><span class="line"><span class="function"><span class="params">  </span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (oldVnode === vnode) &#123;</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">const</span> elm = vnode.elm = oldVnode.elm</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">const</span> oldCh = oldVnode.children</span><br><span class="line">    <span class="keyword">const</span> ch = vnode.children</span><br><span class="line">    <span class="comment">// 调用cbs中update方法，更新真实DOM</span></span><br><span class="line">    <span class="keyword">if</span> (isDef(data) &amp;&amp; isPatchable(vnode)) &#123;</span><br><span class="line">      <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; cbs.update.length; ++i) cbs.update[i](oldVnode, vnode)</span><br><span class="line">      <span class="keyword">if</span> (isDef(i = data.hook) &amp;&amp; isDef(i = i.update)) i(oldVnode, vnode)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isUndef(vnode.text)) &#123;</span><br><span class="line">      <span class="comment">// 如果都有children，则执行updateChildren</span></span><br><span class="line">      <span class="keyword">if</span> (isDef(oldCh) &amp;&amp; isDef(ch)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (oldCh !== ch) updateChildren(elm, oldCh, ch, insertedVnodeQueue, removeOnly)</span><br><span class="line">      <span class="comment">// 如果只有新vnode有children，则将vnode的所有children插入到当前vnode对应的真实DOM下</span></span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDef(ch)) &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">        <span class="comment">// 清空oldVnode的texContent</span></span><br><span class="line">        <span class="keyword">if</span> (isDef(oldVnode.text)) nodeOps.setTextContent(elm, <span class="string">''</span>)</span><br><span class="line">        addVnodes(elm, <span class="literal">null</span>, ch, <span class="number">0</span>, ch.length - <span class="number">1</span>, insertedVnodeQueue)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDef(oldCh)) &#123;</span><br><span class="line">        removeVnodes(elm, oldCh, <span class="number">0</span>, oldCh.length - <span class="number">1</span>)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDef(oldVnode.text)) &#123;</span><br><span class="line">        nodeOps.setTextContent(elm, <span class="string">''</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="comment">// 如果是文本节点，则更新真实textContent</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (oldVnode.text !== vnode.text) &#123;</span><br><span class="line">      nodeOps.setTextContent(elm, vnode.text)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>更新真实DOM的方法存在了<code>cbs</code>变量中，是由<code>createPatchFunction</code>方法调用的时候，根据传入的<code>modules</code>生成的。这里是为了不同平台使用不同的更新真实DOM方式，因此<code>modules</code>可以由<code>src/platforms/web/runtime/modules/index.js</code>或<code>src/platforms/weex/runtime/modules/index.js</code>导出，分别用于支持web环境或weex环境。</p>
+<p>modules会导出形如下面这样的格式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/platforms/web/runtime/modules/attrs.js#L116</span></span><br><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/platforms/web/runtime/modules/transition.js#L332</span></span><br><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/platforms/web/runtime/modules/index.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span>  [</span><br><span class="line">  &#123;</span><br><span class="line">    create: <span class="function"><span class="keyword">function</span> <span class="title">doAttrsCreate</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">    update: <span class="function"><span class="keyword">function</span> <span class="title">doAttrsUpdate</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    create: <span class="function"><span class="keyword">function</span> <span class="title">doTransitionCreate</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">    activate: <span class="function"><span class="keyword">function</span> <span class="title">doTransitionActivate</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">    remove: <span class="function"><span class="keyword">function</span> <span class="title">doTransitionRemove</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/patch.js#L33</span></span><br><span class="line"><span class="keyword">const</span> hooks = [<span class="string">'create'</span>, <span class="string">'activate'</span>, <span class="string">'update'</span>, <span class="string">'remove'</span>, <span class="string">'destroy'</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/patch.js#L70</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createPatchFunction</span> (<span class="params">backend</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> i, j</span><br><span class="line">  <span class="keyword">const</span> cbs = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> &#123; modules, nodeOps &#125; = backend</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 根据传入modules的初始化cbs</span></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; hooks.length; ++i) &#123;</span><br><span class="line">    cbs[hooks[i]] = []</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; modules.length; ++j) &#123;</span><br><span class="line">      <span class="keyword">if</span> (isDef(modules[j][hooks[i]])) &#123;</span><br><span class="line">        cbs[hooks[i]].push(modules[j][hooks[i]])</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="updateChildren"><a href="#updateChildren" class="headerlink" title="updateChildren"></a>updateChildren</h2><p><code>updateChildren</code>方法会对传入的<code>oldCh</code>和<code>newCh</code>进行启发式diff，算法里对几种最常见的vnode变更情况做了优化：</p>
+<ul>
+<li>oldCh和newCh的头和头进行比较</li>
+<li>oldCh和newCh的尾和尾进行比较</li>
+<li>oldCh和newCh的头和尾进行比较</li>
+<li>oldCh和newCh的尾和头进行比较</li>
+</ul>
+<p><code>oldStartIdx</code>、<code>oldEndIdx</code>、<code>newStartIdx</code>、<code>newEndIdx</code>保存着当前比较的vnode的下标，头部比较成功后，idx就往尾部移动，尾部比较成功后，idx头部移动。</p>
+<img src="/2020/08/15/diff/vue-diff.png" class="" title="diff流程图">
+
+<p>当<code>oldCh</code>头部和<code>newCh</code>尾部比较成功后，则将<code>oldCh</code>尾部的节点移动插入到<code>newCh</code>的头部，<code>oldCh</code>尾部和<code>newCh</code>头部比较成功后，也是一样将<code>oldCh</code>头部的节点移动插入到<code>newCh</code>的尾部。</p>
+<img src="/2020/08/15/diff/vue-diff2.png" class="" title="diff流程图">
+
+<p>当循环结束的时候，则可能是<code>oldStartIdx &gt; oldEndIdx</code>（oldCh已经被遍历完了）或者<code>newStartIdx &lt;= newEndIdx</code>（newCh已经被遍历完了），如果是<code>oldCh</code>被遍历完，而<code>newCh</code>没有被遍历完，则说明<code>newCh</code>中剩下的是新插入的节点，如果是<code>newCh</code>被遍历完，而<code>oldCh</code>没有被遍历完，则说明<code>oldCh</code>中剩下的是被移除的节点。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/patch.js#L404</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateChildren</span> (<span class="params">parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> oldStartIdx = <span class="number">0</span></span><br><span class="line">  <span class="keyword">let</span> newStartIdx = <span class="number">0</span></span><br><span class="line">  <span class="keyword">let</span> oldEndIdx = oldCh.length - <span class="number">1</span></span><br><span class="line">  <span class="keyword">let</span> oldStartVnode = oldCh[<span class="number">0</span>]</span><br><span class="line">  <span class="keyword">let</span> oldEndVnode = oldCh[oldEndIdx]</span><br><span class="line">  <span class="keyword">let</span> newEndIdx = newCh.length - <span class="number">1</span></span><br><span class="line">  <span class="keyword">let</span> newStartVnode = newCh[<span class="number">0</span>]</span><br><span class="line">  <span class="keyword">let</span> newEndVnode = newCh[newEndIdx]</span><br><span class="line">  <span class="keyword">let</span> oldKeyToIdx, idxInOld, vnodeToMove, refElm</span><br><span class="line"></span><br><span class="line">  <span class="comment">// removeOnly is a special flag used only by &lt;transition-group&gt;</span></span><br><span class="line">  <span class="comment">// to ensure removed elements stay in correct relative positions</span></span><br><span class="line">  <span class="comment">// during leaving transitions</span></span><br><span class="line">  <span class="keyword">const</span> canMove = !removeOnly</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">while</span> (oldStartIdx &lt;= oldEndIdx &amp;&amp; newStartIdx &lt;= newEndIdx) &#123;</span><br><span class="line">    <span class="keyword">if</span> (isUndef(oldStartVnode)) &#123;</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx] <span class="comment">// Vnode has been moved left</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isUndef(oldEndVnode)) &#123;</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldStartVnode, newStartVnode)) &#123;</span><br><span class="line">       <span class="comment">// oldCh头newCh头比较成功，递归patchVnode，idx往后移</span></span><br><span class="line">      patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue, newCh, newStartIdx)</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx]</span><br><span class="line">      newStartVnode = newCh[++newStartIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldEndVnode, newEndVnode)) &#123; </span><br><span class="line">      <span class="comment">// oldCh尾newCh尾比较成功，递归patchVnode，idx往前移</span></span><br><span class="line">      patchVnode(oldEndVnode, newEndVnode, insertedVnodeQueue, newCh, newEndIdx)</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx]</span><br><span class="line">      newEndVnode = newCh[--newEndIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldStartVnode, newEndVnode)) &#123; <span class="comment">// Vnode moved right</span></span><br><span class="line">      <span class="comment">// oldCh头和newCh尾比较成功，递归patchVnode，然后将oldCh尾部的vnode插入到newCh的头部，oldStartIdx往后移，newEndIdx往前移</span></span><br><span class="line">      patchVnode(oldStartVnode, newEndVnode, insertedVnodeQueue, newCh, newEndIdx)</span><br><span class="line">      canMove &amp;&amp; nodeOps.insertBefore(parentElm, oldStartVnode.elm, nodeOps.nextSibling(oldEndVnode.elm))</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx]</span><br><span class="line">      newEndVnode = newCh[--newEndIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldEndVnode, newStartVnode)) &#123; <span class="comment">// Vnode moved left</span></span><br><span class="line">      <span class="comment">// oldCh尾newCh头比较成功，递归patchVnode，然后将oldCh尾部的vnode插入到newCh的头部，oldEndIdx往前移，newStartIdx往后移</span></span><br><span class="line">      patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue, newCh, newStartIdx)</span><br><span class="line">      canMove &amp;&amp; nodeOps.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm)</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx]</span><br><span class="line">      newStartVnode = newCh[++newStartIdx]</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 用oldCl的key创建一个存有vnode的Map</span></span><br><span class="line">      <span class="keyword">if</span> (isUndef(oldKeyToIdx)) oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx)</span><br><span class="line">      <span class="comment">// 用新vnode的key从Map取数据</span></span><br><span class="line">      idxInOld = isDef(newStartVnode.key)</span><br><span class="line">        ? oldKeyToIdx[newStartVnode.key]</span><br><span class="line">        : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx)</span><br><span class="line">      <span class="comment">// 如果没取到，oldCh中没有能够复用的vnode，新创建一个</span></span><br><span class="line">      <span class="keyword">if</span> (isUndef(idxInOld)) &#123; <span class="comment">// New element</span></span><br><span class="line">        createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm, <span class="literal">false</span>, newCh, newStartIdx)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果取到了，说明key相同，他们是相同的vnode，递归patchVnode，将oldCh的vnode插入到新的位置</span></span><br><span class="line">        vnodeToMove = oldCh[idxInOld]</span><br><span class="line">        <span class="keyword">if</span> (sameVnode(vnodeToMove, newStartVnode)) &#123;</span><br><span class="line">          patchVnode(vnodeToMove, newStartVnode, insertedVnodeQueue, newCh, newStartIdx)</span><br><span class="line">          oldCh[idxInOld] = <span class="literal">undefined</span></span><br><span class="line">          canMove &amp;&amp; nodeOps.insertBefore(parentElm, vnodeToMove.elm, oldStartVnode.elm)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// same key but different element. treat as new element</span></span><br><span class="line">          createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm, <span class="literal">false</span>, newCh, newStartIdx)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      newStartVnode = newCh[++newStartIdx]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 当`oldCh`被遍历完，而`newCh`没有被遍历完，则说明`newCh`中剩下的是新插入的节点</span></span><br><span class="line">  <span class="keyword">if</span> (oldStartIdx &gt; oldEndIdx) &#123;</span><br><span class="line">    refElm = isUndef(newCh[newEndIdx + <span class="number">1</span>]) ? <span class="literal">null</span> : newCh[newEndIdx + <span class="number">1</span>].elm</span><br><span class="line">    addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue)</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (newStartIdx &gt; newEndIdx) &#123;</span><br><span class="line">    <span class="comment">// 当`newCh`被遍历完，而`oldCh`没有被遍历完，则说明`oldCh`中剩下的是被移除的节点</span></span><br><span class="line">    removeVnodes(oldCh, oldStartIdx, oldEndIdx)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>递归执行完<code>patchVnode</code>和<code>updateChildren</code>之后，整棵vnode树就被完全更新了，diff结束。</p>
+<h2 id="完整流程图"><a href="#完整流程图" class="headerlink" title="完整流程图"></a>完整流程图</h2><img src="/2020/08/15/diff/diff.jpg" class="" title="diff流程图">
+
+]]></content>
+      <tags>
+        <tag>Vue</tag>
+        <tag>源码解读</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深入Vue源码理解响应式原理和依赖收集</title>
+    <url>/2020/06/10/dep-collection/</url>
+    <content><![CDATA[<p>每当问到Vue响应式原理，大家可能都会脱口而出“Vue通过<code>Object.defineProperty</code>方法把data对象的全部属性转化成getter/setter，当属性被访问或修改时通知变化”。然而，其内部深层的响应式原理可能很多人都没有完全理解，网络上关于其响应式原理的文章质量也是参差不齐。</p>
+<a id="more"></a>
+
+<h2 id="响应式"><a href="#响应式" class="headerlink" title="响应式"></a>响应式</h2><p>Vue的响应式原理，可以看作是一种观察者模式。观察者模式是一种实现一对多关系解耦的行为设计模式，它主要涉及两个角色：观察目标、观察者。它的特点是观察者要直接订阅观察目标，观察目标一做出通知，观察者就要进行处理（观察者模式区别于发布/订阅模式，发布/订阅模式中，其解耦能力更近一步，发布者只要做好消息的发布，而不关心消息有没有订阅者订阅。而观察者模式则要求两端同时存在）。</p>
+<p>在Vue的响应式原理中，就用到了观察者模式，data即是观察目标，watcher是观察者，依赖收集的过程，其实就是watcher订阅data变化事件的过程。当data(观察目标)发生改变的时候，通过<code>Object.defineProperty</code>定义的setter发送通知给watcher(观察者)。</p>
+<p>本文从Vue组件初始化的时候开始讲解，每段代码前都会附带基于<strong>Vue v2.6.11</strong>版本的源码Github地址。</p>
+<h2 id="initState"><a href="#initState" class="headerlink" title="initState"></a>initState</h2><p>Vue在初始化组件时，会执行<code>initState</code>，并调用<code>initData</code>对data进行observe</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/instance/state.js#L48</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">initState</span> (<span class="params">vm: Component</span>) </span>&#123;</span><br><span class="line">  vm._watchers = []</span><br><span class="line">  <span class="keyword">const</span> opts = vm.$options</span><br><span class="line">  <span class="keyword">if</span> (opts.props) initProps(vm, opts.props)</span><br><span class="line">  <span class="keyword">if</span> (opts.methods) initMethods(vm, opts.methods)</span><br><span class="line">  <span class="keyword">if</span> (opts.data) &#123;</span><br><span class="line">    initData(vm)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    observe(vm._data = &#123;&#125;, <span class="literal">true</span> <span class="comment">/* asRootData */</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (opts.computed) initComputed(vm, opts.computed)</span><br><span class="line">  <span class="keyword">if</span> (opts.watch &amp;&amp; opts.watch !== nativeWatch) &#123;</span><br><span class="line">    initWatch(vm, opts.watch)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/instance/state.js#L112</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initData</span> (<span class="params">vm: Component</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> data = vm.$options.data</span><br><span class="line">  data = vm._data = <span class="keyword">typeof</span> data === <span class="string">'function'</span></span><br><span class="line">    ? getData(data, vm)</span><br><span class="line">    : data || &#123;&#125;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="comment">// observe data</span></span><br><span class="line">  observe(data, <span class="literal">true</span> <span class="comment">/* asRootData */</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>observe</code>方法会对符合条件的对象执行<code>new Observer(value)</code>，包裹成一个响应式对象</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/index.js#L110</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">observe</span> (<span class="params">value: any, asRootData: ?boolean</span>): <span class="title">Observer</span> | <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!isObject(value) || value <span class="keyword">instanceof</span> VNode) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> ob: Observer | <span class="keyword">void</span></span><br><span class="line">  <span class="comment">// 判断是否是响应式对象，如果是，就不再重复observe</span></span><br><span class="line">  <span class="keyword">if</span> (hasOwn(value, <span class="string">'__ob__'</span>) &amp;&amp; value.__ob__ <span class="keyword">instanceof</span> Observer) &#123;</span><br><span class="line">    ob = value.__ob__</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (</span><br><span class="line">    shouldObserve &amp;&amp;</span><br><span class="line">    !isServerRendering() &amp;&amp;</span><br><span class="line">    (<span class="built_in">Array</span>.isArray(value) || isPlainObject(value)) &amp;&amp; <span class="comment">// 是数组或对象</span></span><br><span class="line">    <span class="built_in">Object</span>.isExtensible(value) &amp;&amp; <span class="comment">// 可扩展的对象</span></span><br><span class="line">    !value._isVue <span class="comment">// 不是vue对象</span></span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="comment">// 包裹成响应式对象</span></span><br><span class="line">    ob = <span class="keyword">new</span> Observer(value)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (asRootData &amp;&amp; ob) &#123;</span><br><span class="line">    ob.vmCount++</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> ob</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h2><p><code>Observer</code>构造函数会将传入的对象或数组，调用<code>defineReactive</code>并在其中执行<code>Object.defineProperty</code>重写data的setter和getter变成响应式数据。因为<code>Object.defineProperty</code>必须要对对象的每个key使用，因此对象和数组中新添加的下标元素，都不会被<code>Object.defineProperty</code>定义成响应式对象。</p>
+<p>不过，Vue会将数组原型上的非纯函数方法，进行了包裹，用于监听数组的变化，包括：</p>
+<ul>
+<li><code>push()</code></li>
+<li><code>pop()</code></li>
+<li><code>shift()</code></li>
+<li><code>unshift()</code></li>
+<li><code>splice()</code></li>
+<li><code>sort()</code></li>
+<li><code>reverse()</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/index.js#L37</span></span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line">  value: any;</span><br><span class="line">  dep: Dep;</span><br><span class="line">  vmCount: number; <span class="comment">// number of vms that have this object as root $data</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span> (value: any) &#123;</span><br><span class="line">    <span class="keyword">this</span>.value = value</span><br><span class="line">    <span class="keyword">this</span>.dep = <span class="keyword">new</span> Dep()</span><br><span class="line">    <span class="keyword">this</span>.vmCount = <span class="number">0</span></span><br><span class="line">    def(value, <span class="string">'__ob__'</span>, <span class="keyword">this</span>)</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(value)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (hasProto) &#123;</span><br><span class="line">        <span class="comment">// 如果当前环境有原型链，直接把包裹的方法添加到当前数组上</span></span><br><span class="line">        protoAugment(value, arrayMethods)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        copyAugment(value, arrayMethods, arrayKeys)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 数组响应式</span></span><br><span class="line">      <span class="keyword">this</span>.observeArray(value)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 对象响应式</span></span><br><span class="line">      <span class="keyword">this</span>.walk(value)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Walk through all properties and convert them into</span></span><br><span class="line"><span class="comment">   * getter/setters. This method should only be called when</span></span><br><span class="line"><span class="comment">   * value type is Object.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  walk (obj: <span class="built_in">Object</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> keys = <span class="built_in">Object</span>.keys(obj)</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; keys.length; i++) &#123;</span><br><span class="line">      defineReactive(obj, keys[i])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Observe a list of Array items.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  observeArray (items: <span class="built_in">Array</span>&lt;any&gt;) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>, l = items.length; i &lt; l; i++) &#123;</span><br><span class="line">      observe(items[i])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到这里位置，data就都被包裹成响应式数据了，接下来就是<strong>依赖收集</strong>了</p>
+<h2 id="依赖收集"><a href="#依赖收集" class="headerlink" title="依赖收集"></a>依赖收集</h2><p>Vue的依赖收集过程，简单的来说，实际就是在组件执行<code>render</code>的时候，通过<code>Object.defineProperty</code>定义data的getter方法，把当前watcher添加到被访问的data的订阅列表中。</p>
+<p>computed原理也是类似，在computed执行时，把computed对应的watcher添加到所有被访问过的data的订阅列表中，只要data没有发生变化，那么computed就不会被重新计算，直接使用上次缓存的结果。</p>
+<p>组件data初始化完成后，来到了组件mount的阶段，执行<code>new Watcher</code>，监听对象为当前组件的<code>vm</code>，回调为<code>updateComponent</code>。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/platforms/web/runtime/index.js#L37</span></span><br><span class="line">Vue.prototype.$mount = <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  el?: string | Element,</span></span></span><br><span class="line"><span class="function"><span class="params">  hydrating?: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">Component</span> </span>&#123;</span><br><span class="line">  el = el &amp;&amp; inBrowser ? query(el) : <span class="literal">undefined</span></span><br><span class="line">  <span class="keyword">return</span> mountComponent(<span class="keyword">this</span>, el, hydrating) <span class="comment">// mount组件</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/instance/lifecycle.js#L141</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">mountComponent</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  vm: Component,</span></span></span><br><span class="line"><span class="function"><span class="params">  el: ?Element,</span></span></span><br><span class="line"><span class="function"><span class="params">  hydrating?: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">Component</span> </span>&#123;</span><br><span class="line">  vm.$el = el</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  callHook(vm, <span class="string">'beforeMount'</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> updateComponent</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  updateComponent = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    vm._update(vm._render(), hydrating)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">new</span> Watcher(vm, updateComponent, noop, &#123;</span><br><span class="line">    before () &#123;</span><br><span class="line">      <span class="keyword">if</span> (vm._isMounted &amp;&amp; !vm._isDestroyed) &#123;</span><br><span class="line">        callHook(vm, <span class="string">'beforeUpdate'</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="literal">true</span> <span class="comment">/* isRenderWatcher */</span>)</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">return</span> vm</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Watcher"><a href="#Watcher" class="headerlink" title="Watcher"></a>Watcher</h2><p>在<code>Watcher</code>的构造函数中，默认会执行一次<code>this.get()</code>，get方法会将当前<code>Watcher</code>圧栈到<code>targetStack</code>栈顶，并把全局的Dep.target设置为<code>targetStack</code>栈顶元素。</p>
+<p><em>因为组件是递归渲染的，每个子组件开始渲染的时候，都要对应一个新的watcher进行收集，表示当前访问的data都是该子组件的watcher的依赖，当子组件渲染完毕后，后面在访问的data就是父组件的watcher的依赖，所以这里需要采用栈这一数据结构存放当前被收集watcher。</em></p>
+<p>设置好targetStack后，随后执行<code>this.getter.call(vm, vm)</code>，也就是之前传入的<code>updateComponent</code>方法，然后调用<code>vm._render</code>方法，在执行render的时候，界面所使用的响应式data的getter就会被访问到，就会被收集到栈顶watcher中。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/watcher.js#L26</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">constructor</span> (</span><br><span class="line">    vm: Component,</span><br><span class="line">    expOrFn: string | Function,</span><br><span class="line">    cb: Function,</span><br><span class="line">    options?: ?Object,</span><br><span class="line">    isRenderWatcher?: boolean</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">this</span>.getter = expOrFn</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">this</span>.value = <span class="keyword">this</span>.lazy</span><br><span class="line">      ? <span class="literal">undefined</span></span><br><span class="line">      : <span class="keyword">this</span>.get()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Evaluate the getter, and re-collect dependencies.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">get</span> () &#123;</span><br><span class="line">    pushTarget(<span class="keyword">this</span>)</span><br><span class="line">    <span class="keyword">let</span> value</span><br><span class="line">    <span class="keyword">const</span> vm = <span class="keyword">this</span>.vm</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      value = <span class="keyword">this</span>.getter.call(vm, vm)</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">      popTarget()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/dep.js#L55</span></span><br><span class="line">Dep.target = <span class="literal">null</span></span><br><span class="line"><span class="keyword">const</span> targetStack = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">pushTarget</span> (<span class="params">target: ?Watcher</span>) </span>&#123;</span><br><span class="line">  targetStack.push(target)</span><br><span class="line">  Dep.target = target</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">popTarget</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  targetStack.pop()</span><br><span class="line">  Dep.target = targetStack[targetStack.length - <span class="number">1</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>来到之前定义响应式数据的<code>defineReactive</code>方法中，看一下getter方法是如何收集依赖的，可以看到，该方法先定义了一个<code>Dep</code>对象，这是用于存储所有订阅了该数据的<code>Watcher</code>的，<code>dep.depend()</code>方法会将当前栈顶watcher放入这个响应式对象的订阅列表中（表示该wathcer订阅了该响应式数据的变化通知），并且也会将当前dep放入栈顶watcher</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/index.js#L135</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  obj: Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  key: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  val: any,</span></span></span><br><span class="line"><span class="function"><span class="params">  customSetter?: ?Function,</span></span></span><br><span class="line"><span class="function"><span class="params">  shallow?: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep()</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">let</span> childOb = !shallow &amp;&amp; observe(val)</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    configurable: <span class="literal">true</span>,</span><br><span class="line">    <span class="keyword">get</span>: function reactiveGetter () &#123;</span><br><span class="line">      <span class="keyword">const</span> value = getter ? getter.call(obj) : val </span><br><span class="line">      <span class="keyword">if</span> (Dep.target) &#123;</span><br><span class="line">        <span class="comment">// 将当前栈顶watcher放入这个响应式对象中（订阅该响应式数据的变化通知），并将当前dep放入栈顶watcher</span></span><br><span class="line">        dep.depend()</span><br><span class="line">        <span class="keyword">if</span> (childOb) &#123;</span><br><span class="line">          childOb.dep.depend() <span class="comment">// 对象递归依赖收集</span></span><br><span class="line">          <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(value)) &#123;</span><br><span class="line">            dependArray(value) <span class="comment">// 数组递归依赖收集</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> value</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到这里依赖收集也就完成了,接下来就是<strong>视图更新</strong>了</p>
+<h2 id="视图更新"><a href="#视图更新" class="headerlink" title="视图更新"></a>视图更新</h2><p>当Vue的响应式数据被修改时，也就是<code>Object.defineProperty</code>的setter方法会被调用，再次来到<code>defineReactive</code>方法中，看一下setter方法是怎样发送通知然后更新视图的。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/index.js#L135</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  obj: Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  key: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  val: any,</span></span></span><br><span class="line"><span class="function"><span class="params">  customSetter?: ?Function,</span></span></span><br><span class="line"><span class="function"><span class="params">  shallow?: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> property = <span class="built_in">Object</span>.getOwnPropertyDescriptor(obj, key)</span><br><span class="line">  <span class="keyword">if</span> (property &amp;&amp; property.configurable === <span class="literal">false</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// cater for pre-defined getter/setters</span></span><br><span class="line">  <span class="keyword">const</span> getter = property &amp;&amp; property.get</span><br><span class="line">  <span class="keyword">const</span> setter = property &amp;&amp; property.set</span><br><span class="line">  <span class="keyword">if</span> ((!getter || setter) &amp;&amp; <span class="built_in">arguments</span>.length === <span class="number">2</span>) &#123;</span><br><span class="line">    val = obj[key]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> childOb = !shallow &amp;&amp; observe(val)</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">set</span>: function reactiveSetter (newVal) &#123;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">      childOb = !shallow &amp;&amp; observe(newVal) <span class="comment">// 将新设置的值也变为响应式数据</span></span><br><span class="line">      dep.notify() <span class="comment">// 分发通知</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>notify</code>方法中会调用所有watcher的<code>update</code>方法，默认为异步更新，会调用<code>queueWatcher</code>把watcher放入更新队列，在<code>nextTick</code>的时候调用watcher的<code>get()</code>方法更新依赖收集和渲染视图。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/dep.js#L37</span></span><br><span class="line">notify () &#123;</span><br><span class="line">  <span class="comment">// stabilize the subscriber list first</span></span><br><span class="line">  <span class="keyword">const</span> subs = <span class="keyword">this</span>.subs.slice()</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>, l = subs.length; i &lt; l; i++) &#123;</span><br><span class="line">    subs[i].update()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/watcher.js#L164</span></span><br><span class="line">update () &#123;</span><br><span class="line">  <span class="comment">/* istanbul ignore else */</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.lazy) &#123;</span><br><span class="line">    <span class="keyword">this</span>.dirty = <span class="literal">true</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.sync) &#123;</span><br><span class="line">    <span class="keyword">this</span>.run()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    queueWatcher(<span class="keyword">this</span>) <span class="comment">// 默认情况会进入这个分支语句</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/scheduler.js#L164</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">queueWatcher</span> (<span class="params">watcher: Watcher</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> id = watcher.id</span><br><span class="line">  <span class="keyword">if</span> (has[id] == <span class="literal">null</span>) &#123; <span class="comment">// 具有重复ID的watcher将被跳过</span></span><br><span class="line">    has[id] = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">if</span> (!flushing) &#123;</span><br><span class="line">      queue.push(watcher)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    nextTick(flushSchedulerQueue) </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/scheduler.js#L71</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">flushSchedulerQueue</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  flushing = <span class="literal">true</span></span><br><span class="line">  <span class="keyword">let</span> watcher, id</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 先排序再执行</span></span><br><span class="line">  <span class="comment">// 先更新父组件再更新子组件（父组件先创建，ID更小）</span></span><br><span class="line">  <span class="comment">// 组件的用户定义的watch在render watcher之前运行（因为用户观察者先于渲染观察者创建）</span></span><br><span class="line">  <span class="comment">// 如果在父组件的watcher运行期间某个组件被销毁，它的watcher可以被跳过。</span></span><br><span class="line">  queue.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a.id - b.id)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// do not cache length because more watchers might be pushed</span></span><br><span class="line">  <span class="comment">// as we run existing watchers</span></span><br><span class="line">  <span class="keyword">for</span> (index = <span class="number">0</span>; index &lt; queue.length; index++) &#123;</span><br><span class="line">    watcher = queue[index]</span><br><span class="line">    <span class="keyword">if</span> (watcher.before) &#123;</span><br><span class="line">      watcher.before() <span class="comment">//执行beforeUpdate回调</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    watcher.run() <span class="comment">// 调用</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/vuejs/vue/blob/v2.6.11/src/core/observer/watcher.js#L179</span></span><br><span class="line">run () &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.active) &#123;</span><br><span class="line">    <span class="keyword">const</span> value = <span class="keyword">this</span>.get() <span class="comment">// 重新渲染页面</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>OK，到此Vue响应式原理和依赖收集的一个完整流程，就走完了。</p>
+]]></content>
+      <tags>
+        <tag>Vue</tag>
+        <tag>源码解读</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>100行代码实现Virtual DOM和render</title>
+    <url>/2019/08/06/mvvm/</url>
+    <content><![CDATA[<p>在编写代码之前，我们需要先了解需要先来了解一下Virtual DOM是怎么样构建并渲染到浏览器的，常见的构建Virtual DOM的方法有两种，一种是jsx(react)，另一种是template(vue)。</p>
+<a id="more"></a>
+
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><ul>
+<li><p>React的jsx一般是通过babel的jsx插件编译成<code>createElement</code><a href="https://github.com/facebook/react/blob/v16.13.1/packages/react/src/ReactElement.js#L348" target="_blank" rel="noopener">[源码]</a>，Vue的template也可以通过vue-loader编译成对应的<code>createElement</code><a href="https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/create-element.js#L28" target="_blank" rel="noopener">[源码]</a>，</p>
+</li>
+<li><p>然后，在组件被创建并初始化state之后，执行render，将组件的props和state根据jsx(react)或template(vue)，生成一个虚拟DOM树</p>
+</li>
+<li><p>最后所有的VDOM生成完毕之后，将所有VDOM都mount上真实HTML DOM。</p>
+</li>
+</ul>
+<p>Component -&gt; render -&gt; VDOM -&gt; mount -&gt; HTML</p>
+<h2 id="VDOM"><a href="#VDOM" class="headerlink" title="VDOM"></a>VDOM</h2><p>VDOM的节点是一个简化版的DOM对象，只存储了我们关心的属性，大大提高了DOM操作时的性能。通常一个虚拟节点(VNode)包含：标签名、子节点数组、属性、事件、key和对应的真实DOM。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> VNode &#123;</span><br><span class="line">  <span class="keyword">type</span>: <span class="built_in">string</span>;</span><br><span class="line">  children: VNode[] = [];</span><br><span class="line">  props: &#123; propName: <span class="built_in">string</span>; propValue: <span class="built_in">any</span> &#125;[] = [];</span><br><span class="line">  events: &#123; propName: <span class="built_in">string</span>; propValue: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">void</span> &#125;[] = [];</span><br><span class="line">  key: <span class="built_in">any</span>;</span><br><span class="line">  el: Node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这时候再定义一个创建虚拟DOM对象的方法，用于jsx调用，该方法接收三个参数：标签名，标签属性，子标签。返回一个虚拟DOM对象</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createElement</span>(<span class="params"><span class="keyword">type</span>: <span class="built_in">string</span>, props, ...children</span>) </span>&#123;</span><br><span class="line">  props = props || &#123;&#125;;</span><br><span class="line">  <span class="keyword">const</span> vNode = <span class="keyword">new</span> VNode();</span><br><span class="line">  vNode.type = <span class="keyword">type</span>;</span><br><span class="line">  vNode.events = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> value.startsWith(<span class="string">'on'</span>))</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  vNode.props = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> !value.startsWith(<span class="string">'on'</span>) &amp;&amp; value !== <span class="string">'key'</span>)</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  vNode.key = props[<span class="string">'key'</span>];</span><br><span class="line">  vNode.children = children;</span><br><span class="line">  <span class="keyword">return</span> vNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>虚拟DOM挂载到HTML DOM，根据根节点的ID，使用<code>document.createElement</code>将虚拟DOM转成HTML DOM，并挂载到真实节点mountEl下</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mount</span>(<span class="params">el, vNode: VNode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> node = mountVNode(vNode);</span><br><span class="line">  <span class="keyword">if</span> (el != <span class="literal">null</span>) &#123;</span><br><span class="line">    el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据VNode树生成真实HTML DOM</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mountVNode</span>(<span class="params">vNode: VNode</span>): <span class="title">HTMLElement</span> | <span class="title">Text</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (vNode == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (vNode <span class="keyword">instanceof</span> VNode) &#123;</span><br><span class="line">    <span class="keyword">let</span> el: HTMLElement;</span><br><span class="line">    el = <span class="built_in">document</span>.createElement(vNode.type);</span><br><span class="line">    vNode.props.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.setAttribute(value.propName, value.propValue)</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.events.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.addEventListener(value.propName.replace(<span class="regexp">/^on/</span>, <span class="string">''</span>), value.propValue);</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.children.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> subEl = mountVNode(value);</span><br><span class="line">      <span class="keyword">if</span> (subEl != <span class="literal">null</span>) &#123;</span><br><span class="line">        el.appendChild(subEl);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.el = el;</span><br><span class="line">    <span class="keyword">return</span> el;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createTextNode(<span class="built_in">String</span>(vNode));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义一个所有组件的抽象父组件，实现组件共有的基础功能</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> ComponentProps &#123;</span><br><span class="line">  el: HTMLElement;</span><br><span class="line">  [key: <span class="built_in">string</span>]: <span class="built_in">any</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">abstract</span> <span class="keyword">class</span> Component &#123;</span><br><span class="line"></span><br><span class="line">  readonly el: HTMLElement;</span><br><span class="line">  vNode: VNode;</span><br><span class="line">  <span class="keyword">abstract</span> render(): VNode;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params">props: ComponentProps</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (props) &#123;</span><br><span class="line">      <span class="built_in">Object</span>.assign(<span class="keyword">this</span>, props);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> mount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.vNode = <span class="keyword">this</span>.render();</span><br><span class="line">    <span class="keyword">const</span> node = mountVNode(<span class="keyword">this</span>.vNode);</span><br><span class="line">    <span class="keyword">this</span>.el &amp;&amp; node &amp;&amp; <span class="keyword">this</span>.el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后再用定义一个挂载方法，创建组件并挂载到真实DOM，并且按顺序执行生命周期即可</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">renderDOM</span>(<span class="params">componentType: &#123; <span class="keyword">new</span> (props: ComponentProps) &#125;, props, selector?: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> component = <span class="keyword">new</span> componentType(&#123;...props, el: <span class="built_in">document</span>.querySelector(selector)&#125;);</span><br><span class="line">  component.beforeMount &amp;&amp; component.beforeMount();</span><br><span class="line">  component.mount();</span><br><span class="line">  component.mounted &amp;&amp; component.mounted();</span><br><span class="line">  <span class="keyword">return</span> component;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试运行"><a href="#测试运行" class="headerlink" title="测试运行"></a>测试运行</h2><p>Virtual DOM到render的过程基本就完成了，接下来我们定义一个组件，测试调用一下，看看结果</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"el"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> &gt;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// 定义组件</span></span></span><br><span class="line"><span class="actionscript">  <span class="class"><span class="keyword">class</span> <span class="title">TestComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">    buttonText = <span class="string">'buttonText'</span>;</span></span><br><span class="line">    clickCount = 1;</span><br><span class="line">    </span><br><span class="line"><span class="javascript">    <span class="keyword">constructor</span>(props: ComponentProps) &#123;</span></span><br><span class="line"><span class="actionscript">      <span class="keyword">super</span>(props);</span></span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> (<span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">        <span class="tag">&lt;<span class="name">span</span> &gt;</span>hello world<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">        &lt;button onclick=&#123;() =&gt; &#123;<span class="built_in">console</span>.log(<span class="string">'Hello World!'</span>, ++<span class="keyword">this</span>.clickCount)&#125;&#125;&gt;&#123;<span class="keyword">this</span>.buttonText&#125;&lt;<span class="regexp">/button&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span>);</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="actionscript">  <span class="comment">// 渲染到DOM</span></span></span><br><span class="line"><span class="actionscript">  renderDOM(TestComponent, <span class="string">'#el'</span>)</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<img src="/2019/08/06/mvvm/mvvm.png" class="" title="运行结果">
+
+
+<p>这仅仅是实现了从Virtual DOM渲染到真实DOM，并没有包含diff算法部分，所以当数据变化之后，并不会重新刷新真实DOM。想要刷新真实DOM，就需要在数据发生变化的时候，根据数据重新render一份vnode树，然后和之前生成的vnode树进行diff并更新真实DOM，具体如何实现diff，后续文章会进行具体讲解。</p>
+]]></content>
+      <tags>
+        <tag>React</tag>
+        <tag>Virtual DOM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用node.js开发命令行工具（一）创建与发布</title>
+    <url>/2019/03/31/npm-publish-1/</url>
+    <content><![CDATA[<p>在前端工程化的大环境下，合理运用node和npm script，可以大大提高我们的开发效率，那么怎么才能使自己开发的nodejs代码通过npm安装，就可以直接使用命令行进行调用呢？</p>
+<a id="more"></a>
+
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>确保自己有node环境，并且node已经配置到环境变量。没安装的可以到<a href="https://nodejs.org" target="_blank" rel="noopener">官网下载</a>或者<a href="http://nodejs.cn/" target="_blank" rel="noopener">国内镜像下载</a>。</p>
+<h2 id="第一行node代码"><a href="#第一行node代码" class="headerlink" title="第一行node代码"></a>第一行node代码</h2><ul>
+<li>新建一个js文件，比如: <code>hello.js</code>。</li>
+<li>在js文件中键入<code>console.log(&#39;hello world!&#39;)</code>，保存。</li>
+<li>在打开控制台，切换到<code>hello.js</code>所在的目录，执行<code>node ./hello.js</code>命令中。</li>
+</ul>
+<p>执行完上面的最后一步命令后，就可以看到控制台执行了我们的js文件，输出<code>hello world</code>了。</p>
+<h2 id="强大的nodejs"><a href="#强大的nodejs" class="headerlink" title="强大的nodejs"></a>强大的nodejs</h2><p>我们已经写出了我们的第一个node应用，想要做出更复杂更强大的应用，也只是时间问题了。不过，nodejs除了语法和浏览器端的一样，api和浏览器端是完全不一样的，nodejs没有浏览器端的bom和dom对象，取而代之的是操作系统api和一些工具包，详细的api文档可以查看<a href="https://nodejs.org/en/docs/" target="_blank" rel="noopener">英文文档</a>或者<a href="http://nodejs.cn/api/" target="_blank" rel="noopener">中文文档</a>。</p>
+<h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><p>当我们开发好node程序之后，能不能不经过node，直接像vue/cli这种cli工具那样，输入<code>hello</code>执行我们刚刚的程序呢呢？当然可以。</p>
+<ul>
+<li>创建一个新文件夹作为项目目录。</li>
+<li>使用控制台进入项目目录，执行<code>npm init</code>初始化一个npm项目。</li>
+<li>将之前的hello.js放入项目目录。</li>
+<li>打开<code>package.json</code>文件，在底部添加一项配置<code>&quot;bin&quot;</code>，<code>bin</code>对象里的key就是命令名称，value就是要执行的js文件。  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"MIT"</span>,</span><br><span class="line">  <span class="attr">"bin"</span>: &#123;</span><br><span class="line">    <span class="attr">"hello"</span>: <span class="string">"hello.js"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>打开<code>hello.js</code>文件，在文件顶部添加一句<code>#!/usr/bin/env node</code>并保存，用以指定使用node.js运行当前js文件。</li>
+</ul>
+<p>这个时候，我们的程序已经完成了，只需要发布，使用的时候安装就可以了。那么怎么发布呢，有两种方式，一种方式是本地发布<code>npm link</code>，这种方式只有本地能进行安装，另一种方式是<code>npm publish</code>发布到npm中央仓库，任何人都能够使用npm安装你的应用。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>当我们怎么样进行本地测试运行呢？我们可以使用<code>npm link</code>命令，这时候我们的当前项目就会被发布到本地并全局安装了，我们可以直接使用<code>hello</code>命令运行刚刚的js文件了。</p>
+<p>除此之外，如果我们想局部安装，我们可以切刀需要局部安装的项目中，使用<code>npm link &lt;packageNmae&gt;</code>替代<code>npm install &lt;packageNmae&gt;</code>命令，进行局部安装。被局部安装的包，不会添加到全局变量，但是可以使用npm script进行调用。</p>
+<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><ul>
+<li>在<a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm官网</a>注册一个自己的账号，用于发布和管理自己的npm包。</li>
+<li>给你的npm包起个名字，<code>package.json</code>中的<code>name</code>字段就是你的npm包的名字，<code>name</code>在官网查询下是不是重复，重复的包名不能提交。</li>
+<li>给你的npm包定义版本号，<code>package.json</code>中的<code>version</code>字段就是你的npm包的版本号，<code>version</code>应该比之前的版本递增，推荐使用<a href="https://semver.org/lang/zh-CN/" target="_blank" rel="noopener">语义化版本</a>规范。</li>
+<li>使用<code>npm publish</code>命令，根据提示先登录npm账号，然后发布npm包。</li>
+</ul>
+<p>按步骤执行到这里，整个npm包就发布完成了，我们可以在其他的npm项目下面用<code>npm install</code>命令安装我们发布的包了。</p>
+]]></content>
+      <tags>
+        <tag>Node.js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>当前端面试官总结的一点面试经验</title>
+    <url>/2018/05/22/interview/</url>
+    <content><![CDATA[<p>在公司担任了一段时间前端面试官，发现了一些应聘者在面试的时候常犯的一些错误，包括回头看自己以前也犯过很多小错误，所以总结一下。</p>
+<a id="more"></a>
+
+<h2 id="简历"><a href="#简历" class="headerlink" title="简历"></a>简历</h2><p><strong>简历1-2页内能写完最好，最好不要超过2页。</strong><br>不要觉得写太少就是没技术，简历并不是写作文，要凑够那么多字数。无论是HR还是面试官都是很忙的，你写个三四页，没人会有耐心全读完的。</p>
+<p><strong>排版整洁，重点突出，要让HR和面试官一眼看到你的优势。</strong><br>对于前端简历来说，也就三大框架，构建工具，nodejs之类的。HR筛选简历怎么筛，无非也就比较工作年限，毕业院校，学历，专业，技术栈，项目经验，如果有在项目中有担任重要角色也可两句话简述。如果你投的是高级前端之类的，HTML/CSS这种基础的就可以不用写了。</p>
+<p><strong>简历上一定要是你擅长的。</strong><br>如果只是听过名字，然后面试官一问三不知，那反而会成为减分项。注意用词，简历中对某项技术的描述一般是了解、熟悉、精通，精通一般很少用，如果你说精通，然后被面试官两下问住了，那就尴尬了。</p>
+<p><strong>简历最好使用PDF格式。</strong><br>如果简历使用.doc或者.docx格式，你不知道HR使用的是WPS office还是MS office，2003版还是2016版，可能在你电脑上看起来很漂亮的简历，在HR电脑上直接乱成一团。所以一般简历建议使用PDF格式，PDF格式的文件基本是通用的，在各种平台上的表现基本一致。</p>
+<h2 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h2><p><strong>对于不知道的问题，直接回答不知道。</strong><br>对于一个自己不知道的知识点，直接回答不知道，一般这个问题就过去了。如果强行回答，答了半天没答到点上，反而会导致面试官对你这个知识漏洞印象深刻，然后被面试官几个追问打回原形。</p>
+<p><strong>组织语言很重要。</strong><br>面试官问了个比较复杂的问题，大可不必急着马上回答，可以稍微组织一下语言，让回答更有条理，不要东说一点西说一点，导致很多重要的点忘记回答。</p>
+<hr>
+<p>因为只负责技术面，目前能发现的就只有以上这些。</p>
+]]></content>
+      <tags>
+        <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用node.js开发命令行工具（二）命令行输入输出UI库</title>
+    <url>/2019/04/08/npm-publish-2/</url>
+    <content><![CDATA[<p>相信很多前端都听说过或者使用过@angular/cli, vue-cli, create-react-app或其他类似的命令行工具。他们能够在命令行后面跟各种复杂的参数已经交互性的命令行选项，那你知道这些功能是怎么实现的吗？</p>
+<a id="more"></a>
+<h2 id="Commander-js"><a href="#Commander-js" class="headerlink" title="Commander.js"></a>Commander.js</h2><p>node.js命令行开发工具开发库，使node.js开发CLI工具变得简单，允许快捷的定义形如<code>&lt;command&gt; [options]</code>的命令。</p>
+<p>基础用法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> program = <span class="built_in">require</span>(<span class="string">'commander'</span>);</span><br><span class="line"></span><br><span class="line"> program</span><br><span class="line">  .version(<span class="built_in">require</span>(<span class="string">'../package.json'</span>).version, <span class="string">'-v, --version'</span>) <span class="comment">// 定义版本信息</span></span><br><span class="line">  .usage(<span class="string">'&lt;command&gt; [options]'</span>); <span class="comment">// 定义命令用法</span></span><br><span class="line"> </span><br><span class="line">program</span><br><span class="line">  .command(<span class="string">'rm &lt;dir&gt;'</span>) <span class="comment">// 定义一个rm命令</span></span><br><span class="line">  .description(<span class="string">'删除文件或文件夹'</span>) <span class="comment">// 给rm命令添加描述信息，获取命令帮助信息的时候会显示</span></span><br><span class="line">  .option(<span class="string">'-r, --recursive'</span>, <span class="string">'Remove recursively'</span>) <span class="comment">// rm允许添加-r或者--recursive命令进行递归</span></span><br><span class="line">  .action(<span class="function"><span class="keyword">function</span> (<span class="params">dir, cmd</span>) </span>&#123; <span class="comment">// 对应命令的处理函数</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'remove '</span> + dir + (cmd.recursive ? <span class="string">' recursively'</span> : <span class="string">''</span>))</span><br><span class="line">  &#125;);</span><br><span class="line"> </span><br><span class="line"> program.parse(process.argv); <span class="comment">// commander的入口欧，传入命令行参数执行解析</span></span><br></pre></td></tr></table></figure>
+<p>github仓库：<a href="https://github.com/tj/commander.js" target="_blank" rel="noopener">https://github.com/tj/commander.js</a></p>
+<h2 id="Inquirer-js"><a href="#Inquirer-js" class="headerlink" title="Inquirer.js"></a>Inquirer.js</h2><p>node.js 交互式命令行界面开发库，允许方便的定义使用上下左右进行列表选择等交互式命令。</p>
+<p>基础用法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">'inquirer'</span>);</span><br><span class="line"></span><br><span class="line">inquirer.prompt(</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'input'</span>, <span class="comment">// 问题类型，包括input，number，confirm，list，rawlist，password</span></span><br><span class="line">    name: <span class="string">'name'</span>, </span><br><span class="line">    message: <span class="string">'请输入项目名称'</span>, <span class="comment">// 问题</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'unnamed'</span> <span class="comment">// 默认值</span></span><br><span class="line">    validate: <span class="function">(<span class="params">input: string</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (input.length &gt; <span class="number">255</span>) &#123; <span class="comment">// 输入验证：name长度不允许超过255</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'项目名称超过限制'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;        </span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'list'</span>,</span><br><span class="line">    name: <span class="string">'type'</span>,</span><br><span class="line">    message: <span class="string">'请选择'</span>,</span><br><span class="line">    choices: [<span class="string">'item1'</span>, <span class="string">'item2'</span>, <span class="string">'item3'</span>, <span class="string">'item4'</span>], <span class="comment">// 可选选项</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'project'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(answers.name);</span><br><span class="line">    <span class="built_in">console</span>.log(answers.type);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<img src="/2019/04/08/npm-publish-2/inquirer.js.jpg" class="" title="inquirer.js示例">
+
+<p>github仓库：<a href="https://github.com/SBoudrias/Inquirer.js" target="_blank" rel="noopener">https://github.com/SBoudrias/Inquirer.js</a></p>
+<h2 id="Ora"><a href="#Ora" class="headerlink" title="Ora"></a>Ora</h2><p>优雅的命令行Loading动画。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> ora = <span class="built_in">require</span>(<span class="string">'ora'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> spinner = ora(<span class="string">'Loading unicorns'</span>).start();</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.color = <span class="string">'yellow'</span>;</span><br><span class="line">	spinner.text = <span class="string">'Loading rainbows'</span>;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.stop();</span><br><span class="line">&#125;, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
+<p align="center">
+    <br>
+    <img src="/2019/04/08/npm-publish-2/ora.svg" class="" title="ora.js示例">
+    <br>
+</p>
+
+<p>github仓库：<a href="https://github.com/sindresorhus/ora" target="_blank" rel="noopener">https://github.com/sindresorhus/ora</a></p>
+<h2 id="Chalk"><a href="#Chalk" class="headerlink" title="Chalk"></a>Chalk</h2><p>给命令行输出的文本添加样式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 基本示例</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello world!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一行文本多种样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello'</span>) + <span class="string">' World'</span> + chalk.red(<span class="string">'!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复合样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue.bgRed.bold(<span class="string">'Hello world!'</span>));</span><br></pre></td></tr></table></figure>
+
+<p align="center">
+    <br>
+    <img src="/2019/04/08/npm-publish-2/chalk.svg" class="" title="chalk示例">
+    <br>
+</p>
+
+<p>github仓库：<a href="https://github.com/chalk/chalk" target="_blank" rel="noopener">https://github.com/chalk/chalk</a></p>
+]]></content>
+      <tags>
+        <tag>Node.js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WebIDE 踩坑</title>
+    <url>/2021/06/26/webide/</url>
+    <content><![CDATA[<p>调研了市面上其他厂商做的IDE，有些是基于electron或NW.js从头开始构建的，成本较高。还有很多是基于VSCode源码定制的，后来了解到Eclipse Theia这个框架，发现样式和功能与VSCode差不多，而且也部分支持VSCode的插件，最主要是能够通过扩展的形式去丰富IDE的视图功能，比VSCode修改源码更加好用。</p>
+<a id="more"></a>
+
+<h2 id="主流-WebIDE-对比"><a href="#主流-WebIDE-对比" class="headerlink" title="主流 WebIDE 对比"></a>主流 WebIDE 对比</h2><ul>
+<li><p><strong>Monaco Editor</strong>。Monaco Editor 是在 VSCode 项目中开发过程中抽离出来的纯编辑器部分，他们很大一部分的代码（monaco-editor-core）都是共用的，所以 monaco 和 VSCode 在编辑代码，交互以及UI上几乎是一摸一样的，有点不同的是，两者的平台不一样，monaco 基于浏览器，而 VSCode 基于 electron ，所以功能上 monaco 相对于其他 IDE 缺乏较多重要功能，都需要自己实现。</p>
+</li>
+<li><p><strong>VSCode</strong>。运行在VSCode 也发现在云计算的背景下，对 WebIDE 的呼声很高，就在最近 VSCode 也支持了 WebIDE，采用单项目架构，扩展需要采用插件形式或者直接对源码扩展。</p>
+</li>
+<li><p><strong>Code server</strong>。Code server 将 VSCode 在浏览器端跑起来，主要思路是将 VSCode 内部通信替换后成 websocket 通信，然后通过 webpack 将前端依赖的 native 库替换掉。这种实现的好处是可以更大范围的去兼容 vscode 以及 vscode 的插件。</p>
+</li>
+<li><p><strong>Theia IDE</strong>。Theia IDE 定位是 WebIDE 开发框架，可以运行在 WEB 端和 electron ，基于它可以很方便的开发业务 WebIDE，提供了两种扩展模型：扩展和插件，并且兼容 VSCode 的插件</p>
+</li>
+</ul>
+<h2 id="技术介绍"><a href="#技术介绍" class="headerlink" title="技术介绍"></a>技术介绍</h2><p>Theia效果图：</p>
+<img src="/2021/06/26/webide/image.png" class="" title="Theia">
+
+<p>是不是感觉和VSCode很像，因为 Theia IDE 的 UI层基于 PhosphorJS， 和 VSCode 一样的，Theia 的目标是 Theia 插件 API 大于等于 vscode 插件 API。Theia的架构更具模块化，并且支持更丰富的扩展方式，而且 Theia IDE 先天提供了在Cloud上运行的能力。</p>
+<h3 id="扩展方式"><a href="#扩展方式" class="headerlink" title="扩展方式"></a>扩展方式</h3><p>Theia IDE 支持两种扩展方式：扩展(Extensions)和插件(Plug-ins)。扩展是编译时期的，安装一个扩展需要重新编译 IDE；插件是运行时的，安装一个插件不需要重新编译；所以安装插件要比安装扩展快。与扩展相比，插件有如下优缺点：</p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><ul>
+<li>更强的扩展性。Theia IDE 本身就是由各种扩展组成的。编写扩展具有很强大自定义能力，可以新增、移除或覆盖Tehia IDE 的视图、命令、快捷键、高亮、菜单等功能。</li>
+<li>使用 Inversify.js 依赖注入管理扩展。通过 DI 容器处理拓展之间的依赖关系，这就像一个全局公告板，拓展可以去修改上面的内容。</li>
+</ul>
+<p>每个 Extension 都是通过 npm 包的形式提供给 Theia Application 集成，导出一个 Inversify.js 模块，模块中往 Theia 定义的扩展点 Contribution 中注入新的服务，以实现扩展。</p>
+<p>一个扩展通常包含 FrontendModule 和 BackendModule， 会分别被加载到浏览器端和node端，通过内置的JSON RPC 模块进行前后端通信，像调用本地方法一样调用后端方法。</p>
+<p>相对于 VS Code 中 Contribution Points 比较局限，只能做一些基础的配置及使用特定 API 进行有限操作，而 Theia 中定义了大量的 contribution 接口，通过实现 Contribution 类型的接口扩展可以为应用增加很多功能。</p>
+<img src="/2021/06/26/webide/image2.png" class="" title="通信">
+
+<h4 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h4><ul>
+<li>代码隔离。作为在单独进程中运行的插件代码，它无法干扰 Theia 核心进程。</li>
+<li>可以在运行时加载。无需重新编译 Theia 的完整 IDE，减少编译时间。</li>
+<li>简单的 API。插件 API 被封装成一个入口对象，无需学习依赖注入等框架。</li>
+<li>插件只能使用预定义的 API。如果某些扩展点没有提供给插件使用的预定义 API，则该扩展点无法被插件扩展。</li>
+</ul>
+<p>前端插件和后端插件架构一致，只有运行环境的区别：前端插件运行在前端 Web Worker 进程里，后端插件运行在 Server 端的 node 子进程里。</p>
+<img src="/2021/06/26/webide/image3.png" class="" title="架构图">
+
+<p>插件和 IDE 核心功能之间通过进程进行隔离，彼此通过 RPC 协议进行通信。插件和插件之间做了上下文的隔离，同时通过 API 的工厂函数，对 API 的实现做了隔离。</p>
+<h2 id="踩坑经历"><a href="#踩坑经历" class="headerlink" title="踩坑经历"></a>踩坑经历</h2><h3 id="想要扩展某功能，找不到应该使用哪个扩展点，不知道往哪里注入什么样的服务"><a href="#想要扩展某功能，找不到应该使用哪个扩展点，不知道往哪里注入什么样的服务" class="headerlink" title="想要扩展某功能，找不到应该使用哪个扩展点，不知道往哪里注入什么样的服务"></a>想要扩展某功能，找不到应该使用哪个扩展点，不知道往哪里注入什么样的服务</h3><p>Tehia官网：<a href="https://theia-ide.org/docs/" target="_blank" rel="noopener">https://theia-ide.org/docs/</a><br>Theia社区：<a href="https://community.theia-ide.org/" target="_blank" rel="noopener">https://community.theia-ide.org/</a><br>Theia github issues：<a href="https://github.com/eclipse-theia/theia/issues" target="_blank" rel="noopener">https://github.com/eclipse-theia/theia/issues</a><br>API文档：<a href="https://eclipse-theia.github.io/theia/docs/next/globals.html" target="_blank" rel="noopener">https://eclipse-theia.github.io/theia/docs/next/globals.html</a><br>常用扩展总结：<a href="https://www.yuque.com/zhaomenghuan/theia/qalple" target="_blank" rel="noopener">https://www.yuque.com/zhaomenghuan/theia/qalple</a></p>
+<p>@theia/languages 提示已弃用；</p>
+<img src="/2021/06/26/webide/image4.png" class="" title="npm">
+
+<p>强行使用旧版本会报错，不想使用旧版本Theia去兼容启用的 @theia/languages，此路不通。</p>
+<h3 id="language-server接入"><a href="#language-server接入" class="headerlink" title="language-server接入"></a>language-server接入</h3><p><a href="https://code.visualstudio.com/api/language-extensions/language-server-extension-guide" target="_blank" rel="noopener">https://code.visualstudio.com/api/language-extensions/language-server-extension-guide</a> ，未找到具体接入方法，目前找到的了一些 Python 相关的扩展，但是资料并没有写如何接入，正在研究如何接入更合适<br>Microsoft/vscode-python：<a href="https://github.com/Microsoft/vscode-python" target="_blank" rel="noopener">https://github.com/Microsoft/vscode-python</a><br>Microsoft/python-language-server：<a href="https://github.com/Microsoft/python-language-server" target="_blank" rel="noopener">https://github.com/Microsoft/python-language-server</a></p>
+<h3 id="按照官方文档，进行插件开发，无法调试和启动"><a href="#按照官方文档，进行插件开发，无法调试和启动" class="headerlink" title="按照官方文档，进行插件开发，无法调试和启动"></a>按照官方文档，进行插件开发，无法调试和启动</h3><p>需要引入插件相关扩展，才能使用插件和插件扩展功能</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;@theia&#x2F;plugin-dev&quot;: &quot;1.12.0&quot;,</span><br><span class="line">&quot;@theia&#x2F;plugin-ext&quot;: &quot;1.12.0&quot;,</span><br><span class="line">&quot;@theia&#x2F;plugin-ext-vscode&quot;: &quot;1.12.0&quot;,</span><br></pre></td></tr></table></figure>
+
+<p>插件开发：<a href="https://github.com/eclipse-theia/theia/blob/master/packages/plugin/README.md" target="_blank" rel="noopener">https://github.com/eclipse-theia/theia/blob/master/packages/plugin/README.md</a><br>VSCode 和 Theia API对比：<a href="https://che-incubator.github.io/vscode-theia-comparator/status.html" target="_blank" rel="noopener">https://che-incubator.github.io/vscode-theia-comparator/status.html</a></p>
+<h3 id="Theia直接使用-VSCode-插件"><a href="#Theia直接使用-VSCode-插件" class="headerlink" title="Theia直接使用 VSCode 插件"></a>Theia直接使用 VSCode 插件</h3><p>Visual Studio Marketplace：VSCode扩展商店 <a href="https://marketplace.visualstudio.com/vscode" target="_blank" rel="noopener">https://marketplace.visualstudio.com/vscode</a><br>Open VSX：Visual Studio Marketplace的开源替代方案 <a href="https://github.com/eclipse/openvsx" target="_blank" rel="noopener">https://github.com/eclipse/openvsx</a></p>
+]]></content>
+      <tags>
+        <tag>theia</tag>
+        <tag>cloudIDE</tag>
+        <tag>vscode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RxJS和响应式编程</title>
+    <url>/2019/04/26/rxjs/</url>
+    <content><![CDATA[<p>RxJS 是一个库，它通过使用 observable 序列来编写异步和基于事件的程序。它提供了一个核心类型 Observable，附属类型 (Observer、 Schedulers、 Subjects) 和受 [Array#extras] 启发的操作符 (map、filter、reduce、every, 等等)，这些数组操作符可以把异步事件作为集合来处理。可以把 RxJS 当做是用来处理异步事件的 Lodash 。</p>
+<a id="more"></a>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>ReactiveX 结合了 <strong>观察者模式</strong>、<strong>迭代器模式</strong> 和 <strong>使用集合的函数式编程</strong>，以满足以一种理想方式来管理事件序列所需要的一切。</p>
+<p>注册事件监听器的常规写法。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
+<p>使用 RxJS 的话，创建一个 observable 来代替。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).subscribe(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
+<p>这里涉及到了几个基础概念，</p>
+<p><strong>Observable</strong> (可观察对象)：<code>fromEvent</code>方法返回就是一个<code>Observable</code>对象，表示一个事件或值的发生方，可以调用<code>subscribe</code>方法，对这个事件进行监听。</p>
+<p><strong>Observer</strong> (观察者)：对<code>Observable</code>进行监听调用的<code>subscribe</code>方法接收的参数就是<code>Observer</code>，就需要<code>Observer</code>对象，通常包含了成功、失败、结束三种回调。</p>
+<p><strong>Subscription</strong> (订阅): <code>subscribe</code>的返回值就是<code>Subscription</code>，主要用于取消<code>Observable</code>的执行。</p>
+<p><strong>Operators</strong> (操作符)：采用函数式编程风格的纯函数，使用像<code>map</code>、<code>filter</code>、<code>concat</code>、<code>flatMap</code>这样的操作符来处理事件集合。</p>
+<p><strong>Schedulers</strong> (调度器): 用来控制并发并且是中央集权的调度员，允许我们在发生计算时进行协调，例如<code>setTimeout</code>或微任务或其他。</p>
+<h3 id="纯净性-Purity"><a href="#纯净性-Purity" class="headerlink" title="纯净性 (Purity)"></a>纯净性 (Purity)</h3><p>RxJS之所以如此强大，正是因为它使用纯函数来产生值的能力，这意味着你的代码更不容易出错。</p>
+<p>在很多情况下，一些事件的处理，需要额外的状态，通常你会创建一个非纯函数，在这个函数之外也可能修改共享变量，这将使得你的应用更难维护。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+<p>使用 RxJS 的话，你会将应用状态隔离出来。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>)</span><br><span class="line">  .scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">  .subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+<p>scan 操作符的工作原理与数组的 reduce 类似。它接收一个回调函数和初始值。每次回调函数运行后的返回值会作为下次回调函数运行时的参数。</p>
+<h3 id="流动性-Flow"><a href="#流动性-Flow" class="headerlink" title="流动性 (Flow)"></a>流动性 (Flow)</h3><p><code>Observable</code>对象提供了pipe方法，可以使用RxJS提供的操作符来帮助你控制事件如何流经管道。</p>
+<p>下面的代码展示的是如何控制一秒钟内最多点击一次，先来看使用普通的 JavaScript：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> rate = <span class="number">1000</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> lastClick = <span class="built_in">Date</span>.now() - rate;</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - lastClick &gt;= rate) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>);</span><br><span class="line">    lastClick = <span class="built_in">Date</span>.now();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>使用 RxJS：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; scan, throttleTime &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).pipe(</span><br><span class="line">  throttleTime(<span class="number">1000</span>),</span><br><span class="line">  scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">).subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>Observable 是多个值的惰性推送集合。它填补了下面表格中的空白：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>单个值</th>
+<th>多个值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拉取</td>
+<td>Function</td>
+<td>Generator</td>
+</tr>
+<tr>
+<td>推送</td>
+<td>Promise</td>
+<td>Observable</td>
+</tr>
+</tbody></table>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> Observable(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  subscriber.next(<span class="number">1</span>);</span><br><span class="line">  subscriber.next(<span class="number">2</span>);</span><br><span class="line">  subscriber.next(<span class="number">3</span>);</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    subscriber.next(<span class="number">4</span>);</span><br><span class="line">    subscriber.complete();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>要调用 Observable 并看到这些值，我们需要订阅 Observable：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">observable.subscribe(&#123;</span><br><span class="line">  next: <span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'获取值：'</span> + x),</span><br><span class="line">  error: <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(<span class="string">'错误：'</span> + err),</span><br><span class="line">  complete: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'结束'</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="// TODO"></a>// TODO</h2>]]></content>
+      <tags>
+        <tag>RxJS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浅谈Typescript</title>
+    <url>/2020/03/05/typescript/</url>
+    <content><![CDATA[<p>TypeScript是一种由微软开发的开源、跨平台的编程语言。它扩展了JavaScript的语法，添加了可选的静态类型系统和很多尚未正式发布的ECMAScript新特性。TypeScript是JavaScript的超集，现有的JavaScript程序可以直接运行在在TypeScript环境中，TypeScript最终会被编译为JavaScript代码。</p>
+<a id="more"></a>
+
+<!--是什么？-->
+
+<!--有什么用？-->
+
+<!--什么时候用？-->
+
+
+<h2 id="TS比JS多了什么？"><a href="#TS比JS多了什么？" class="headerlink" title="TS比JS多了什么？"></a>TS比JS多了什么？</h2><h3 id="类型注解"><a href="#类型注解" class="headerlink" title="类型注解"></a>类型注解</h3><p>TS定义变量的时候可以给变量声明类型，ts会在变量使用的时候，检测是否正确的使用了该变量。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a: <span class="built_in">number</span>;</span><br><span class="line">a = <span class="number">1</span>; <span class="comment">// 正确</span></span><br><span class="line">a = <span class="literal">true</span>; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p>TS的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。 在TS里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。</p>
+<p>这里我们使用接口来描述一个拥有firstName和lastName字段的对象。 在TS里，只在两个类型内部的结构兼容那么这两个类型就是兼容的。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    firstName: <span class="built_in">string</span>;</span><br><span class="line">    lastName: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user: Person;</span><br><span class="line">user = &#123; firstName: <span class="string">"Jane"</span>, lastName: <span class="string">"User"</span> &#125;; <span class="comment">// 正确 </span></span><br><span class="line">user = &#123; firstName: <span class="number">2</span>, lastName: <span class="number">1</span> &#125;; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="类"><a href="#类" class="headerlink" title="类"></a>类</h3><p>TS的类可以带有一个构造函数和一些公共字段， 注意类可以实现接口，开发人员可以自行决定抽象的级别。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    firstName: <span class="built_in">string</span>;</span><br><span class="line">    lastName: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> Student <span class="keyword">implements</span> Person &#123;</span><br><span class="line">    fullName: <span class="built_in">string</span>;</span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params"><span class="keyword">public</span> firstName, <span class="keyword">public</span> lastName</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.fullName = firstName + <span class="string">" "</span> + lastName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user: Person = <span class="keyword">new</span> Student(<span class="string">"Jane"</span>, <span class="string">"User"</span>); <span class="comment">// 正确</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> Result&lt;T&gt; &#123;</span><br><span class="line">    data: T;</span><br><span class="line">    status: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> a: Result&lt;<span class="built_in">string</span>&gt;;</span><br><span class="line">a.data = <span class="string">"abc"</span>; <span class="comment">// 正确</span></span><br><span class="line">a.data = <span class="number">123</span>; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><p>使用枚举我们可以定义一些带名字的常量。 使用枚举可以清晰地表达意图或创建一组有区别的用例。 TS支持数字的和基于字符串的枚举。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> Direction &#123;</span><br><span class="line">    Up = <span class="number">1</span>,</span><br><span class="line">    Down = <span class="number">2</span>,</span><br><span class="line">    Left = <span class="number">3</span>,</span><br><span class="line">    Right = <span class="number">4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="更多特性"><a href="#更多特性" class="headerlink" title="更多特性"></a>更多特性</h3><ul>
+<li>类型推论</li>
+<li>类型兼容性</li>
+<li>高级类型</li>
+<li>更多…</li>
+</ul>
+<h2 id="TS开发上的变化？"><a href="#TS开发上的变化？" class="headerlink" title="TS开发上的变化？"></a>TS开发上的变化？</h2><p>TS为我们扩展的这些语法，能提高我们的开发效率吗？ 事实上，在TS的严格模式下，我们需要为我们所有的变量提供类型声明，这对于原生的Javascript来说，会提升我们不小的工作量，开发效率也相应降低。这也是不少前端开发者刚开始使用TS的第一感觉。</p>
+<p>对前端开发者来说，TS 能强化了「面向接口编程」这一理念。我们知道稍微复杂一点的程序都离不开不同模块间的配合，不同模块的功能理应是更为清晰的，TS 能帮我们梳理清不同的接口。</p>
+<h3 id="明确的模块抽象过程"><a href="#明确的模块抽象过程" class="headerlink" title="明确的模块抽象过程"></a>明确的模块抽象过程</h3><p>TS 对我的思考方式的影响之一在于，我现在会把考虑抽象和拓展看作写一个模块前的必备环节了。当然一个好的开发者用任何语言写程序，考虑抽象和拓展都会是一个必备环节，不过如果你在日常生活中使用过清单，你就会明白 TS 通过接口将这种抽象明确为具体的内容的意义所在了，任何没有被明确的内容，其实都有点像是可选的内容，往往就容易被忽略。</p>
+<p>举例来说，比如说我们用 TS 定义一个函数，TS 会要求我们对函数的参数及返回值有一个明确的定义，简单的定义一些类型，却能帮助我们定位函数的作用，比如说我们设置其返回值类型为 void ，就明确的表明了我们想利用这个函数的副作用；</p>
+<p>把抽象明确下来，对后续代码的修改也非常有意义，我们不用再担心忘记了之前是怎么构想的呢，对多人协作的团队来说，这一点也许更为重要。</p>
+<p>当然使用 jsdoc 等工具也能把对函数的抽象明确下来，不过并没有那么强制，所以效果不一定会很好，不过 jsdoc 反而可以做为 TS 的一种补充。</p>
+<h3 id="更自信的写代码"><a href="#更自信的写代码" class="headerlink" title="更自信的写代码"></a>更自信的写代码</h3><p>TS 还能让我更自信的写前端代码，这种自信来自 TS 可以帮我们避免很多可能由于自己的忽略造成的 bug。实际上，关于 TS 辅助避免 bug 方面存在专门的研究，一篇名为 To Type or Not to Type: Quantifying Detectable Bugs in JavaScript 的论文，表明使用 TS 进行静态类型检查能帮我们至少减少 15% 以上的 bug （这篇论文的研究过程也很有意思，感兴趣可以点击链接阅读）。</p>
+<p>可以举一个例子来说明，TS 是怎么给我带来这种自信的。</p>
+<p>下面这条语句，大家都很熟悉，是 DOM 提供依据 id 获取元素的方法。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="built_in">document</span>.getElementById(<span class="string">"a"</span>)</span><br></pre></td></tr></table></figure>
+<p>对我自己来说，使用 TS 之前，我忽略了document.getElementById的返回值还可能是 null，这种不经意的忽略也许在未来就会造成一个意想不到的 bug。</p>
+<p>使用 TS，在编辑器中就会明确的提醒我们 a 的值可能为 null。我们并不一定要处理值 null 的情况，使用 <code>const a = document.getElementById(&#39;id&#39;)!</code> 可以明确告诉 TS ，它不会是 null，不过至少，这时候我们清楚的知道自己想做什么。</p>
+<h3 id="代码就是最好的注释"><a href="#代码就是最好的注释" class="headerlink" title="代码就是最好的注释"></a>代码就是最好的注释</h3><p>习惯使用 TS 后，可以明显的感觉到查文档的时间大大减少了。无论是库还是原生的 js 或者 nodejs，甚至是自己团队其它成员定义的类型。结合IED ，会有非常智能的提醒，也可以很方便看到相应的接口的确切定义。使用的过程就是在加深理解的过程，确实「面向接口编程」天然和静态类型更为亲密。</p>
+<p><strong>总的来说，TS带来的并不是开发效率的提升，而是能通过语法的限制，避免开发者犯错。这在大规模、长周期的项目中，显得尤为明显，因此，在选择是否要使用TS之前，需要清楚目标项目是否足够复杂，不然不但感觉不到TS的任何好处，反而提高了开发成本。</strong> </p>
+]]></content>
+      <tags>
+        <tag>Typescript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浅析 Web 安全与防护</title>
+    <url>/2019/07/06/web-security/</url>
+    <content><![CDATA[<p>在互联网时代，数据安全与个人隐私受到了前所未有的挑战，各种新奇的攻击技术层出不穷，Web 安全的对于 Web 从业人员来说是一个非常重要的课题，也许你对所有的安全问题都有一定的认识，但最主要的还是在编码设计的过程中时刻绷紧安全那根弦，需要反复推敲每个实现细节，安全无小事。</p>
+<img src="/2019/07/06/web-security/web-security.png" class="" title="x-mind">
+
+<a id="more"></a>
+
+
+<h2 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h2><p>XSS (Cross-Site Scripting)，跨站脚本攻击，因为缩写和 CSS重叠，所以只能叫 XSS。XSS 的原理是攻击者往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入Web里面的Script代码会被执行，从而达到恶意攻击用户的目的。</p>
+<p>XSS 的攻击方式千变万化，但还是可以大致细分为几种类型：</p>
+<h3 id="反射型-XSS"><a href="#反射型-XSS" class="headerlink" title="反射型 XSS"></a>反射型 XSS</h3><p>反射型 XSS 一般是通过给别人发送带有恶意脚本代码参数的 URL，当 URL 地址被打开时，特有的恶意代码参数被 HTML 解析、执行。</p>
+<blockquote>
+<p>比如某搜索页面<code>www.xxx.com?search=&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code>，然后通常打开URL页面后是默认搜索search参数的内容，但是这里search是一段HTML，导致HTML被浏览器解释并执行。</p>
+</blockquote>
+<p>反射型 XSS 漏洞攻击有以下特征：</p>
+<ul>
+<li>即时性，直接构建URL给用户点击，就能拿到用户隐私数据。</li>
+<li>隐蔽性，不经过服务器存储，较难发现。</li>
+<li>攻击者需要诱骗点击,必须要通过用户点击链接才能发起。</li>
+</ul>
+<h3 id="存储型-XSS"><a href="#存储型-XSS" class="headerlink" title="存储型 XSS"></a>存储型 XSS</h3><p>持久型 XSS 漏洞，一般发生在用户提交的文本，需要展示在页面上，如文章留言，用户名等，黑客利用 XSS 漏洞，将恶意代码经正常功能提交进入数据库存储，当前端页面获得后端从数据库中读出的注入代码时，恰好将其渲染执行。</p>
+<blockquote>
+<p>比如某用户注册了一个用户名为<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>的用户，当其他人打开了显示这个用户名的页面，就会执行script中的恶意代码。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">'color:red'</span>&gt;</span>文章作者：______<span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">'color:red'</span>&gt;</span>文章作者：<span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>存储型 XSS 漏洞攻击有以下特征：</p>
+<ul>
+<li>持久性，当恶意脚本被提交到数据库后，这段代码没被处理会一直存在。</li>
+<li>危害面广，所有打开这个页面的用户，都会被执行这段恶意代码。</li>
+</ul>
+<h3 id="危害和防护"><a href="#危害和防护" class="headerlink" title="危害和防护"></a>危害和防护</h3><p>跨站脚本攻击有可能造成以下影响：</p>
+<ul>
+<li>利用虚假输入表单骗取用户个人信息。</li>
+<li>利用脚本窃取用户的Cookie或Token，被害者在不知情的情况下，帮助攻击者发送恶意请求。</li>
+<li>显示伪造的文章或图片。</li>
+</ul>
+<p>如何防护：</p>
+<ul>
+<li>使用CSP(Content Security Policy)，即内容安全策略，建立白名单，只允许加载和执行指定域下的资源。</li>
+<li>使用转义字符，将所有来自用户的文本进行转义，过滤掉危险内容。</li>
+<li>在Web应用程序中将cookie设为HttpOnly，禁止前端js获取cookie，可以有效避免cookie被窃取。</li>
+</ul>
+<h2 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h2><p>CSRF(Cross Site Request Forgery)，即跨站请求伪造，是一种常见的Web攻击，它利用用户已登录的身份，在用户毫不知情的情况下，以用户的名义完成非法操作。</p>
+<blockquote>
+<p>当我们登入转账页面后，突然收到陌生人发的未知链接，然后手贱不小心点进了该危险的网站，该页面一加载，便会恶意代码发送转账请求，从而将账户里的钱转给黑客。</p>
+</blockquote>
+<p>如何防护：</p>
+<ul>
+<li>设置Referer白名单，通过判断HTTP herder中的Referer值，判断请求是否是来自合法的页面发起的。</li>
+<li>Token，用户登录的之后，不是有cookie，而使用token，由于同源策略，其他页面无法获取带该页面下的cookie。</li>
+<li>验证码，用户提交表单的时候，强制用户输入验证码，能够很好地遏制CSRF攻击。<blockquote>
+</blockquote>
+</li>
+</ul>
+<h2 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h2><p>所谓SQL注入，就是通过把SQL命令插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</p>
+<blockquote>
+<p>比如有如下的用户登录SQL</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> username = ____ <span class="keyword">and</span> <span class="keyword">password</span>=_____</span><br></pre></td></tr></table></figure>
+
+<p>尝试构造一个用户名为<code>test&quot; or &quot;</code>，密码为<code>123456</code>的表单，调用登录结构，最终拼接处的SQL为：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> username = <span class="string">"test"</span> <span class="keyword">or</span> <span class="string">""</span>=<span class="string">""</span> <span class="keyword">and</span> <span class="keyword">password</span>=<span class="string">"123456"</span></span><br></pre></td></tr></table></figure>
+
+<p>“” = “” 恒为真，登录成功。</p>
+</blockquote>
+<p>我们会发现SQL注入流程中与正常请求服务器类似，只是黑客控制了数据，构造了SQL查询，而正常的请求不会SQL查询这一步，SQL注入的本质：<strong>数据和代码未分离，即数据当做了代码来执行</strong>。</p>
+<p>SQL注入的危害：</p>
+<ul>
+<li>获取数据库信息。</li>
+<li>管理员后台用户名和密码。</li>
+<li>获取其他数据库敏感信息：用户名、密码、手机号码、身份证、银行卡信息……</li>
+<li>整个数据库：脱裤。</li>
+<li>获取服务器权限。</li>
+<li>植入Webshell，获取服务器后门。</li>
+<li>读取服务器敏感文件。</li>
+</ul>
+<p>如何防护：</p>
+<ul>
+<li>后端代码检查输入的数据是否符合预期，严格限制变量的类型，例如使用正则表达式进行一些匹配处理。</li>
+<li>对进入数据库的特殊字符（’，”，\，&lt;，&gt;，&amp;，*，; 等）进行转义处理，或编码转换。</li>
+<li>使用数据库提供的参数化查询接口，不要直接拼接 SQL 语句，比如Mybatis的<code>#{param}</code>。</li>
+<li>Mybatis中不要将用户的数据传入<code>${param}</code>，${}是简单的字符替换，如果用户构造特殊参数，就会导致SQL注入。</li>
+<li>严格限制Web应用的数据库的操作权限，给此用户提供仅仅能够满足其工作的最低权限，最大限度的减少注入攻击对数据库的危害。</li>
+</ul>
+<h2 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h2><p>当数据传输发生在一个设备（PC/手机）和网络服务器之间时，攻击者使用其技能和工具将自己置于两个端点之间并截获数据；尽管交谈的两方认为他们是在与对方交谈，但是实际上他们是在与干坏事的人交流，这便是中间人攻击。</p>
+<blockquote>
+<p>当用户连接了不安全的Wi-Fi 无线接入点，并使用未加密的传输协议，中间人攻击者可以将你所有发送给服务端的请求截获和篡改，也可以将服务端的响应截获并篡改，导致用户隐私泄露。</p>
+<p>另一种常见的情况是，一些电信运营商，会在用户浏览的页面上插入广告。</p>
+</blockquote>
+<p>如果浏览器和服务器传输中的某个网络节点被攻击这控制了，仅仅是对通信数据加密是没办法抵御的，在web环境下，客户端代码是完全暴露的，秘钥也能会攻击者截获，攻击者就可以模拟浏览器向服务端发送加密数据，然后再模拟服务端返回数据给浏览器。</p>
+<p>通常对于web环境来说，最简单有效的防护方式，就是为自己的页面引入<strong>HTTPS</strong>，能够有效的抵御中间人攻击。</p>
+<h2 id="重放攻击"><a href="#重放攻击" class="headerlink" title="重放攻击"></a>重放攻击</h2><p>重放攻击的基本原理就是把以前窃听到的数据原封不动地重新发送给接收方。很多时候，网络上传输的数据是加密过的，此时窃听者无法得到数据的准确意义。但如果他知道这些数据的作用，就可以在不知道数据内容的情况下通过再次发送这些数据达到愚弄接收端的目的。</p>
+<blockquote>
+<p>假设某用户在不安全的网络，执行了转账操作，向服务端发送了转账100元的请求，并使用了HTTPS协议加密请求内容，这时攻击者是无法知道请求的内容的也无法篡改的，但是攻击者将整个请求数据保存下来，再次向服务端发送，就可能导致用户再次执行转账操作，遭受经济损失。</p>
+</blockquote>
+<p>如何防护：</p>
+<ul>
+<li>加随机数，如发现报文中有以前使用过的随机数，就认为是重放攻击。但需要额外保存使用过的随机数，保存和查询的开销较大。</li>
+<li>加时间戳，过期的请求直接丢弃。认证双方需要准确的时间同步，同步越好，受攻击的可能性就越小。但当系统很庞大，跨越的区域较广时，要做到精确的时间同步并不是很容易。 [4]</li>
+<li>加流水号，就是双方在报文中添加一个逐步递增的整数，只要接收到一个不连续的流水号报文(太大或太小)，就认定有重放威胁，但是必须保证请求有序到达服务端。</li>
+<li>在实际中，常将随机数和时间戳组合使用，这样就只需保存某个很短时间段内的所有随机数，而且时间戳的同步也不需要太精确。</li>
+</ul>
+<h2 id="文件上传漏洞"><a href="#文件上传漏洞" class="headerlink" title="文件上传漏洞"></a>文件上传漏洞</h2><p>文件上传漏洞是指攻击者利用web应用的文件上传接口，上传了一个可执行的脚本文件，并通过此脚本文件获得了执行服务器端命令的能力。</p>
+<blockquote>
+<p>攻击者可以上传一个与网站脚本语言相对应的恶意代码动态脚本，例如(jsp、asp、php、aspx文件后缀)到服务器上，然后访问该文件，服务器就会动态解析脚本文件并执行，最终达到执行恶意代码的效果，影响服务器安全。</p>
+</blockquote>
+<p>如何防护：</p>
+<ul>
+<li>判断文件类型，在判断文件类型时，可以结合使用MIME Type、文件后缀检查等方式。最好是采用白名单，防止有未考虑到的格式。</li>
+<li>文件上传的目录设置为不可执行，只要web容器无法解析该目录下面的文件，即使攻击者上传了脚本文件，服务器本身也不会受到影响。</li>
+<li>改写随机文件名和路径，如果应用了随机数改写了文件名和路径，将极大地增加攻击的成本。</li>
+</ul>
+<h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><blockquote>
+<p>// TODO</p>
+</blockquote>
+<h2 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h2><blockquote>
+<p>// TODO</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>结构化思维</title>
+    <url>/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/</url>
+    <content><![CDATA[<p>在日常工作中，我们时常会碰到这样的情况，有的人讲事情逻辑非常混乱，罗列了很多事项，却把握不到重点，无法把一件事情说清楚。他说的每个字你都听得懂，然而组合在一起，你并不知道他想说什么，内容没有逻辑，语句没有重点。</p>
+<p>这种思维混乱是典型的缺少结构化思维的表现。结构化思维非常重要，不仅仅体现在表达上，也体现在在我们分析问题的过程中。具备结构化思维，才能将问题分析地更全面、更深刻。</p>
+<a id="more"></a>
+
+<h2 id="什么是结构化思维？"><a href="#什么是结构化思维？" class="headerlink" title="什么是结构化思维？"></a>什么是结构化思维？</h2><p>在理解概念之前，咱们来看一个例子：</p>
+<p><strong>花5秒钟的时间，记住下图的数字</strong></p>
+<img src="/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/number.png" class="" title="无序数字">
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<p><strong>好，我们再来试一组数字，还是花5秒钟来记住它</strong></p>
+<img src="/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/number2.png" class="" title="有序数字">
+
+
+<p>其实这2组的20个数字是一样的，但是不是觉得第二组一下子就记住了？</p>
+<p>为什么会这样？因为第二组数据更符合我们大脑的使用习惯，数字与数字之间有清晰的逻辑和结构。</p>
+<p>再举一个例子：</p>
+<p>当有人问你，你能说说你有哪些衣服吗？</p>
+<p>“嗯….我有很多衣服（想法）…”</p>
+<p>能详细点说吗？</p>
+<p>“我有一条蓝裤子，一条橘黄色裙子，一件白衬衫，还有件灰白条纹衬衫，一条牛仔裤，一条蓝色竖条纹的裤子，还有顶黑色的帽子，哦对了，还有一条蓝色裤子（这个刚才好像说过了)…”</p>
+<p>￥#%@#￥%@… 你到底有些啥？</p>
+<p>“我刚才说的都是我有的啊…”</p>
+<p>语言是思维的传声筒，如果你的思维没有经过整理，就会像这堆乱糟糟的衣服，你拥有他们，却无法理解他们！自己看着难受，别人听着难懂！</p>
+<p>那怎么办？如何让思维变得既全面又有序呢？</p>
+<p><strong>你需要结构化思维</strong></p>
+<p>所谓结构化思维，就像是把衣橱里的这些衣服，分门别类的整理好。</p>
+<p>比如按季节分类，按穿着场合分类，按服装风格分类等等..</p>
+<p>这时候，别人再问你：你有些什么衣服呢？</p>
+<p>你回答：我一共有208件装备，分为：</p>
+<ul>
+<li>夏季、春秋季、冬季三大类；</li>
+<li>每个季节的衣服又分为工作装、休闲装、宴会装、运动装四大系列；</li>
+<li>其中，休闲装里有田园、淑女、简约三种风格；</li>
+<li>每种风格的衣服，拥有深色、浅色各3套搭配；</li>
+<li>另外配了4双运动鞋，5双皮鞋，6双休闲鞋，7个包包，8顶帽子来应对不同需要..</li>
+<li>是不是听着清楚多了？</li>
+</ul>
+<img src="/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/clothes.png" class="" title="衣服">
+
+<p>我们大脑处理信息有2个规律：</p>
+<ul>
+<li>人处理信息的能力有限，太多的信息记不住</li>
+<li>人更偏爱有规律的信息</li>
+</ul>
+<p>假如我们在解决问题、与人沟通、输出文章的过程中找到一个框架，可以将零散信息放进去加以整合，就能得出方法和结论。这个框架就是<strong>结构化思维</strong>。</p>
+<h2 id="结构化思考的步骤"><a href="#结构化思考的步骤" class="headerlink" title="结构化思考的步骤"></a>结构化思考的步骤</h2><p>看完前面的例子，乍看还挺容易的，具体是怎么运用呢？</p>
+<p><strong>首先，明确目的，找到分解角度。</strong>同样的要素，组合成不同的结构，就能实现不同的功能和目的。因此，结构化思维，并不是简单的做个分类汇总，而是分解后，以什么方式组合，要达成什么目的？</p>
+<p>所以，我们得在问题分解之前，先弄清楚分解的目的是什么，然后根据目的进行拆解与结构化。比如说，对于一个项目：</p>
+<ul>
+<li>如果目标是分析进度：那就按时间进度，过程阶段来分解；</li>
+<li>如果目标是分析成本：那就按工作项来分解；</li>
+<li>如果目标是分析客户：那就按性别、年龄、学历、职业、收入等来分解。</li>
+</ul>
+<p><strong>其次，按 MECE 原则，组成结构。</strong>这个时候，就要用到结构化思维的首选工具 —— 金字塔结构</p>
+<p><strong>什么是金字塔结构？</strong></p>
+<p>简单来说就是：先确认目标问题，再根据分解的目的，将问题分解成不同的类别，类别下再放入对应的不同要素，这样逐层分解，最终的形成类似于金字塔的形状结构。</p>
+<p><strong>什么是MECE原则？</strong></p>
+<p>Mece原则，是麦肯锡著名咨询师「巴巴拉·明托」提出的，全称是是 Mutually Exclusiv Collectively Exhaustive，中文意思是“相互独立，完全穷尽”。</p>
+<p>也就是金字塔的每一层，内容不能有重复的部分，也不能有遗漏的部分。<br>比如将人进行分类：老人、小孩、女人。</p>
+<p>这个就有重叠的部分：有些女人既可以是小孩，也可以是老人；<br>也有遗漏的部分：中年男人应该分到哪一类？</p>
+<p>那么，什么才是不重叠，不遗漏，符合MECE原则的呢？</p>
+<p>你可以按年龄分：小孩、老人、年轻人；<br>或者按照性别分：男人、女人。</p>
+<p>是不是感觉整体结构清晰很多了？。</p>
+<p>总的来说，结构化思维的 3 大要素：</p>
+<ul>
+<li>主题鲜明：有清晰的中心思想</li>
+<li>归类分组：同类信息归为一组（MECE分析法：相互独立，完全穷尽）</li>
+<li>逻辑递进：纵向层次有逻辑关系，横向层次有递进关系</li>
+</ul>
+<h2 id="利用结构化思维思考问题"><a href="#利用结构化思维思考问题" class="headerlink" title="利用结构化思维思考问题"></a>利用结构化思维思考问题</h2><p><strong>自上而下发散</strong>：适用于思考问题、输出文章/演讲稿、与人沟通等这种问题比较明确的情况，我们只需要找到问题的核心要素即可，然后进行展开即可。</p>
+<p><strong>从下往上总结</strong>：适合判断他人逻辑、归纳信息等这种问题不够明确的情况，我们需要对多种杂乱的内容，进行分类、剪枝、归纳汇总成一个中心。</p>
+<p>建立中心通常不会是一次成型的，随着对问题理解的变化，对中心的抽象也会进行相应的调整。不同的抽象层次其面对的问题宽度是不一样的。具体要用哪个层次的抽象作为“中心”，要视具体情况而定。</p>
+<p>举个简单的例子，比如面对“系统 bug 多”的问题，我们尝试使用自上而下发散来思考这个问题。</p>
+<ul>
+<li>这个问题原因可能是：开发代码质量不够高导致，测试没有测出bug导致的；</li>
+<li>针对开发质量不够高，可以能的原因是：系统架构导致的问题，开发人员技术水平导致的；</li>
+<li>针对测试没测出bug，可能的原因是：测试用例覆盖度不够，修改A处导致了B处bug；</li>
+<li>针对系统架构导致bug多，我们可以…</li>
+<li>针对开发人员技术水平导致bug多，我们可以…</li>
+<li>针对测试用例覆盖度不够，我们可以…</li>
+<li>针对修改A处导致了B处bug，我们可以…</li>
+</ul>
+<p>可以非常容易的就整理出如下一个思维导图</p>
+<img src="/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/tree.png" class="" title="系统bug多">
+
+
+<p>你看，这样一步步梳理，我们就从一堆凌乱、没有规则的想法中，提炼出了一套有结构，有逻辑，可执行的行动方案。</p>
+<p>这，就是结构化思维的力量！</p>
+]]></content>
+      <tags>
+        <tag>效率</tag>
+      </tags>
+  </entry>
+</search>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+    <meta name="keywords" content="米饭博客 博客 米饭 mifan blog">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    使用node.js开发命令行工具（一）创建与发布 |
+    
+    米饭博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-npm-publish-1" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      使用node.js开发命令行工具（一）创建与发布
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/03/31/npm-publish-1/" class="article-date">
+  <time datetime="2019-03-31T06:27:10.000Z" itemprop="datePublished">2019-03-31</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>在前端工程化的大环境下，合理运用node和npm script，可以大大提高我们的开发效率，那么怎么才能使自己开发的nodejs代码通过npm安装，就可以直接使用命令行进行调用呢？</p>
+<a id="more"></a>
+
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>确保自己有node环境，并且node已经配置到环境变量。没安装的可以到<a href="https://nodejs.org" target="_blank" rel="noopener">官网下载</a>或者<a href="http://nodejs.cn/" target="_blank" rel="noopener">国内镜像下载</a>。</p>
+<h2 id="第一行node代码"><a href="#第一行node代码" class="headerlink" title="第一行node代码"></a>第一行node代码</h2><ul>
+<li>新建一个js文件，比如: <code>hello.js</code>。</li>
+<li>在js文件中键入<code>console.log(&#39;hello world!&#39;)</code>，保存。</li>
+<li>在打开控制台，切换到<code>hello.js</code>所在的目录，执行<code>node ./hello.js</code>命令中。</li>
+</ul>
+<p>执行完上面的最后一步命令后，就可以看到控制台执行了我们的js文件，输出<code>hello world</code>了。</p>
+<h2 id="强大的nodejs"><a href="#强大的nodejs" class="headerlink" title="强大的nodejs"></a>强大的nodejs</h2><p>我们已经写出了我们的第一个node应用，想要做出更复杂更强大的应用，也只是时间问题了。不过，nodejs除了语法和浏览器端的一样，api和浏览器端是完全不一样的，nodejs没有浏览器端的bom和dom对象，取而代之的是操作系统api和一些工具包，详细的api文档可以查看<a href="https://nodejs.org/en/docs/" target="_blank" rel="noopener">英文文档</a>或者<a href="http://nodejs.cn/api/" target="_blank" rel="noopener">中文文档</a>。</p>
+<h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><p>当我们开发好node程序之后，能不能不经过node，直接像vue/cli这种cli工具那样，输入<code>hello</code>执行我们刚刚的程序呢呢？当然可以。</p>
+<ul>
+<li>创建一个新文件夹作为项目目录。</li>
+<li>使用控制台进入项目目录，执行<code>npm init</code>初始化一个npm项目。</li>
+<li>将之前的hello.js放入项目目录。</li>
+<li>打开<code>package.json</code>文件，在底部添加一项配置<code>&quot;bin&quot;</code>，<code>bin</code>对象里的key就是命令名称，value就是要执行的js文件。  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"MIT"</span>,</span><br><span class="line">  <span class="attr">"bin"</span>: &#123;</span><br><span class="line">    <span class="attr">"hello"</span>: <span class="string">"hello.js"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>打开<code>hello.js</code>文件，在文件顶部添加一句<code>#!/usr/bin/env node</code>并保存，用以指定使用node.js运行当前js文件。</li>
+</ul>
+<p>这个时候，我们的程序已经完成了，只需要发布，使用的时候安装就可以了。那么怎么发布呢，有两种方式，一种方式是本地发布<code>npm link</code>，这种方式只有本地能进行安装，另一种方式是<code>npm publish</code>发布到npm中央仓库，任何人都能够使用npm安装你的应用。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>当我们怎么样进行本地测试运行呢？我们可以使用<code>npm link</code>命令，这时候我们的当前项目就会被发布到本地并全局安装了，我们可以直接使用<code>hello</code>命令运行刚刚的js文件了。</p>
+<p>除此之外，如果我们想局部安装，我们可以切刀需要局部安装的项目中，使用<code>npm link &lt;packageNmae&gt;</code>替代<code>npm install &lt;packageNmae&gt;</code>命令，进行局部安装。被局部安装的包，不会添加到全局变量，但是可以使用npm script进行调用。</p>
+<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><ul>
+<li>在<a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm官网</a>注册一个自己的账号，用于发布和管理自己的npm包。</li>
+<li>给你的npm包起个名字，<code>package.json</code>中的<code>name</code>字段就是你的npm包的名字，<code>name</code>在官网查询下是不是重复，重复的包名不能提交。</li>
+<li>给你的npm包定义版本号，<code>package.json</code>中的<code>version</code>字段就是你的npm包的版本号，<code>version</code>应该比之前的版本递增，推荐使用<a href="https://semver.org/lang/zh-CN/" target="_blank" rel="noopener">语义化版本</a>规范。</li>
+<li>使用<code>npm publish</code>命令，根据提示先登录npm账号，然后发布npm包。</li>
+</ul>
+<p>按步骤执行到这里，整个npm包就发布完成了，我们可以在其他的npm项目下面用<code>npm install</code>命令安装我们发布的包了。</p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2019/03/31/npm-publish-1/" data-id="clt2z9ron000nk4u612gn9i43" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2019/04/08/npm-publish-2/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            使用node.js开发命令行工具（二）命令行输入输出UI库
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/03/30/async-await/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">当async/await遇到map和reduce</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2024 米饭博客</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="米饭博客"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/tags">标签</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="https://github.com/qqabcv520" target="_blank" rel="noopener">GitHub</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

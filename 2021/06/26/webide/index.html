@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+    <meta name="keywords" content="米饭博客 博客 米饭 mifan blog">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    WebIDE 踩坑 |
+    
+    米饭博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-webide" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      WebIDE 踩坑
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2021/06/26/webide/" class="article-date">
+  <time datetime="2021-06-26T07:25:33.000Z" itemprop="datePublished">2021-06-26</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>调研了市面上其他厂商做的IDE，有些是基于electron或NW.js从头开始构建的，成本较高。还有很多是基于VSCode源码定制的，后来了解到Eclipse Theia这个框架，发现样式和功能与VSCode差不多，而且也部分支持VSCode的插件，最主要是能够通过扩展的形式去丰富IDE的视图功能，比VSCode修改源码更加好用。</p>
+<a id="more"></a>
+
+<h2 id="主流-WebIDE-对比"><a href="#主流-WebIDE-对比" class="headerlink" title="主流 WebIDE 对比"></a>主流 WebIDE 对比</h2><ul>
+<li><p><strong>Monaco Editor</strong>。Monaco Editor 是在 VSCode 项目中开发过程中抽离出来的纯编辑器部分，他们很大一部分的代码（monaco-editor-core）都是共用的，所以 monaco 和 VSCode 在编辑代码，交互以及UI上几乎是一摸一样的，有点不同的是，两者的平台不一样，monaco 基于浏览器，而 VSCode 基于 electron ，所以功能上 monaco 相对于其他 IDE 缺乏较多重要功能，都需要自己实现。</p>
+</li>
+<li><p><strong>VSCode</strong>。运行在VSCode 也发现在云计算的背景下，对 WebIDE 的呼声很高，就在最近 VSCode 也支持了 WebIDE，采用单项目架构，扩展需要采用插件形式或者直接对源码扩展。</p>
+</li>
+<li><p><strong>Code server</strong>。Code server 将 VSCode 在浏览器端跑起来，主要思路是将 VSCode 内部通信替换后成 websocket 通信，然后通过 webpack 将前端依赖的 native 库替换掉。这种实现的好处是可以更大范围的去兼容 vscode 以及 vscode 的插件。</p>
+</li>
+<li><p><strong>Theia IDE</strong>。Theia IDE 定位是 WebIDE 开发框架，可以运行在 WEB 端和 electron ，基于它可以很方便的开发业务 WebIDE，提供了两种扩展模型：扩展和插件，并且兼容 VSCode 的插件</p>
+</li>
+</ul>
+<h2 id="技术介绍"><a href="#技术介绍" class="headerlink" title="技术介绍"></a>技术介绍</h2><p>Theia效果图：</p>
+<img src="/2021/06/26/webide/image.png" class="" title="Theia">
+
+<p>是不是感觉和VSCode很像，因为 Theia IDE 的 UI层基于 PhosphorJS， 和 VSCode 一样的，Theia 的目标是 Theia 插件 API 大于等于 vscode 插件 API。Theia的架构更具模块化，并且支持更丰富的扩展方式，而且 Theia IDE 先天提供了在Cloud上运行的能力。</p>
+<h3 id="扩展方式"><a href="#扩展方式" class="headerlink" title="扩展方式"></a>扩展方式</h3><p>Theia IDE 支持两种扩展方式：扩展(Extensions)和插件(Plug-ins)。扩展是编译时期的，安装一个扩展需要重新编译 IDE；插件是运行时的，安装一个插件不需要重新编译；所以安装插件要比安装扩展快。与扩展相比，插件有如下优缺点：</p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><ul>
+<li>更强的扩展性。Theia IDE 本身就是由各种扩展组成的。编写扩展具有很强大自定义能力，可以新增、移除或覆盖Tehia IDE 的视图、命令、快捷键、高亮、菜单等功能。</li>
+<li>使用 Inversify.js 依赖注入管理扩展。通过 DI 容器处理拓展之间的依赖关系，这就像一个全局公告板，拓展可以去修改上面的内容。</li>
+</ul>
+<p>每个 Extension 都是通过 npm 包的形式提供给 Theia Application 集成，导出一个 Inversify.js 模块，模块中往 Theia 定义的扩展点 Contribution 中注入新的服务，以实现扩展。</p>
+<p>一个扩展通常包含 FrontendModule 和 BackendModule， 会分别被加载到浏览器端和node端，通过内置的JSON RPC 模块进行前后端通信，像调用本地方法一样调用后端方法。</p>
+<p>相对于 VS Code 中 Contribution Points 比较局限，只能做一些基础的配置及使用特定 API 进行有限操作，而 Theia 中定义了大量的 contribution 接口，通过实现 Contribution 类型的接口扩展可以为应用增加很多功能。</p>
+<img src="/2021/06/26/webide/image2.png" class="" title="通信">
+
+<h4 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h4><ul>
+<li>代码隔离。作为在单独进程中运行的插件代码，它无法干扰 Theia 核心进程。</li>
+<li>可以在运行时加载。无需重新编译 Theia 的完整 IDE，减少编译时间。</li>
+<li>简单的 API。插件 API 被封装成一个入口对象，无需学习依赖注入等框架。</li>
+<li>插件只能使用预定义的 API。如果某些扩展点没有提供给插件使用的预定义 API，则该扩展点无法被插件扩展。</li>
+</ul>
+<p>前端插件和后端插件架构一致，只有运行环境的区别：前端插件运行在前端 Web Worker 进程里，后端插件运行在 Server 端的 node 子进程里。</p>
+<img src="/2021/06/26/webide/image3.png" class="" title="架构图">
+
+<p>插件和 IDE 核心功能之间通过进程进行隔离，彼此通过 RPC 协议进行通信。插件和插件之间做了上下文的隔离，同时通过 API 的工厂函数，对 API 的实现做了隔离。</p>
+<h2 id="踩坑经历"><a href="#踩坑经历" class="headerlink" title="踩坑经历"></a>踩坑经历</h2><h3 id="想要扩展某功能，找不到应该使用哪个扩展点，不知道往哪里注入什么样的服务"><a href="#想要扩展某功能，找不到应该使用哪个扩展点，不知道往哪里注入什么样的服务" class="headerlink" title="想要扩展某功能，找不到应该使用哪个扩展点，不知道往哪里注入什么样的服务"></a>想要扩展某功能，找不到应该使用哪个扩展点，不知道往哪里注入什么样的服务</h3><p>Tehia官网：<a href="https://theia-ide.org/docs/" target="_blank" rel="noopener">https://theia-ide.org/docs/</a><br>Theia社区：<a href="https://community.theia-ide.org/" target="_blank" rel="noopener">https://community.theia-ide.org/</a><br>Theia github issues：<a href="https://github.com/eclipse-theia/theia/issues" target="_blank" rel="noopener">https://github.com/eclipse-theia/theia/issues</a><br>API文档：<a href="https://eclipse-theia.github.io/theia/docs/next/globals.html" target="_blank" rel="noopener">https://eclipse-theia.github.io/theia/docs/next/globals.html</a><br>常用扩展总结：<a href="https://www.yuque.com/zhaomenghuan/theia/qalple" target="_blank" rel="noopener">https://www.yuque.com/zhaomenghuan/theia/qalple</a></p>
+<p>@theia/languages 提示已弃用；</p>
+<img src="/2021/06/26/webide/image4.png" class="" title="npm">
+
+<p>强行使用旧版本会报错，不想使用旧版本Theia去兼容启用的 @theia/languages，此路不通。</p>
+<h3 id="language-server接入"><a href="#language-server接入" class="headerlink" title="language-server接入"></a>language-server接入</h3><p><a href="https://code.visualstudio.com/api/language-extensions/language-server-extension-guide" target="_blank" rel="noopener">https://code.visualstudio.com/api/language-extensions/language-server-extension-guide</a> ，未找到具体接入方法，目前找到的了一些 Python 相关的扩展，但是资料并没有写如何接入，正在研究如何接入更合适<br>Microsoft/vscode-python：<a href="https://github.com/Microsoft/vscode-python" target="_blank" rel="noopener">https://github.com/Microsoft/vscode-python</a><br>Microsoft/python-language-server：<a href="https://github.com/Microsoft/python-language-server" target="_blank" rel="noopener">https://github.com/Microsoft/python-language-server</a></p>
+<h3 id="按照官方文档，进行插件开发，无法调试和启动"><a href="#按照官方文档，进行插件开发，无法调试和启动" class="headerlink" title="按照官方文档，进行插件开发，无法调试和启动"></a>按照官方文档，进行插件开发，无法调试和启动</h3><p>需要引入插件相关扩展，才能使用插件和插件扩展功能</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;@theia&#x2F;plugin-dev&quot;: &quot;1.12.0&quot;,</span><br><span class="line">&quot;@theia&#x2F;plugin-ext&quot;: &quot;1.12.0&quot;,</span><br><span class="line">&quot;@theia&#x2F;plugin-ext-vscode&quot;: &quot;1.12.0&quot;,</span><br></pre></td></tr></table></figure>
+
+<p>插件开发：<a href="https://github.com/eclipse-theia/theia/blob/master/packages/plugin/README.md" target="_blank" rel="noopener">https://github.com/eclipse-theia/theia/blob/master/packages/plugin/README.md</a><br>VSCode 和 Theia API对比：<a href="https://che-incubator.github.io/vscode-theia-comparator/status.html" target="_blank" rel="noopener">https://che-incubator.github.io/vscode-theia-comparator/status.html</a></p>
+<h3 id="Theia直接使用-VSCode-插件"><a href="#Theia直接使用-VSCode-插件" class="headerlink" title="Theia直接使用 VSCode 插件"></a>Theia直接使用 VSCode 插件</h3><p>Visual Studio Marketplace：VSCode扩展商店 <a href="https://marketplace.visualstudio.com/vscode" target="_blank" rel="noopener">https://marketplace.visualstudio.com/vscode</a><br>Open VSX：Visual Studio Marketplace的开源替代方案 <a href="https://github.com/eclipse/openvsx" target="_blank" rel="noopener">https://github.com/eclipse/openvsx</a></p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2021/06/26/webide/" data-id="clt2z9rop000tk4u68cnd10cb" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cloudIDE/" rel="tag">cloudIDE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/theia/" rel="tag">theia</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vscode/" rel="tag">vscode</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/11/24/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">结构化思维</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2024 米饭博客</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="米饭博客"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/tags">标签</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="https://github.com/qqabcv520" target="_blank" rel="noopener">GitHub</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

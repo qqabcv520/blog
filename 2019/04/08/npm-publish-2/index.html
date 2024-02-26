@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+    <meta name="keywords" content="米饭博客 博客 米饭 mifan blog">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    使用node.js开发命令行工具（二）命令行输入输出UI库 |
+    
+    米饭博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-npm-publish-2" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      使用node.js开发命令行工具（二）命令行输入输出UI库
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/04/08/npm-publish-2/" class="article-date">
+  <time datetime="2019-04-08T01:09:44.000Z" itemprop="datePublished">2019-04-08</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>相信很多前端都听说过或者使用过@angular/cli, vue-cli, create-react-app或其他类似的命令行工具。他们能够在命令行后面跟各种复杂的参数已经交互性的命令行选项，那你知道这些功能是怎么实现的吗？</p>
+<a id="more"></a>
+<h2 id="Commander-js"><a href="#Commander-js" class="headerlink" title="Commander.js"></a>Commander.js</h2><p>node.js命令行开发工具开发库，使node.js开发CLI工具变得简单，允许快捷的定义形如<code>&lt;command&gt; [options]</code>的命令。</p>
+<p>基础用法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> program = <span class="built_in">require</span>(<span class="string">'commander'</span>);</span><br><span class="line"></span><br><span class="line"> program</span><br><span class="line">  .version(<span class="built_in">require</span>(<span class="string">'../package.json'</span>).version, <span class="string">'-v, --version'</span>) <span class="comment">// 定义版本信息</span></span><br><span class="line">  .usage(<span class="string">'&lt;command&gt; [options]'</span>); <span class="comment">// 定义命令用法</span></span><br><span class="line"> </span><br><span class="line">program</span><br><span class="line">  .command(<span class="string">'rm &lt;dir&gt;'</span>) <span class="comment">// 定义一个rm命令</span></span><br><span class="line">  .description(<span class="string">'删除文件或文件夹'</span>) <span class="comment">// 给rm命令添加描述信息，获取命令帮助信息的时候会显示</span></span><br><span class="line">  .option(<span class="string">'-r, --recursive'</span>, <span class="string">'Remove recursively'</span>) <span class="comment">// rm允许添加-r或者--recursive命令进行递归</span></span><br><span class="line">  .action(<span class="function"><span class="keyword">function</span> (<span class="params">dir, cmd</span>) </span>&#123; <span class="comment">// 对应命令的处理函数</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'remove '</span> + dir + (cmd.recursive ? <span class="string">' recursively'</span> : <span class="string">''</span>))</span><br><span class="line">  &#125;);</span><br><span class="line"> </span><br><span class="line"> program.parse(process.argv); <span class="comment">// commander的入口欧，传入命令行参数执行解析</span></span><br></pre></td></tr></table></figure>
+<p>github仓库：<a href="https://github.com/tj/commander.js" target="_blank" rel="noopener">https://github.com/tj/commander.js</a></p>
+<h2 id="Inquirer-js"><a href="#Inquirer-js" class="headerlink" title="Inquirer.js"></a>Inquirer.js</h2><p>node.js 交互式命令行界面开发库，允许方便的定义使用上下左右进行列表选择等交互式命令。</p>
+<p>基础用法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">'inquirer'</span>);</span><br><span class="line"></span><br><span class="line">inquirer.prompt(</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'input'</span>, <span class="comment">// 问题类型，包括input，number，confirm，list，rawlist，password</span></span><br><span class="line">    name: <span class="string">'name'</span>, </span><br><span class="line">    message: <span class="string">'请输入项目名称'</span>, <span class="comment">// 问题</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'unnamed'</span> <span class="comment">// 默认值</span></span><br><span class="line">    validate: <span class="function">(<span class="params">input: string</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (input.length &gt; <span class="number">255</span>) &#123; <span class="comment">// 输入验证：name长度不允许超过255</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'项目名称超过限制'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;        </span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'list'</span>,</span><br><span class="line">    name: <span class="string">'type'</span>,</span><br><span class="line">    message: <span class="string">'请选择'</span>,</span><br><span class="line">    choices: [<span class="string">'item1'</span>, <span class="string">'item2'</span>, <span class="string">'item3'</span>, <span class="string">'item4'</span>], <span class="comment">// 可选选项</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="string">'project'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(answers.name);</span><br><span class="line">    <span class="built_in">console</span>.log(answers.type);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<img src="/2019/04/08/npm-publish-2/inquirer.js.jpg" class="" title="inquirer.js示例">
+
+<p>github仓库：<a href="https://github.com/SBoudrias/Inquirer.js" target="_blank" rel="noopener">https://github.com/SBoudrias/Inquirer.js</a></p>
+<h2 id="Ora"><a href="#Ora" class="headerlink" title="Ora"></a>Ora</h2><p>优雅的命令行Loading动画。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ora = <span class="built_in">require</span>(<span class="string">'ora'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> spinner = ora(<span class="string">'Loading unicorns'</span>).start();</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.color = <span class="string">'yellow'</span>;</span><br><span class="line">	spinner.text = <span class="string">'Loading rainbows'</span>;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">	spinner.stop();</span><br><span class="line">&#125;, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
+<p align="center">
+    <br>
+    <img src="/2019/04/08/npm-publish-2/ora.svg" class="" title="ora.js示例">
+    <br>
+</p>
+
+<p>github仓库：<a href="https://github.com/sindresorhus/ora" target="_blank" rel="noopener">https://github.com/sindresorhus/ora</a></p>
+<h2 id="Chalk"><a href="#Chalk" class="headerlink" title="Chalk"></a>Chalk</h2><p>给命令行输出的文本添加样式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 基本示例</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello world!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一行文本多种样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue(<span class="string">'Hello'</span>) + <span class="string">' World'</span> + chalk.red(<span class="string">'!'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复合样式</span></span><br><span class="line"><span class="built_in">console</span>.log(chalk.blue.bgRed.bold(<span class="string">'Hello world!'</span>));</span><br></pre></td></tr></table></figure>
+
+<p align="center">
+    <br>
+    <img src="/2019/04/08/npm-publish-2/chalk.svg" class="" title="chalk示例">
+    <br>
+</p>
+
+<p>github仓库：<a href="https://github.com/chalk/chalk" target="_blank" rel="noopener">https://github.com/chalk/chalk</a></p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2019/04/08/npm-publish-2/" data-id="clt2z9rop000rk4u6bs2f9o78" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2019/04/26/rxjs/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            RxJS和响应式编程
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/03/31/npm-publish-1/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">使用node.js开发命令行工具（一）创建与发布</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2024 米饭博客</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="米饭博客"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/tags">标签</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="https://github.com/qqabcv520" target="_blank" rel="noopener">GitHub</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

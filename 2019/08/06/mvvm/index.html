@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+    <meta name="keywords" content="米饭博客 博客 米饭 mifan blog">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    100行代码实现Virtual DOM和render |
+    
+    米饭博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-mvvm" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      100行代码实现Virtual DOM和render
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/08/06/mvvm/" class="article-date">
+  <time datetime="2019-08-06T09:41:58.000Z" itemprop="datePublished">2019-08-06</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>在编写代码之前，我们需要先了解需要先来了解一下Virtual DOM是怎么样构建并渲染到浏览器的，常见的构建Virtual DOM的方法有两种，一种是jsx(react)，另一种是template(vue)。</p>
+<a id="more"></a>
+
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><ul>
+<li><p>React的jsx一般是通过babel的jsx插件编译成<code>createElement</code><a href="https://github.com/facebook/react/blob/v16.13.1/packages/react/src/ReactElement.js#L348" target="_blank" rel="noopener">[源码]</a>，Vue的template也可以通过vue-loader编译成对应的<code>createElement</code><a href="https://github.com/vuejs/vue/blob/v2.6.11/src/core/vdom/create-element.js#L28" target="_blank" rel="noopener">[源码]</a>，</p>
+</li>
+<li><p>然后，在组件被创建并初始化state之后，执行render，将组件的props和state根据jsx(react)或template(vue)，生成一个虚拟DOM树</p>
+</li>
+<li><p>最后所有的VDOM生成完毕之后，将所有VDOM都mount上真实HTML DOM。</p>
+</li>
+</ul>
+<p>Component -&gt; render -&gt; VDOM -&gt; mount -&gt; HTML</p>
+<h2 id="VDOM"><a href="#VDOM" class="headerlink" title="VDOM"></a>VDOM</h2><p>VDOM的节点是一个简化版的DOM对象，只存储了我们关心的属性，大大提高了DOM操作时的性能。通常一个虚拟节点(VNode)包含：标签名、子节点数组、属性、事件、key和对应的真实DOM。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> VNode &#123;</span><br><span class="line">  <span class="keyword">type</span>: <span class="built_in">string</span>;</span><br><span class="line">  children: VNode[] = [];</span><br><span class="line">  props: &#123; propName: <span class="built_in">string</span>; propValue: <span class="built_in">any</span> &#125;[] = [];</span><br><span class="line">  events: &#123; propName: <span class="built_in">string</span>; propValue: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">void</span> &#125;[] = [];</span><br><span class="line">  key: <span class="built_in">any</span>;</span><br><span class="line">  el: Node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这时候再定义一个创建虚拟DOM对象的方法，用于jsx调用，该方法接收三个参数：标签名，标签属性，子标签。返回一个虚拟DOM对象</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createElement</span>(<span class="params"><span class="keyword">type</span>: <span class="built_in">string</span>, props, ...children</span>) </span>&#123;</span><br><span class="line">  props = props || &#123;&#125;;</span><br><span class="line">  <span class="keyword">const</span> vNode = <span class="keyword">new</span> VNode();</span><br><span class="line">  vNode.type = <span class="keyword">type</span>;</span><br><span class="line">  vNode.events = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> value.startsWith(<span class="string">'on'</span>))</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  vNode.props = <span class="built_in">Object</span>.keys(props)</span><br><span class="line">    .filter(<span class="function"><span class="params">value</span> =&gt;</span> !value.startsWith(<span class="string">'on'</span>) &amp;&amp; value !== <span class="string">'key'</span>)</span><br><span class="line">    .map(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        propName: value,</span><br><span class="line">        propValue: props[value]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  vNode.key = props[<span class="string">'key'</span>];</span><br><span class="line">  vNode.children = children;</span><br><span class="line">  <span class="keyword">return</span> vNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>虚拟DOM挂载到HTML DOM，根据根节点的ID，使用<code>document.createElement</code>将虚拟DOM转成HTML DOM，并挂载到真实节点mountEl下</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mount</span>(<span class="params">el, vNode: VNode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> node = mountVNode(vNode);</span><br><span class="line">  <span class="keyword">if</span> (el != <span class="literal">null</span>) &#123;</span><br><span class="line">    el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据VNode树生成真实HTML DOM</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mountVNode</span>(<span class="params">vNode: VNode</span>): <span class="title">HTMLElement</span> | <span class="title">Text</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (vNode == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (vNode <span class="keyword">instanceof</span> VNode) &#123;</span><br><span class="line">    <span class="keyword">let</span> el: HTMLElement;</span><br><span class="line">    el = <span class="built_in">document</span>.createElement(vNode.type);</span><br><span class="line">    vNode.props.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.setAttribute(value.propName, value.propValue)</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.events.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      el.addEventListener(value.propName.replace(<span class="regexp">/^on/</span>, <span class="string">''</span>), value.propValue);</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.children.forEach(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> subEl = mountVNode(value);</span><br><span class="line">      <span class="keyword">if</span> (subEl != <span class="literal">null</span>) &#123;</span><br><span class="line">        el.appendChild(subEl);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    vNode.el = el;</span><br><span class="line">    <span class="keyword">return</span> el;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createTextNode(<span class="built_in">String</span>(vNode));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义一个所有组件的抽象父组件，实现组件共有的基础功能</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> ComponentProps &#123;</span><br><span class="line">  el: HTMLElement;</span><br><span class="line">  [key: <span class="built_in">string</span>]: <span class="built_in">any</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">abstract</span> <span class="keyword">class</span> Component &#123;</span><br><span class="line"></span><br><span class="line">  readonly el: HTMLElement;</span><br><span class="line">  vNode: VNode;</span><br><span class="line">  <span class="keyword">abstract</span> render(): VNode;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params">props: ComponentProps</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (props) &#123;</span><br><span class="line">      <span class="built_in">Object</span>.assign(<span class="keyword">this</span>, props);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> mount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.vNode = <span class="keyword">this</span>.render();</span><br><span class="line">    <span class="keyword">const</span> node = mountVNode(<span class="keyword">this</span>.vNode);</span><br><span class="line">    <span class="keyword">this</span>.el &amp;&amp; node &amp;&amp; <span class="keyword">this</span>.el.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后再用定义一个挂载方法，创建组件并挂载到真实DOM，并且按顺序执行生命周期即可</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">renderDOM</span>(<span class="params">componentType: &#123; <span class="keyword">new</span> (props: ComponentProps) &#125;, props, selector?: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> component = <span class="keyword">new</span> componentType(&#123;...props, el: <span class="built_in">document</span>.querySelector(selector)&#125;);</span><br><span class="line">  component.beforeMount &amp;&amp; component.beforeMount();</span><br><span class="line">  component.mount();</span><br><span class="line">  component.mounted &amp;&amp; component.mounted();</span><br><span class="line">  <span class="keyword">return</span> component;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试运行"><a href="#测试运行" class="headerlink" title="测试运行"></a>测试运行</h2><p>Virtual DOM到render的过程基本就完成了，接下来我们定义一个组件，测试调用一下，看看结果</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"el"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> &gt;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// 定义组件</span></span></span><br><span class="line"><span class="actionscript">  <span class="class"><span class="keyword">class</span> <span class="title">TestComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">    buttonText = <span class="string">'buttonText'</span>;</span></span><br><span class="line">    clickCount = 1;</span><br><span class="line">    </span><br><span class="line"><span class="javascript">    <span class="keyword">constructor</span>(props: ComponentProps) &#123;</span></span><br><span class="line"><span class="actionscript">      <span class="keyword">super</span>(props);</span></span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> (<span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">        <span class="tag">&lt;<span class="name">span</span> &gt;</span>hello world<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">        &lt;button onclick=&#123;() =&gt; &#123;<span class="built_in">console</span>.log(<span class="string">'Hello World!'</span>, ++<span class="keyword">this</span>.clickCount)&#125;&#125;&gt;&#123;<span class="keyword">this</span>.buttonText&#125;&lt;<span class="regexp">/button&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span>);</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="actionscript">  <span class="comment">// 渲染到DOM</span></span></span><br><span class="line"><span class="actionscript">  renderDOM(TestComponent, <span class="string">'#el'</span>)</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<img src="/2019/08/06/mvvm/mvvm.png" class="" title="运行结果">
+
+
+<p>这仅仅是实现了从Virtual DOM渲染到真实DOM，并没有包含diff算法部分，所以当数据变化之后，并不会重新刷新真实DOM。想要刷新真实DOM，就需要在数据发生变化的时候，根据数据重新render一份vnode树，然后和之前生成的vnode树进行diff并更新真实DOM，具体如何实现diff，后续文章会进行具体讲解。</p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2019/08/06/mvvm/" data-id="clt2z9ron000lk4u6ghq3a1re" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Virtual-DOM/" rel="tag">Virtual DOM</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2019/12/08/data-structure/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            数据结构与算法基础知识点
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/07/06/web-security/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">浅析 Web 安全与防护</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2024 米饭博客</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="米饭博客"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/tags">标签</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="https://github.com/qqabcv520" target="_blank" rel="noopener">GitHub</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

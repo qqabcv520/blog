@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+    <meta name="keywords" content="米饭博客 博客 米饭 mifan blog">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    RxJS和响应式编程 |
+    
+    米饭博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-rxjs" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      RxJS和响应式编程
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/04/26/rxjs/" class="article-date">
+  <time datetime="2019-04-26T03:20:18.000Z" itemprop="datePublished">2019-04-26</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>RxJS 是一个库，它通过使用 observable 序列来编写异步和基于事件的程序。它提供了一个核心类型 Observable，附属类型 (Observer、 Schedulers、 Subjects) 和受 [Array#extras] 启发的操作符 (map、filter、reduce、every, 等等)，这些数组操作符可以把异步事件作为集合来处理。可以把 RxJS 当做是用来处理异步事件的 Lodash 。</p>
+<a id="more"></a>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>ReactiveX 结合了 <strong>观察者模式</strong>、<strong>迭代器模式</strong> 和 <strong>使用集合的函数式编程</strong>，以满足以一种理想方式来管理事件序列所需要的一切。</p>
+<p>注册事件监听器的常规写法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
+<p>使用 RxJS 的话，创建一个 observable 来代替。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).subscribe(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'Clicked!'</span>));</span><br></pre></td></tr></table></figure>
+<p>这里涉及到了几个基础概念，</p>
+<p><strong>Observable</strong> (可观察对象)：<code>fromEvent</code>方法返回就是一个<code>Observable</code>对象，表示一个事件或值的发生方，可以调用<code>subscribe</code>方法，对这个事件进行监听。</p>
+<p><strong>Observer</strong> (观察者)：对<code>Observable</code>进行监听调用的<code>subscribe</code>方法接收的参数就是<code>Observer</code>，就需要<code>Observer</code>对象，通常包含了成功、失败、结束三种回调。</p>
+<p><strong>Subscription</strong> (订阅): <code>subscribe</code>的返回值就是<code>Subscription</code>，主要用于取消<code>Observable</code>的执行。</p>
+<p><strong>Operators</strong> (操作符)：采用函数式编程风格的纯函数，使用像<code>map</code>、<code>filter</code>、<code>concat</code>、<code>flatMap</code>这样的操作符来处理事件集合。</p>
+<p><strong>Schedulers</strong> (调度器): 用来控制并发并且是中央集权的调度员，允许我们在发生计算时进行协调，例如<code>setTimeout</code>或微任务或其他。</p>
+<h3 id="纯净性-Purity"><a href="#纯净性-Purity" class="headerlink" title="纯净性 (Purity)"></a>纯净性 (Purity)</h3><p>RxJS之所以如此强大，正是因为它使用纯函数来产生值的能力，这意味着你的代码更不容易出错。</p>
+<p>在很多情况下，一些事件的处理，需要额外的状态，通常你会创建一个非纯函数，在这个函数之外也可能修改共享变量，这将使得你的应用更难维护。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+<p>使用 RxJS 的话，你会将应用状态隔离出来。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>)</span><br><span class="line">  .scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">  .subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+<p>scan 操作符的工作原理与数组的 reduce 类似。它接收一个回调函数和初始值。每次回调函数运行后的返回值会作为下次回调函数运行时的参数。</p>
+<h3 id="流动性-Flow"><a href="#流动性-Flow" class="headerlink" title="流动性 (Flow)"></a>流动性 (Flow)</h3><p><code>Observable</code>对象提供了pipe方法，可以使用RxJS提供的操作符来帮助你控制事件如何流经管道。</p>
+<p>下面的代码展示的是如何控制一秒钟内最多点击一次，先来看使用普通的 JavaScript：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rate = <span class="number">1000</span>;</span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> lastClick = <span class="built_in">Date</span>.now() - rate;</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - lastClick &gt;= rate) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;++count&#125;</span> times`</span>);</span><br><span class="line">    lastClick = <span class="built_in">Date</span>.now();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>使用 RxJS：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; scan, throttleTime &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> button = <span class="built_in">document</span>.querySelector(<span class="string">'button'</span>);</span><br><span class="line">fromEvent(button, <span class="string">'click'</span>).pipe(</span><br><span class="line">  throttleTime(<span class="number">1000</span>),</span><br><span class="line">  scan(<span class="function"><span class="params">count</span> =&gt;</span> count + <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">).subscribe(<span class="function"><span class="params">count</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Clicked <span class="subst">$&#123;count&#125;</span> times`</span>));</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>Observable 是多个值的惰性推送集合。它填补了下面表格中的空白：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>单个值</th>
+<th>多个值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拉取</td>
+<td>Function</td>
+<td>Generator</td>
+</tr>
+<tr>
+<td>推送</td>
+<td>Promise</td>
+<td>Observable</td>
+</tr>
+</tbody></table>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> Observable(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  subscriber.next(<span class="number">1</span>);</span><br><span class="line">  subscriber.next(<span class="number">2</span>);</span><br><span class="line">  subscriber.next(<span class="number">3</span>);</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    subscriber.next(<span class="number">4</span>);</span><br><span class="line">    subscriber.complete();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>要调用 Observable 并看到这些值，我们需要订阅 Observable：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">observable.subscribe(&#123;</span><br><span class="line">  next: <span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'获取值：'</span> + x),</span><br><span class="line">  error: <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(<span class="string">'错误：'</span> + err),</span><br><span class="line">  complete: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'结束'</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="// TODO"></a>// TODO</h2>
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2019/04/26/rxjs/" data-id="clt2z9roq000vk4u6dcrxeywe" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RxJS/" rel="tag">RxJS</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2019/06/16/git-filter-branch/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            git filter-branch指令
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/04/08/npm-publish-2/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">使用node.js开发命令行工具（二）命令行输入输出UI库</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2024 米饭博客</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="米饭博客"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/tags">标签</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="https://github.com/qqabcv520" target="_blank" rel="noopener">GitHub</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
